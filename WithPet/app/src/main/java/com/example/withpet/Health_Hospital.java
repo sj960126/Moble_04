@@ -18,10 +18,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Health_Hospital extends AppCompatActivity {
-    final static String TAG = "XML";
+/*    final static String TAG = "XML";
     Tmap tMapView;
     ArrayList<Hospital> list = parser();
-    String[] data = new String[list.size()];
+    String[] data = new String[list.size()];*/
 
 //        for(int i = 0; i < list.size(); i++){
 //            data[i] = list.get(i).getName()+" "+list.get(i).getAddres()
@@ -33,13 +33,15 @@ public class Health_Hospital extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_health__hospital);
+        //setContentView(R.layout.activity_health__hospital);
+/*
 
         LinearLayout health_hospital_map =(LinearLayout) findViewById(R.id.health_hospital_map);
         tMapView = new TMapView(this);
 
         tMapView.setSKTMapApiKey("l7xxfa281c47f54b4b8d866946553f981932");
         health_hospital_map.addView(tMapView);
+*/
 
 
 
@@ -49,7 +51,7 @@ public class Health_Hospital extends AppCompatActivity {
 
     }
 
-    private ArrayList<Hospital> parser() {
+/*    private ArrayList<Hospital> parser() {
         Log.i(TAG, "parser");
         ArrayList<Hospital> arrayList = new ArrayList<Hospital>();
 
@@ -133,5 +135,5 @@ public class Health_Hospital extends AppCompatActivity {
             }
         }
         return arrayList;
-    }
+    }*/
 }
