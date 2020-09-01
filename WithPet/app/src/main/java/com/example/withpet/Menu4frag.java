@@ -18,6 +18,7 @@ public class Menu4frag extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.activity_mypage,container,false);
+        // test주석입니다.
         return rootview;
     }
 }
