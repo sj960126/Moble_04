@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.skt.Tmap.TMapView;
+import com.skt.Tmap.TMapView;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -19,10 +19,12 @@ import java.util.ArrayList;
 
 
 public class Health_Hospital extends AppCompatActivity {
- /* final static String TAG = "XML";
-    Tmap tMapView;
+  final static String TAG = "XML";
+
+    TMapView tMapView;
+
     ArrayList<Hospital> list = parser();
-    String[] data = new String[list.size()];*/
+    String[] data = new String[list.size()];
 
 //        for(int i = 0; i < list.size(); i++){
 //            data[i] = list.get(i).getName()+" "+list.get(i).getAddres()
@@ -31,22 +33,22 @@ public class Health_Hospital extends AppCompatActivity {
 //            Log.d("데이터 : ",""+data[i]);
 //        }
 
-    //@Override
-    //protected void onCreate(Bundle savedInstanceState) {
-    //super.onCreate(savedInstanceState);
-    //setContentView(R.layout.activity_health__hospital);
-/*
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_health_hospital);
+
 
         LinearLayout health_hospital_map =(LinearLayout) findViewById(R.id.health_hospital_map);
         tMapView = new TMapView(this);
 
         tMapView.setSKTMapApiKey("l7xxfa281c47f54b4b8d866946553f981932");
-        health_hospital_map.addView(tMapView);*/
+        health_hospital_map.addView(tMapView);
 
 
 
 
-   /* }
+    }
     private void setupMap(){
 
     }
@@ -141,7 +143,7 @@ public class Health_Hospital extends AppCompatActivity {
     }
 
 }
-    */
-}
+
+
 
 
