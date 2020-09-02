@@ -25,4 +25,51 @@
 
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/H_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:background="@android:color/white"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:srcCompat="@drawable/health_btn" />
+
+    <ImageButton
+        android:id="@+id/D_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:background="@android:color/white"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/I_btn"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/health2_btn" />
+
+    <ImageButton
+        android:id="@+id/I_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:background="@android:color/white"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/H_btn"
+        app:srcCompat="@drawable/health3_btn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
