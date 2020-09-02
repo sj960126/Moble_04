@@ -1,7 +1,10 @@
 package com.example.withpet;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,12 +41,21 @@ public class Menu1frag extends Fragment {
 
     private Button btn_wirte;
 
+    private String[] permission_list = {Manifest.permission.READ_EXTERNAL_STORAGE};
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.activity_news,container,false);
-        btn_wirte = rootview.findViewById(R.id.mainBtn_write);
+        btn_wirte = rootview.findViewById(R.id.walkBtn_write);
+
+        Button btn1 = (Button) rootview.findViewById(R.id.walkBtn_write);
+        Button btn2 = (Button) rootview.findViewById(R.id.mainBtn_chatt);
+
+        btn1.setBackgroundResource(R.drawable.iconadd);
+        btn2.setBackgroundResource(R.drawable.iconchatt);
 
         list = rootview.findViewById(R.id.mainRv);
         list.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
@@ -80,10 +93,53 @@ public class Menu1frag extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "클릭햇어......", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(view.getContext(), NewsWriteActivity.class);
-                startActivity(intent);
+                checkPermission();
             }
         });
         return rootview;
     }
+
+    public void checkPermission(){
+        //현재 안드로이드 버전이 6.0미만이면 메서드를 종료한다.
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return;
+        for(String permission : permission_list){
+            //권한 허용 여부를 확인한다.
+            int chk = ContextCompat.checkSelfPermission(getContext(), permission);
+
+            if(chk == PackageManager.PERMISSION_DENIED){
+                //권한 허용을여부를 확인하는 창을 띄운다
+                requestPermissions(permission_list,0);
+            }
+            else{
+                //페이지 이동
+                Intent intent = new Intent(getContext(), NewsWriteActivity.class);
+                startActivity(intent);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 0)
+        {
+            for(int i=0; i<grantResults.length; i++)
+            {
+                //허용됬다면
+                if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
+                    //페이지 이동
+                    Intent intent = new Intent(getContext(), NewsWriteActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getContext(),"앱권한설정하세요",Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
 }
+
+
+
+

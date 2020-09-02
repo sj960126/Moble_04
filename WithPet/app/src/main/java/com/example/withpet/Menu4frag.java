@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,9 @@ public class Menu4frag extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.activity_mypage,container,false);
+        Button btn1 = (Button) rootview.findViewById(R.id.mypageBtn_setting);
+        btn1.setBackgroundResource(R.drawable.iconsetting);
+
         list = rootview.findViewById(R.id.myPageListview_mynotice);
         list.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
         layoutManager = new LinearLayoutManager(getActivity());
