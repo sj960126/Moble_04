@@ -1,49 +1,54 @@
 package com.example.withpet;
 
-import android.content.Context;
-import android.view.View;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-public class GalleryAdapter extends BaseAdapter {
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
-    private Context context;
+import java.util.ArrayList;
 
-    public int[] galleryArray ={
-            R.drawable.dog,R.drawable.dog,R.drawable.dog,R.drawable.dog,R.drawable.dog,
-            R.drawable.dog,R.drawable.dog,R.drawable.dog,R.drawable.dog,R.drawable.dog,
-            R.drawable.dog,R.drawable.dog,R.drawable.dog,R.drawable.dog,R.drawable.dog
-    };
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
+    private ArrayList<String> mDataset;
 
-    public GalleryAdapter(Context context) {
-        this.context = context;
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        public CardView layout;
+        public MyViewHolder(CardView l) {
+            super(l);
+            layout = l;
+        }
+    }
+
+    public GalleryAdapter(ArrayList<String> myDataset) {
+        mDataset = myDataset;
+    }
+
+    // Create new views (invoked by the layout manager)
+    @Override
+    public GalleryAdapter.MyViewHolder onCreateViewHolder( ViewGroup parent,
+                                                     int viewType) {
+        CardView v = (CardView) LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.news_galleryitems, parent, false);
+        MyViewHolder vh = new MyViewHolder(v);
+        return vh;
     }
 
     @Override
-    public int getCount() {
-        return galleryArray.length;
+    public void onBindViewHolder( MyViewHolder holder, int position) {
+        ImageView iv = holder.layout.findViewById(R.id.mainIv_gal);
+        Bitmap bmp = BitmapFactory.decodeFile(mDataset.get(position));
+        iv.setImageBitmap(bmp);
     }
 
     @Override
-    public Object getItem(int position) {
-        return galleryArray[position];
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
-
-        ImageView iv = new ImageView(context);
-        iv.setImageResource(galleryArray[position]);
-        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        iv.setLayoutParams(new GridView.LayoutParams(340,350));
-
-        return iv;
+    public int getItemCount() {
+        return mDataset.size();
     }
 }
+

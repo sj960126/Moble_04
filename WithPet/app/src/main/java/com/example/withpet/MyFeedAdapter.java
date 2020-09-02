@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,11 +62,33 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         //listitem
         TextView name;
         ImageView img;
+        Button like;
+        Button reply;
 
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
+            like = (Button) itemView.findViewById(R.id.mainBtn_like);
+            reply = (Button) itemView.findViewById(R.id.mainBtn_reply);
+
+            like.setBackgroundResource(R.drawable.iconlike);
+            reply.setBackgroundResource(R.drawable.iconreply);
+
             this.name = itemView.findViewById(R.id.mainTv_name);
             this.img = itemView.findViewById(R.id.mainImage);
+
+            like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    like.setBackgroundResource(R.drawable.iconlike2);
+                }
+            });
+            reply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    reply.setBackgroundResource(R.drawable.iconreply2);
+                }
+            });
         }
     }
+
 }
