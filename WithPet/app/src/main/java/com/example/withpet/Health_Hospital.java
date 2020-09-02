@@ -1,30 +1,28 @@
 package com.example.withpet;
 
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
-
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.skt.Tmap.TMapGpsManager;
+import com.skt.Tmap.TMapMarkerItem;
+import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
-public class Health_Hospital extends AppCompatActivity {
+public class Health_Hospital extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
   final static String TAG = "XML";
-
     TMapView tMapView;
-
-    ArrayList<Hospital> list = parser();
-    String[] data = new String[list.size()];
 
 //        for(int i = 0; i < list.size(); i++){
 //            data[i] = list.get(i).getName()+" "+list.get(i).getAddres()
@@ -37,26 +35,35 @@ public class Health_Hospital extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_health_hospital);
+    Toast.makeText(this,"하이",Toast.LENGTH_SHORT).show();
 
 
-        LinearLayout health_hospital_map =(LinearLayout) findViewById(R.id.health_hospital_map);
+        LinearLayout health_hospital_map =(LinearLayout)findViewById(R.id.health_hospital_map);
+
         tMapView = new TMapView(this);
-
         tMapView.setSKTMapApiKey("l7xxfa281c47f54b4b8d866946553f981932");
         health_hospital_map.addView(tMapView);
 
+        setUpMap();
 
 
 
     }
-    private void setupMap(){
+    private void setUpMap(){
+        ArrayList<Hospital> list = parser();
+        for (int i=0;i<list.size();i++){
+                TMapPoint point = new TMapPoint(Double.parseDouble(list.get(i).getX()),Double.parseDouble(list.get(i).getY()));
+                TMapMarkerItem markerItem1 = new TMapMarkerItem();
 
+                markerItem1.setPosition(0.5f,1.0f);
+                markerItem1.setTMapPoint(point);
+                markerItem1.setName(list.get(i).getName());
+                tMapView.setCenterPoint(Double.parseDouble(list.get(i).getX()),Double.parseDouble(list.get(i).getY()));
+                tMapView.addMarkerItem(" "+i,markerItem1);
+        }
     }
 
-
-
-
-   private ArrayList<Hospital> parser() {
+    private ArrayList<Hospital> parser() {
         Log.i(TAG, "parser");
         ArrayList<Hospital> arrayList = new ArrayList<Hospital>();
 
@@ -141,7 +148,6 @@ public class Health_Hospital extends AppCompatActivity {
         }
         return arrayList;
     }
-
 }
 
 
