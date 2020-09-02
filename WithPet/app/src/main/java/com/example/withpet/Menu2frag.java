@@ -21,15 +21,15 @@ public class Menu2frag extends Fragment {
         rootview = inflater.inflate(R.layout.activity_health,container,false);
         return rootview;
         //건강 메인 선택창 Java
-        Button btn = (Button)rootview.findViewById(R.id.button9);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), Health_Hospital.class);
-                startActivity(intent);
-            }
-        });
+//        Button btn = (Button)rootview.findViewById(R.id.button9);
+//
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(view.getContext(), Health_Hospital.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 }
