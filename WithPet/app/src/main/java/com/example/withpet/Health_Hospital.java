@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.skt.Tmap.TMapView;
+//import com.skt.Tmap.TMapView;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -17,9 +17,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-/*
+
 public class Health_Hospital extends AppCompatActivity {
-/*    final static String TAG = "XML";
+ /* final static String TAG = "XML";
     Tmap tMapView;
     ArrayList<Hospital> list = parser();
     String[] data = new String[list.size()];*/
@@ -31,28 +31,30 @@ public class Health_Hospital extends AppCompatActivity {
 //            Log.d("데이터 : ",""+data[i]);
 //        }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_health__hospital);
+    //@Override
+    //protected void onCreate(Bundle savedInstanceState) {
+    //super.onCreate(savedInstanceState);
+    //setContentView(R.layout.activity_health__hospital);
 /*
 
         LinearLayout health_hospital_map =(LinearLayout) findViewById(R.id.health_hospital_map);
         tMapView = new TMapView(this);
 
         tMapView.setSKTMapApiKey("l7xxfa281c47f54b4b8d866946553f981932");
-        health_hospital_map.addView(tMapView);
-*/
+        health_hospital_map.addView(tMapView);*/
 
 
 
 
-    }
+   /* }
     private void setupMap(){
 
     }
 
-/*    private ArrayList<Hospital> parser() {
+
+
+
+   private ArrayList<Hospital> parser() {
         Log.i(TAG, "parser");
         ArrayList<Hospital> arrayList = new ArrayList<Hospital>();
 
@@ -137,6 +139,9 @@ public class Health_Hospital extends AppCompatActivity {
         }
         return arrayList;
     }
+
 }
-*/
-*/
+    */
+}
+
+

@@ -80,6 +80,8 @@ public class Menu1frag extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "클릭햇어......", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(view.getContext(), NewsWriteActivity.class);
+                startActivity(intent);
             }
         });
         return rootview;
