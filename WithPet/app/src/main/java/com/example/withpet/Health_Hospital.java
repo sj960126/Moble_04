@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/*
 public class Health_Hospital extends AppCompatActivity {
 /*    final static String TAG = "XML";
     Tmap tMapView;
@@ -135,5 +136,7 @@ public class Health_Hospital extends AppCompatActivity {
             }
         }
         return arrayList;
-    }*/
+    }
 }
+*/
+*/
