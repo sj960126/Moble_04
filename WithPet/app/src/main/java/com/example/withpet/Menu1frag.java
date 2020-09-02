@@ -4,7 +4,6 @@ package com.example.withpet;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,8 +41,6 @@ public class Menu1frag extends Fragment {
     private Button btn_wirte;
 
     private String[] permission_list = {Manifest.permission.READ_EXTERNAL_STORAGE};
-
-
 
     @Nullable
     @Override
@@ -93,32 +90,34 @@ public class Menu1frag extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "클릭햇어......", Toast.LENGTH_SHORT).show();
-                checkPermission();
+                //권한설정 함수 실행
+                Permission();
             }
         });
         return rootview;
     }
 
-    public void checkPermission(){
-        //현재 안드로이드 버전이 6.0미만이면 메서드를 종료한다.
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-            return;
+    //권한설정 _ 안드로이드스튜디오개발가이드 + 구글링
+    public void Permission(){
         for(String permission : permission_list){
-            //권한 허용 여부를 확인한다.
-            int chk = ContextCompat.checkSelfPermission(getContext(), permission);
-
-            if(chk == PackageManager.PERMISSION_DENIED){
-                //권한 허용을여부를 확인하는 창을 띄운다
+            //권한 확인 여부
+            int access = ContextCompat.checkSelfPermission(getContext(), permission);
+            //권한 x
+            if(access == PackageManager.PERMISSION_DENIED){
+                //권한 설정 확인 창이 뜸!!
+                //requestCode는 아래의 onRequestPermissionsResult 함수 실행의 매개변수!
                 requestPermissions(permission_list,0);
             }
+            //권한 o
             else{
-                //페이지 이동
+                //해당 페이지로 이동
                 Intent intent = new Intent(getContext(), NewsWriteActivity.class);
                 startActivity(intent);
             }
         }
     }
 
+    //권한 요청 후 어떻게 관리할 것인지에 대한 함수 _ 개발가이드에 자세히 나와있음
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -126,14 +125,15 @@ public class Menu1frag extends Fragment {
         {
             for(int i=0; i<grantResults.length; i++)
             {
-                //허용됬다면
+                //사용자가 허용했을 경우!
                 if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
                     //페이지 이동
                     Intent intent = new Intent(getContext(), NewsWriteActivity.class);
                     startActivity(intent);
                 }
+                //사용자가 거부했을 경우!
                 else {
-                    Toast.makeText(getContext(),"앱권한설정하세요",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"저장소 권한을 설정하세요.",Toast.LENGTH_LONG).show();
                 }
             }
         }

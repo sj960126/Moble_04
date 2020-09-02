@@ -1,10 +1,16 @@
 package com.example.withpet;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,16 +29,28 @@ public class NewsWriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_write);
 
-        final int clo = 3;
+        //상단 next 버튼 이미지 설정
+        Button btn1 = (Button) findViewById(R.id.mainwBtn_next);
+        btn1.setBackgroundResource(R.drawable.iconnext);
 
+        //선택한 이미지 보는 imageView 디폴트 사진 설정
+        ImageView iv2 = (ImageView) findViewById(R.id.mainwIv_choice);
+        iv2.setImageResource(R.drawable.dog);
+
+        //Gridview 행의 수
+        final int clo = 4;
+
+        //recyclerView(갤러리 미리보기) 설정
         recyclerView = (RecyclerView) findViewById(R.id.mainwGv);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, clo));
 
-        mAdapter = new GalleryAdapter(getImagesPath(this));
+        //recyclerView(갤러리 미리보기) 어댑터 연결
+        mAdapter = new GalleryAdapter(this,getImagesPath(this));
         recyclerView.setAdapter(mAdapter);
     }
 
+    //권한설정 후 사용자의 갤러리에서 이미지 데이터 가져오는 함수(거의 국룰)
     @NonNull
     public static ArrayList<String> getImagesPath(Activity activity){
         Uri uri;
