@@ -49,6 +49,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                     .into(holder.img);
 
         holder.name.setText(myfeed.get(position).getId());
+        holder.context.setText(myfeed.get(position).getContext());
     }
 
     @Override
@@ -62,6 +63,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         //listitem
         TextView name;
         ImageView img;
+        TextView context;
         Button like;
         Button reply;
 
@@ -75,6 +77,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
 
             this.name = itemView.findViewById(R.id.mainTv_name);
             this.img = itemView.findViewById(R.id.mainImage);
+            this.context = itemView.findViewById(R.id.mainTv_context);
 
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
