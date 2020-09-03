@@ -10,21 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 
@@ -37,6 +32,7 @@ public class NewsWriteActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageRf;
     private StorageReference imgRf;
+    private String imgToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +56,12 @@ public class NewsWriteActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText tv = (EditText) findViewById(R.id.mainwEt_context);
-                inputContext= tv.getText().toString();
                 uploadImage(input);
-                //Toast.makeText(NewsWriteActivity.this, ""+imgId, Toast.LENGTH_SHORT).show();
-
-              /*  writeNewUser("6","sb",inputContext, imgId);
+                Image(input);
                 //페이지 이동
-                 Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
+                Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
                 startActivity(intent);
-                finish();*/
+                finish();
             }
         });
     }
@@ -110,6 +102,20 @@ public class NewsWriteActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(NewsWriteActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //파베 저장소에서 url 다운로드 해서 데베 등록
+    public void Image(String input){
+        String[] path = input.split("/");
+        storageRf.child("feed/" +path[path.length - 1]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL for 'users/me/profile.png'
+                EditText et =findViewById(R.id.mainwEt_context);
+                inputContext = et.getText().toString();
+                writeNewUser("ang","ang",inputContext, uri.toString());
             }
         });
     }
