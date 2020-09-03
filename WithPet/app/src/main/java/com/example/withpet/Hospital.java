@@ -38,5 +38,4 @@ public class Hospital {
         this.y = y;
     }
 
-
-   }
+}
