@@ -3,8 +3,15 @@ package com.example.withpet;
 public class News {
     String id;
     String imgUrl;
+    String context;
 
     News(){}
+
+    News(String id,String imgUrl, String context){
+        this.id = id;
+        this.imgUrl = imgUrl;
+        this.context = context;
+    }
 
     public String getId() {
         return id;
@@ -22,4 +29,11 @@ public class News {
         this.imgUrl = imgUrl;
     }
 
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
 }

@@ -72,16 +72,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         });
 
         Button btn1  = (Button) activity.findViewById(R.id.mainwBtn_next);
-
-/*        btn1.setOnClickListener(new View.OnClickListener() {
+        btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(activity, NewsWriteActivity.class);
-                //intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
-                //activity.startActivity(intent);
-                Toast.makeText(activity, "tlqkf", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(activity, NewsWriteActivity.class);
+                intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
+                activity.startActivityForResult(intent,1000);
+                activity.finish();
             }
-        })*/
+        });
     }
 
     @Override
