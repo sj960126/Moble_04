@@ -1,25 +1,44 @@
 package com.example.withpet;
 
 public class Walk_news {
-    String title;
-    String context;
-    int imgUri;
+    private String title;
+    private String context;
+    private int board_nb;
 
-    Walk_news (String title, String context, int imgUri){
-        this.title = title;
-        this.context = context;
-        this.imgUri = imgUri;
+    public Walk_news(){}
+    
+    public String getTitle() {
+        return title;
     }
 
-    public String getTitle() { return title;}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public void setTitle(String title){ this.title = title;}
+    public String getContext() {
+        return context;
+    }
 
-    public String getContext() { return context;}
+    public void setContext(String context) {
+        this.context = context;
+    }
 
-    public void setContext(String context){ this.context = context;}
+    public int getBoard_nb() {
+        return board_nb;
+    }
 
-    public int getImgUri() { return imgUri;}
+    public void setBoard_nb(int board_nb) {
+        this.board_nb = board_nb;
+    }
 
-    public void setImgUri() { this.imgUri = imgUri;}
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    private String profile;
+
 }

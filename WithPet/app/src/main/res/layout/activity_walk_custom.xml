@@ -20,7 +20,7 @@
         app:srcCompat="@mipmap/dog" />
 
     <TextView
-        android:id="@+id/walk_contents"
+        android:id="@+id/walk_title"
         android:layout_width="164dp"
         android:layout_height="32dp"
         android:layout_marginStart="35dp"
@@ -46,5 +46,5 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/walk_contents" />
+        app:layout_constraintTop_toBottomOf="@+id/walk_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>

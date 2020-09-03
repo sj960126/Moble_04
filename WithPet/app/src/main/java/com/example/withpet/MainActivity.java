@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -63,7 +64,11 @@ public class MainActivity extends AppCompatActivity {
         m3 = new Menu3frag();
         m4 = new Menu4frag();
         m5 = new Menu5frag();
-        setFrag(0);
+
+        Intent intent = getIntent();
+        int frag = intent.getIntExtra("frag",0);
+        setFrag(frag);
+
     }
 
     //각 메뉴의 레이아웃 화면 설정

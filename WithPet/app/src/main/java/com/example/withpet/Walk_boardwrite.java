@@ -22,8 +22,11 @@ public class Walk_boardwrite extends AppCompatActivity {
         walkBtn_add.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),Menu3frag.class);
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+
+                intent.putExtra("frag",2);
                 startActivity(intent);
+                finish();
             }
         });
 
