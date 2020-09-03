@@ -111,7 +111,7 @@ public class Menu1frag extends Fragment {
             //권한 o
             else{
                 //해당 페이지로 이동
-                Intent intent = new Intent(getContext(), NewsWriteActivity.class);
+                Intent intent = new Intent(getContext(), NewsGalleryActivity.class);
                 startActivity(intent);
             }
         }
@@ -128,7 +128,7 @@ public class Menu1frag extends Fragment {
                 //사용자가 허용했을 경우!
                 if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
                     //페이지 이동
-                    Intent intent = new Intent(getContext(), NewsWriteActivity.class);
+                    Intent intent = new Intent(getContext(), NewsGalleryActivity.class);
                     startActivity(intent);
                 }
                 //사용자가 거부했을 경우!

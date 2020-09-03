@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,6 +68,18 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 ImageView iv2 = (ImageView) activity.findViewById(R.id.mainwIv_choice);
                 //mDataset.get(holder.getAdapterPosition()) : 상수
                 Glide.with(activity).load(mDataset.get(holder.getAdapterPosition())).override(800).into(iv2);
+            }
+        });
+
+        Button btn1  = (Button) activity.findViewById(R.id.mainwBtn_next);
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, NewsWriteActivity.class);
+                intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
+                activity.setResult(Activity.RESULT_OK, intent);
+                activity.finish();
             }
         });
     }
