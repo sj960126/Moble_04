@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +17,16 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.w3c.dom.Text;
+
+import java.io.File;
 
 public class NewsWriteActivity extends AppCompatActivity {
 
@@ -47,8 +52,6 @@ public class NewsWriteActivity extends AppCompatActivity {
         storage= FirebaseStorage.getInstance();
         storageRf = storage.getReference();
 
-
-
         input = getIntent().getStringExtra("imgId");
         //선택한 사진 불러오기
         ImageView iv = (ImageView) findViewById(R.id.mainwIv_thumbnail);
@@ -59,14 +62,12 @@ public class NewsWriteActivity extends AppCompatActivity {
             public void onClick(View view) {
                 EditText tv = (EditText) findViewById(R.id.mainwEt_context);
                 inputContext= tv.getText().toString();
+                uploadImage(input);
+                //Toast.makeText(NewsWriteActivity.this, ""+imgId, Toast.LENGTH_SHORT).show();
 
-                imgRf = storageRf.child("dog.jpg");
-                String ang = imgRf.getPath();
-                Toast.makeText(NewsWriteActivity.this, "" + ang, Toast.LENGTH_SHORT).show();
-               //Toast.makeText(NewsWriteActivity.this, ""+inputContext, Toast.LENGTH_SHORT).show();
-                //writeNewUser("4","sb",inputContext, input);
+              /*  writeNewUser("6","sb",inputContext, imgId);
                 //페이지 이동
-/*                Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
+                 Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();*/
             }
@@ -93,5 +94,23 @@ public class NewsWriteActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    //파베 저장소에 feed 폴더에 사진 저장
+    public void uploadImage(String input){
+        Uri file = Uri.fromFile(new File(input));
+        imgRf = storageRf.child("feed/"+file.getLastPathSegment());
+        UploadTask uploadTask = imgRf.putFile(file);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(NewsWriteActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
