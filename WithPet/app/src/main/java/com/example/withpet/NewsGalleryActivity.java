@@ -26,10 +26,19 @@ public class NewsGalleryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_gallery);
-
+        Intent  intent = getIntent();
+        int requestcode = intent.getIntExtra("request", -1);
         //상단 next 버튼 이미지 설정
         Button btn1 = (Button) findViewById(R.id.mainwBtn_next);
-        btn1.setBackgroundResource(R.drawable.iconnext);
+        if(requestcode == R.integer.newsRequestcode){
+            btn1.setBackgroundResource(R.drawable.iconnext);
+            btn1.setTag(requestcode);
+        }
+        // 프로필 수정에서 갤러리 사진 선택 액티비티 실행시
+        else if(requestcode == R.integer.profileModifyRequestcode){
+            btn1.setBackgroundResource(R.drawable.iconcheck);
+            btn1.setTag(requestcode);
+        }
 
         //선택한 이미지 보는 imageView 디폴트 사진 설정
         ImageView iv2 = (ImageView) findViewById(R.id.mainwIv_choice);

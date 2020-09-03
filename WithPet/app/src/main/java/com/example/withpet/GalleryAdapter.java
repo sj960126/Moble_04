@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,10 +76,21 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity, NewsWriteActivity.class);
-                intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
-                activity.startActivityForResult(intent,1000);
-                activity.finish();
+                // 메인에서 갤러리 사진 선택 액티비티 띄웠을 때
+                if((int)view.getTag() == R.integer.newsRequestcode){
+                    Intent intent = new Intent(activity, NewsWriteActivity.class);
+                    intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
+                    activity.startActivityForResult(intent,1000);
+                    activity.finish();
+                }
+                // 프로필 수정에서 갤러리 사진 선택 액티비티 띄웠을 때
+                else if((int)view.getTag() == R.integer.profileModifyRequestcode){
+                    Intent intent = activity.getIntent();
+                    intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
+                    activity.setResult(activity.RESULT_OK,intent);
+                    activity.finish();
+                }
+
             }
         });
     }
