@@ -112,6 +112,7 @@ public class Menu1frag extends Fragment {
             else{
                 //해당 페이지로 이동
                 Intent intent = new Intent(getContext(), NewsGalleryActivity.class);
+                intent.putExtra("request", R.integer.newsRequestcode);
                 startActivity(intent);
             }
         }

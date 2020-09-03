@@ -1,6 +1,8 @@
 package com.example.withpet;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,13 +10,21 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.bumptech.glide.Glide;
 
 public class ProfileModifyActivity extends AppCompatActivity {
     String shape;
     ArrayAdapter adapter;
+    private String[] permission_list = {Manifest.permission.READ_EXTERNAL_STORAGE};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +33,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
         findViewById(R.id.modifyBtn_Ok).setOnClickListener(onclickListener);
         findViewById(R.id.modifyBtn_cancel).setOnClickListener(onclickListener);
         findViewById(R.id.modifyBtn_help).setOnClickListener(onclickListener);
+        findViewById(R.id.modifyIv_profile).setOnClickListener(onclickListener);
 
         // Spinner(콤보박스)에 사용할 아이템 리스트 adapter 생성(R.array.shape : 아이템리스트, R.layout.support~ : 안드로이드 제공 콤보박스 아이템 기본 레이아웃)
         adapter = ArrayAdapter.createFromResource(this, R.array.shape, R.layout.support_simple_spinner_dropdown_item);
@@ -72,9 +83,22 @@ public class ProfileModifyActivity extends AppCompatActivity {
                     helpdialog.setCancelable(true);
                     helpdialog.show();
                     break;
+                case R.id.modifyIv_profile:
+                    Permission();
+                    break;
             }
         }
     };
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Intent mintent = data;
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            ImageView iv = findViewById(R.id.modifyIv_profile);
+            // 갤러리에서 선택한 이미지 가져오기
+            Glide.with(this).load(mintent.getStringExtra("imgId")).override(800).into(iv);
+        }
+    }
     // 입력 정보를 판단(입력 정보 중 공백을 판단)해서 ProfileInfo 객체를 반환하는 메소드
     public ProfileInfo checkProfileInfo(String username, String shape, String meal){
         ProfileInfo pinfo;
@@ -82,6 +106,50 @@ public class ProfileModifyActivity extends AppCompatActivity {
         int tmpmeal = (meal.equals("")) ? -1 : Integer.parseInt(meal);
         pinfo = new ProfileInfo(username, tmpshape, tmpmeal);
         return  pinfo;
+    }
+    //권한설정 _ 안드로이드스튜디오개발가이드 + 구글링
+    public void Permission(){
+        for(String permission : permission_list){
+            //권한 확인 여부
+            int access = ContextCompat.checkSelfPermission(this, permission);
+            //권한 x
+            if(access == PackageManager.PERMISSION_DENIED){
+                //권한 설정 확인 창이 뜸!!
+                //requestCode는 아래의 onRequestPermissionsResult 함수 실행의 매개변수!
+                requestPermissions(permission_list,0);
+            }
+            //권한 o
+            else{
+                //해당 페이지로 이동
+                Intent intent = new Intent(this, NewsGalleryActivity.class);
+                intent.putExtra("request", R.integer.profileModifyRequestcode);
+                startActivityForResult(intent, 1020);
+            }
+        }
+    }
+
+    //권한 요청 후 어떻게 관리할 것인지에 대한 함수 _ 개발가이드에 자세히 나와있음
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 0)
+        {
+            for(int i=0; i<grantResults.length; i++)
+            {
+                //사용자가 허용했을 경우!
+                if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
+                    //페이지 이동
+                    Intent intent = new Intent(this, NewsGalleryActivity.class);
+
+                    startActivity(intent);
+
+                }
+                //사용자가 거부했을 경우!
+                else {
+                    Toast.makeText(this,"저장소 권한을 설정하세요.",Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
 }

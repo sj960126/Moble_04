@@ -1,27 +1,24 @@
 package com.example.withpet;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
-import android.view.View;
+
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import com.skt.Tmap.TMapCircle;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapTapi;
 import com.skt.Tmap.TMapView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -30,31 +27,64 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 
-
-public class Health_Hospital extends AppCompatActivity{
+public class Health_Hospital extends AppCompatActivity implements  TMapGpsManager.onLocationChangedCallback{
   final static String TAG = "XML";
   TMapView tMapView;
-  final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.marker);
+  private boolean TrackingMode = true;
+  private  TMapGpsManager tMapGpsManager =null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_health_hospital);
-    Toast.makeText(this,"하이",Toast.LENGTH_SHORT).show();
 
 
-//        LinearLayout health_hospital_map =(LinearLayout)findViewById(R.id.health_hospital_map);
-//
-//        tMapView = new TMapView(this);
-//        tMapView.setSKTMapApiKey("l7xxfa281c47f54b4b8d866946553f981932");
-//        health_hospital_map.addView(tMapView);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
-//        setUpMap();
-//        setGps();
+        LinearLayout health_hospital_map =(LinearLayout)findViewById(R.id.health_hospital_map);
+        tMapView = new TMapView(this);
+        tMapView.setSKTMapApiKey("l7xxfa281c47f54b4b8d866946553f981932");
+        health_hospital_map.addView(tMapView);
+
+        marker();
+
+        tMapView.setCompassMode(true);
+        tMapView.setIconVisibility(true);
+
+        tMapView.setZoomLevel(15);
+        tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
+        tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
+
+        tMapGpsManager = new TMapGpsManager(Health_Hospital.this);
+        tMapGpsManager.setMinTime(1000);
+        tMapGpsManager.setMinDistance(5);
+//        tMapGpsManager.setProvider(tMapGpsManager.NETWORK_PROVIDER);
+//        tMapGpsManager.OpenGps();
+
+        tMapView.setTrackingMode(true);
+        tMapView.setSightVisible(true);
+
+
 
     }
+
+    public void marker(){
+        ArrayList<Hospital> list = parser();
+        //i<list.size()
+        for (int i=0;i<20;i++) {
+                TMapPoint point = new TMapPoint(Double.parseDouble(list.get(i).getX()), Double.parseDouble(list.get(i).getY()));
+                TMapMarkerItem markerItem = new TMapMarkerItem();
+                markerItem.setPosition(0.5f, 1.0f);
+                markerItem.setTMapPoint(point);
+                tMapView.setCenterPoint(Double.parseDouble(list.get(i).getX()), Double.parseDouble(list.get(i).getY()));
+                tMapView.addMarkerItem("marker" + i, markerItem);
+        }
+    }
+    //문제점 전체 사이즈 다 돌리면 시스템 꺼짐 20개나 사이즈가 작아지면 돌아감  지금 돌리면 돌아감
 
     private ArrayList<Hospital> parser() {
         Log.i(TAG, "parser");
@@ -86,26 +116,26 @@ public class Health_Hospital extends AppCompatActivity{
                             if (startTag.equals("row")) {
                                 hospital = new Hospital();
                             }
-                            if (startTag.equals("siteWhlAddr")) {
+                            if (startTag.equals("REFINE_LOTNO_ADDR")) {
                                 hospital.setAddres(xmlParser.nextText());
                                 Log.i(TAG, "TEXT : " + xmlParser.getText());
                                 Log.i(TAG, "name : " + xmlParser.getName());
                                 Log.i(TAG, "add : " + hospital.getAddres());
                             }
-                            if (startTag.equals("bplcNm")) {
+                            if (startTag.equals("BIZPLC_NM ")) {
                                 hospital.setName(xmlParser.nextText());
                                 Log.i(TAG, "TEXT : " + xmlParser.getText());
                                 Log.i(TAG, "TEXT : " + xmlParser.getName());
                                 Log.i(TAG, "TEXT : " + hospital.getName());
                             }
 
-                            if (startTag.equals("x")) {
+                            if (startTag.equals("REFINE_WGS84_LAT")) {
                                 hospital.setX(xmlParser.nextText().replace(" ", ""));
                                 Log.i(TAG, "TEXT : " + xmlParser.getName());
                                 Log.i(TAG, "TEXT : " + xmlParser.getName());
                                 Log.i(TAG, "TEXT : " + hospital.getX());
                             }
-                            if (startTag.equals("y")) {
+                            if (startTag.equals("REFINE_WGS84_LOGT")) {
                                 hospital.setY(xmlParser.nextText().replace(" ", ""));
                                 Log.i(TAG, "TEXT : " + xmlParser.getName());
                                 Log.i(TAG, "TEXT : " + xmlParser.getName());
@@ -143,68 +173,12 @@ public class Health_Hospital extends AppCompatActivity{
     }
 
 
-    private final LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            if(location !=null){
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-
-                tMapView.setLocationPoint(longitude, latitude);
-                tMapView.setCenterPoint(longitude, latitude);
-
-                TMapPoint tMapPoint = new TMapPoint(latitude, longitude);
-
-                TMapCircle tMapCircle = new TMapCircle();
-                tMapCircle.setCenterPoint( tMapPoint );
-                tMapCircle.setRadius(300);
-                tMapCircle.setCircleWidth(2);
-                tMapCircle.setLineColor(Color.BLUE);
-                tMapCircle.setAreaColor(Color.GRAY);
-                tMapCircle.setAreaAlpha(100);
-                tMapView.addTMapCircle("circle1", tMapCircle);
-
-            }
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-
-        }
-    };
-
-    private void setUpMap(){
-        ArrayList<Hospital> list = parser();
-        for (int i=0;i<list.size();i++){
-            TMapPoint point = new TMapPoint(Double.parseDouble(list.get(i).getX()),Double.parseDouble(list.get(i).getY()));
-            TMapMarkerItem markerItem1 = new TMapMarkerItem();
-            markerItem1.setIcon(bitmap);
-            markerItem1.setTMapPoint(point);
-            tMapView.addMarkerItem("marker"+i,markerItem1);
+    @Override
+    public void onLocationChange(Location location) {
+        if (TrackingMode){
+            tMapView.setLocationPoint(location.getLongitude(),location.getLatitude());
         }
     }
-
-    public void setGps(){
-        final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//           ContextCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
-                1000, // 통지사이의 최소 시간간격 (miliSecond)
-                1, // 통지사이의 최소 변경거리 (m)
-                mLocationListener);
-    }
-
 }
 
 

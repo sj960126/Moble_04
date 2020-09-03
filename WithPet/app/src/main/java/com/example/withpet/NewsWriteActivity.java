@@ -4,24 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
+import java.io.File;
 
 public class NewsWriteActivity extends AppCompatActivity {
 
@@ -32,6 +32,7 @@ public class NewsWriteActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageRf;
     private StorageReference imgRf;
+    private String imgToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,6 @@ public class NewsWriteActivity extends AppCompatActivity {
         storage= FirebaseStorage.getInstance();
         storageRf = storage.getReference();
 
-
-
         input = getIntent().getStringExtra("imgId");
         //선택한 사진 불러오기
         ImageView iv = (ImageView) findViewById(R.id.mainwIv_thumbnail);
@@ -57,18 +56,12 @@ public class NewsWriteActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText tv = (EditText) findViewById(R.id.mainwEt_context);
-                inputContext= tv.getText().toString();
-
-                imgRf = storageRf.child("dog.jpg");
-                String ang = imgRf.getPath();
-                Toast.makeText(NewsWriteActivity.this, "" + ang, Toast.LENGTH_SHORT).show();
-               //Toast.makeText(NewsWriteActivity.this, ""+inputContext, Toast.LENGTH_SHORT).show();
-                //writeNewUser("4","sb",inputContext, input);
+                uploadImage(input);
+                Image(input);
                 //페이지 이동
-/*                Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
+                Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
                 startActivity(intent);
-                finish();*/
+                finish();
             }
         });
     }
@@ -93,5 +86,37 @@ public class NewsWriteActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    //파베 저장소에 feed 폴더에 사진 저장
+    public void uploadImage(String input){
+        Uri file = Uri.fromFile(new File(input));
+        imgRf = storageRf.child("feed/"+file.getLastPathSegment());
+        UploadTask uploadTask = imgRf.putFile(file);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(NewsWriteActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //파베 저장소에서 url 다운로드 해서 데베 등록
+    public void Image(String input){
+        String[] path = input.split("/");
+        storageRf.child("feed/" +path[path.length - 1]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL for 'users/me/profile.png'
+                EditText et =findViewById(R.id.mainwEt_context);
+                inputContext = et.getText().toString();
+                writeNewUser("ang","ang",inputContext, uri.toString());
+            }
+        });
     }
 }
