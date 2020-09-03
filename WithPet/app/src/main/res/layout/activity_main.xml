@@ -31,9 +31,11 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNV"
+            app:itemIconTint="@color/nav_color"
+            app:itemTextColor="@color/nav_color"
             android:layout_width="match_parent"
-            android:layout_height="50sp"
-            android:background="#777474"
+            android:layout_height="70dp"
+            android:background="#fff"
             app:menu="@menu/menuitem" />
     </FrameLayout>
 

@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     Menu2frag m2;
     Menu3frag m3;
     Menu4frag m4;
+    Menu5frag m5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "내정보", Toast.LENGTH_SHORT).show();
                         setFrag(3);
                         break;
+                    case R.id.menu5:
+                        Toast.makeText(MainActivity.this, "IOT", Toast.LENGTH_SHORT).show();
+                        setFrag(4);
+                        break;
                 }
                 return true;
             }
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         m2 = new Menu2frag();
         m3 = new Menu3frag();
         m4 = new Menu4frag();
+        m5 = new Menu5frag();
         setFrag(0);
     }
 
@@ -79,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 3:
                 ft.replace(R.id.main, m4);
+                ft.commit();
+                break;
+            case 4:
+                ft.replace(R.id.main, m5);
                 ft.commit();
                 break;
         }
