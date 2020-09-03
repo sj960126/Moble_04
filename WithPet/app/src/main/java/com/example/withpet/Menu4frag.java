@@ -1,5 +1,6 @@
 package com.example.withpet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ public class Menu4frag extends Fragment {
     private ArrayList<News> myfeed;
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
+    final  int requestcode = 1001;
 
     @Nullable
     @Override
@@ -72,6 +74,22 @@ public class Menu4frag extends Fragment {
         });
         adapter = new MyPageNoticeAdapter(myfeed, getContext());
         list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
+        rootview.findViewById(R.id.myPageBtn_modify).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent modify = new Intent(getActivity(), ProfileModifyActivity.class);
+                startActivityForResult(modify, requestcode);
+            }
+        });
         return rootview;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == getActivity().RESULT_OK){
+            ProfileInfo pinfo = (ProfileInfo) data.getSerializableExtra("profileinfo");
+            Log.i("username : ",pinfo.getUsername());
+            Log.i("shape : ",pinfo.getShape());
+            Log.i("meal : ",""+pinfo.getMeal());
+        }
     }
 }

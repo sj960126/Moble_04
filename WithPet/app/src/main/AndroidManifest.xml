@@ -16,10 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewsWriteActivity"></activity>
-        <activity android:name=".Health_Hospital" />
-        <activity android:name=".NewsGalleryActivity" />
-        <activity android:name=".iot_streaming_area" />
+        <activity android:name=".Health_Hospital"/>
+        <activity android:name=".NewsWriteActivity"/>
+        <activity android:name=".iot_streaming_area"></activity>
+        <activity android:name=".ProfileModifyActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
