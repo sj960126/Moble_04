@@ -73,15 +73,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
         Button btn1  = (Button) activity.findViewById(R.id.mainwBtn_next);
 
-        btn1.setOnClickListener(new View.OnClickListener() {
+/*        btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity, NewsWriteActivity.class);
-                intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
-                activity.setResult(Activity.RESULT_OK, intent);
-                activity.finish();
+                //Intent intent = new Intent(activity, NewsWriteActivity.class);
+                //intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
+                //activity.startActivity(intent);
+                Toast.makeText(activity, "tlqkf", Toast.LENGTH_SHORT).show();
             }
-        });
+        })*/
     }
 
     @Override
