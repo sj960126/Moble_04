@@ -1,20 +1,23 @@
 package com.example.withpet;
 
-
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
-
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
@@ -27,60 +30,88 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
-public class Health_Hospital extends AppCompatActivity implements  TMapGpsManager.onLocationChangedCallback{
+public class Health_Hospital extends AppCompatActivity{
   final static String TAG = "XML";
   TMapView tMapView;
   private boolean TrackingMode = true;
   private  TMapGpsManager tMapGpsManager =null;
+  private Context mcontext =null;
+  private final String APK ="l7xxfa281c47f54b4b8d866946553f981932";
+  private final int SCALE = 8;
+  private final int SCALE2 = 10;
+  double lat;
+  double lon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_health_hospital);
 
+//    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//    StrictMode.setThreadPolicy(policy);
+    //네트워크 사용하기 위한 쓰레드
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
+        mcontext =this;
         LinearLayout health_hospital_map =(LinearLayout)findViewById(R.id.health_hospital_map);
         tMapView = new TMapView(this);
-        tMapView.setSKTMapApiKey("l7xxfa281c47f54b4b8d866946553f981932");
+        tMapView.setSKTMapApiKey(APK);
         health_hospital_map.addView(tMapView);
 
         marker();
+//        setGps();
+        tMapView.setCenterPoint(126.988205, 37.551135);
 
-        tMapView.setCompassMode(true);
-        tMapView.setIconVisibility(true);
+        tMapView.setOnCalloutRightButtonClickListener(new TMapView.OnCalloutRightButtonClickCallback() {
+            @Override
+            public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
 
-        tMapView.setZoomLevel(15);
-        tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
-        tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
+                lat = tMapMarkerItem.latitude; //위도
+                lon = tMapMarkerItem.longitude; //경도
 
-        tMapGpsManager = new TMapGpsManager(Health_Hospital.this);
-        tMapGpsManager.setMinTime(1000);
-        tMapGpsManager.setMinDistance(5);
-//        tMapGpsManager.setProvider(tMapGpsManager.NETWORK_PROVIDER);
-//        tMapGpsManager.OpenGps();
+                TMapTapi tMapTapi = new TMapTapi(mcontext);
+                boolean isTmapApp = tMapTapi.isTmapApplicationInstalled();
+                if(isTmapApp){
+                    tMapTapi.invokeRoute("출발지",(float)lon,(float)lat);
+                }else{
+                    Toast.makeText(mcontext,"티맵깔아씹년아",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-        tMapView.setTrackingMode(true);
-        tMapView.setSightVisible(true);
     }
 
     public void marker(){
         ArrayList<Hospital> list = parser();
         for (int i=0;i<list.size();i++) {
-                TMapPoint point = new TMapPoint(Double.parseDouble(list.get(i).getX()), Double.parseDouble(list.get(i).getY()));
-                TMapMarkerItem markerItem = new TMapMarkerItem();
-                markerItem.setPosition(0.5f, 1.0f);
-                markerItem.setTMapPoint(point);
-                tMapView.setCenterPoint(Double.parseDouble(list.get(i).getX()), Double.parseDouble(list.get(i).getY()));
-                tMapView.addMarkerItem("marker" + i, markerItem);
+            TMapPoint point = new TMapPoint(Double.parseDouble(list.get(i).getX()), Double.parseDouble(list.get(i).getY()));
+            TMapMarkerItem markerItem = new TMapMarkerItem();
+
+            Bitmap bitmap = BitmapFactory.decodeResource(mcontext.getResources(),R.drawable.marker);
+            bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / SCALE, bitmap.getHeight() / SCALE, true);
+
+            markerItem.setPosition(0.5f, 1.0f);
+            markerItem.setTMapPoint(point);
+            markerItem.setIcon(bitmap);
+
+            Bitmap bitmap2 = BitmapFactory.decodeResource(mcontext.getResources(),R.drawable.marker2);
+            bitmap2 = Bitmap.createScaledBitmap(bitmap2, bitmap2.getWidth() / SCALE2, bitmap2.getHeight() / SCALE2, true);
+
+            markerItem.setCalloutRightButtonImage(bitmap2);
+            markerItem.setCalloutTitle(list.get(i).getName()); //풍선뷰 메시지
+            markerItem.setCalloutSubTitle(list.get(i).getAddres());
+            markerItem.setCanShowCallout(true);
+            markerItem.setAutoCalloutVisible(true);
+
+            tMapView.addMarkerItem("marker" + i, markerItem);
+
+
         }
     }
-    //문제점 전체 사이즈 다 돌리면 시스템 꺼짐 20개나 사이즈가 작아지면 돌아감  지금 돌리면 돌아감
+
 
     private ArrayList<Hospital> parser() {
         Log.i(TAG, "parser");
@@ -118,7 +149,7 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
                                 Log.i(TAG, "name : " + xmlParser.getName());
                                 Log.i(TAG, "add : " + hospital.getAddres());*/
                             }
-                            if (startTag.equals("BIZPLC_NM ")) {
+                            if (startTag.equals("BIZPLC_NM")) {
                                 hospital.setName(xmlParser.nextText());
                                 /*Log.i(TAG, "TEXT : " + xmlParser.getText());
                                 Log.i(TAG, "TEXT : " + xmlParser.getName());
@@ -168,12 +199,63 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
         return arrayList;
     }
 
-    @Override
-    public void onLocationChange(Location location) {
-        if (TrackingMode){
-            tMapView.setLocationPoint(location.getLongitude(),location.getLatitude());
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            if(location !=null){
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                tMapView.setLocationPoint(longitude, latitude);
+                tMapView.setCenterPoint(longitude, latitude);
+
+                tMapView.setCompassMode(true); //현재 보는 방향
+                tMapView.setIconVisibility(true); //현위치 아이콘 표시
+
+                /*줌 레벨 설정 */
+                tMapView.setZoomLevel(15);
+                tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
+                tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
+
+                /* 화면중심을 단말의 현재위치로 이동 */
+                tMapView.setTrackingMode(true);
+                tMapView.setSightVisible(true);
+            }
         }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    };
+
+    public void setGps(){
+        final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
+            }
+            return;
+        }
+
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자(실내에선 NETWORK_PROVIDER 권장)
+                1000, // 통지사이의 최소 시간간격 (miliSecond)
+                1, // 통지사이의 최소 변경거리 (m)
+                mLocationListener);
     }
+
 }
 
 
