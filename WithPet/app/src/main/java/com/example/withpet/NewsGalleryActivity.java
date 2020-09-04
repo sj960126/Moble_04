@@ -26,6 +26,9 @@ public class NewsGalleryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_gallery);
+        //화면전환시 아래에서 위로 올라오는 애니메이션 제거
+        overridePendingTransition(0, 0);
+
         Intent  intent = getIntent();
         int requestcode = intent.getIntExtra("request", -1);
         //상단 next 버튼 이미지 설정

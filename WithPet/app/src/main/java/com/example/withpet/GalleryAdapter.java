@@ -27,6 +27,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     private ArrayList<String> mDataset; //사진은 경로로 저장하기 때문에 String 타입의 ArrayList 사용
     private Activity activity; //어댑터는 activity가 존재하지 않음! 현재 어댑터가 실행되는 activity의 정보를 가져오기 위해 선언!
+    private Intent intentw;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public CardView layout;
@@ -69,6 +70,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 ImageView iv2 = (ImageView) activity.findViewById(R.id.mainwIv_choice);
                 //mDataset.get(holder.getAdapterPosition()) : 상수
                 Glide.with(activity).load(mDataset.get(holder.getAdapterPosition())).override(800).into(iv2);
+                //다음페이지에 선택한 값을 전달하기 위해 intent 작성
+                intentw = new Intent(activity, NewsWriteActivity.class);
+                intentw.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
             }
         });
 
@@ -78,9 +82,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
             public void onClick(View view) {
                 // 메인에서 갤러리 사진 선택 액티비티 띄웠을 때
                 if((int)view.getTag() == R.integer.newsRequestcode){
-                    Intent intent = new Intent(activity, NewsWriteActivity.class);
-                    intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
-                    activity.startActivityForResult(intent,1000);
+                    activity.startActivity(intentw);
                     activity.finish();
                 }
                 // 프로필 수정에서 갤러리 사진 선택 액티비티 띄웠을 때
