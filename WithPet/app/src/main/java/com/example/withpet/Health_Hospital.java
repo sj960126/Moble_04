@@ -44,6 +44,7 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+        //네트워크 사용하기 위한 쓰레드
 
         LinearLayout health_hospital_map =(LinearLayout)findViewById(R.id.health_hospital_map);
         tMapView = new TMapView(this);
@@ -62,8 +63,13 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
         tMapGpsManager = new TMapGpsManager(Health_Hospital.this);
         tMapGpsManager.setMinTime(1000);
         tMapGpsManager.setMinDistance(5);
+
 //        tMapGpsManager.setProvider(tMapGpsManager.NETWORK_PROVIDER);
 //        tMapGpsManager.OpenGps();
+
+
+
+
 
         tMapView.setTrackingMode(true);
         tMapView.setSightVisible(true);
@@ -84,6 +90,7 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
                 tMapView.addMarkerItem("marker" + i, markerItem);
         }
     }
+
     //문제점 전체 사이즈 다 돌리면 시스템 꺼짐 20개나 사이즈가 작아지면 돌아감  지금 돌리면 돌아감
 
     private ArrayList<Hospital> parser() {
@@ -179,6 +186,7 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
             tMapView.setLocationPoint(location.getLongitude(),location.getLatitude());
         }
     }
+
 }
 
 
