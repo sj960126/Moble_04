@@ -35,6 +35,7 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
   TMapView tMapView;
   private boolean TrackingMode = true;
   private  TMapGpsManager tMapGpsManager =null;
+//  Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.marker);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +87,15 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
                 TMapMarkerItem markerItem = new TMapMarkerItem();
                 markerItem.setPosition(0.5f, 1.0f);
                 markerItem.setTMapPoint(point);
+                markerItem.setCanShowCallout(true); //풍선뷰의 사용 여부
+                markerItem.setCalloutTitle(list.get(i).getName()); //풍선뷰 메시지
+                markerItem.setCalloutSubTitle(list.get(i).getAddres()); //서브 메시지
+                markerItem.setEnableClustering(true);
                 tMapView.setCenterPoint(Double.parseDouble(list.get(i).getX()), Double.parseDouble(list.get(i).getY()));
                 tMapView.addMarkerItem("marker" + i, markerItem);
         }
     }
 
-    //문제점 전체 사이즈 다 돌리면 시스템 꺼짐 20개나 사이즈가 작아지면 돌아감  지금 돌리면 돌아감
 
     private ArrayList<Hospital> parser() {
         Log.i(TAG, "parser");
