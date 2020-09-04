@@ -73,8 +73,12 @@ public class Health_Hospital extends AppCompatActivity{
                 lon = tMapMarkerItem.longitude; //경도
 
                 TMapTapi tMapTapi = new TMapTapi(mcontext);
-                
-                tMapTapi.invokeRoute("출발지",(float)lon,(float)lat);
+                boolean isTmapApp = tMapTapi.isTmapApplicationInstalled();
+                if(isTmapApp){
+                    tMapTapi.invokeRoute("출발지",(float)lon,(float)lat);
+                }else{
+                    Toast.makeText(mcontext,"티맵깔아씹년아",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
