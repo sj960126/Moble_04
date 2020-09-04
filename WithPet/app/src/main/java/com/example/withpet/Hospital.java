@@ -6,6 +6,7 @@ public class Hospital {
     String x;
     String y;
 
+
     public String getAddres() {
         return addres;
     }
@@ -22,20 +23,11 @@ public class Hospital {
         this.name = name;
     }
 
-    public String getX() {
-        return x;
-    }
+    public String getX() { return x; }
 
-    public void setX(String x) {
-        this.x = x;
-    }
+    public void setX(String x) { this.x = x; }
 
-    public String getY() {
-        return y;
-    }
+    public String getY() { return y; }
 
-    public void setY(String y) {
-        this.y = y;
-    }
-
+    public void setY(String y) { this.y = y; }
 }

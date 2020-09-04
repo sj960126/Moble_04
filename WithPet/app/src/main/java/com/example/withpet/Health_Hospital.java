@@ -67,15 +67,11 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
 
         tMapView.setTrackingMode(true);
         tMapView.setSightVisible(true);
-
-
-
     }
 
     public void marker(){
         ArrayList<Hospital> list = parser();
-        //i<list.size()
-        for (int i=0;i<20;i++) {
+        for (int i=0;i<list.size();i++) {
                 TMapPoint point = new TMapPoint(Double.parseDouble(list.get(i).getX()), Double.parseDouble(list.get(i).getY()));
                 TMapMarkerItem markerItem = new TMapMarkerItem();
                 markerItem.setPosition(0.5f, 1.0f);
@@ -110,7 +106,7 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
                         Log.i(TAG, "xml START");
                         break;
                     case XmlPullParser.START_TAG:
-                        Log.i(TAG, "Start TAG :" + xmlParser.getName());
+                        //Log.i(TAG, "Start TAG :" + xmlParser.getName());
                         try {
                             String startTag = xmlParser.getName();
                             if (startTag.equals("row")) {
@@ -118,35 +114,35 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
                             }
                             if (startTag.equals("REFINE_LOTNO_ADDR")) {
                                 hospital.setAddres(xmlParser.nextText());
-                                Log.i(TAG, "TEXT : " + xmlParser.getText());
+                                /*Log.i(TAG, "TEXT : " + xmlParser.getText());
                                 Log.i(TAG, "name : " + xmlParser.getName());
-                                Log.i(TAG, "add : " + hospital.getAddres());
+                                Log.i(TAG, "add : " + hospital.getAddres());*/
                             }
                             if (startTag.equals("BIZPLC_NM ")) {
                                 hospital.setName(xmlParser.nextText());
-                                Log.i(TAG, "TEXT : " + xmlParser.getText());
+                                /*Log.i(TAG, "TEXT : " + xmlParser.getText());
                                 Log.i(TAG, "TEXT : " + xmlParser.getName());
-                                Log.i(TAG, "TEXT : " + hospital.getName());
+                                Log.i(TAG, "TEXT : " + hospital.getName());*/
                             }
 
                             if (startTag.equals("REFINE_WGS84_LAT")) {
                                 hospital.setX(xmlParser.nextText().replace(" ", ""));
+                                /*Log.i(TAG, "TEXT : " + xmlParser.getName());
                                 Log.i(TAG, "TEXT : " + xmlParser.getName());
-                                Log.i(TAG, "TEXT : " + xmlParser.getName());
-                                Log.i(TAG, "TEXT : " + hospital.getX());
+                                Log.i(TAG, "TEXT : " + hospital.getX());*/
                             }
                             if (startTag.equals("REFINE_WGS84_LOGT")) {
                                 hospital.setY(xmlParser.nextText().replace(" ", ""));
+                                /*Log.i(TAG, "TEXT : " + xmlParser.getName());
                                 Log.i(TAG, "TEXT : " + xmlParser.getName());
-                                Log.i(TAG, "TEXT : " + xmlParser.getName());
-                                Log.i(TAG, "TEXT : " + hospital.getY());
+                                Log.i(TAG, "TEXT : " + hospital.getY());*/
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
                     case XmlPullParser.END_TAG:
-                        Log.i(TAG, "End TAG : " + xmlParser.getName());
+                        //Log.i(TAG, "End TAG : " + xmlParser.getName());
                         String endTag = xmlParser.getName();
                         if (endTag.equals("row")) {
                             arrayList.add(hospital);
@@ -171,7 +167,6 @@ public class Health_Hospital extends AppCompatActivity implements  TMapGpsManage
         }
         return arrayList;
     }
-
 
     @Override
     public void onLocationChange(Location location) {
