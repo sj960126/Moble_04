@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //화면전환시 아래에서 위로 올라오는 애니메이션 제거
+        overridePendingTransition(0, 0);
 
         //bottomNavigationView 클릭시 이벤트
         bottomNavigationView =findViewById(R.id.bottomNV);

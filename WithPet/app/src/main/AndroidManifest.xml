@@ -14,12 +14,14 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
+        <activity android:name="MainActivity"/>
         <activity android:name=".Health_Hospital"/>
         <activity android:name=".NewsGalleryActivity"/>
         <activity android:name=".NewsWriteActivity"/>
         <activity android:name=".iot_streaming_area"></activity>
         <activity android:name=".ProfileModifyActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".JoinActivity"/>
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
