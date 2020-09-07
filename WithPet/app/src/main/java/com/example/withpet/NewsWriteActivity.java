@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +39,8 @@ public class NewsWriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_write);
+        //화면전환시 아래에서 위로 올라오는 애니메이션 제거
+        overridePendingTransition(0, 0);
 
         Button btn = (Button) findViewById(R.id.mainwBtn_finish);
         btn.setBackgroundResource(R.drawable.iconcheck);
@@ -85,7 +88,6 @@ public class NewsWriteActivity extends AppCompatActivity {
                         Toast.makeText(NewsWriteActivity.this, "저장을 실패했습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
     //파베 저장소에 feed 폴더에 사진 저장
@@ -107,15 +109,17 @@ public class NewsWriteActivity extends AppCompatActivity {
     }
 
     //파베 저장소에서 url 다운로드 해서 데베 등록
-    public void Image(String input){
+    public void Image(final String input){
         String[] path = input.split("/");
+
         storageRf.child("feed/" +path[path.length - 1]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 // Got the download URL for 'users/me/profile.png'
                 EditText et =findViewById(R.id.mainwEt_context);
                 inputContext = et.getText().toString();
-                writeNewUser("ang","ang",inputContext, uri.toString());
+
+                writeNewUser( "g" ,"ang",inputContext, uri.toString());
             }
         });
     }
