@@ -35,6 +35,7 @@ import java.util.List;
 
 
 public class Health_Hospital extends AppCompatActivity{
+    //개선점 : Tmap 다운로드 경로 제공 / 코드 길이 최소화 / 주석 삭제
   final static String TAG = "XML";
   TMapView tMapView;
   private boolean TrackingMode = true;
