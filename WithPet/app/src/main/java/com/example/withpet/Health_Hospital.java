@@ -43,9 +43,9 @@ public class Health_Hospital extends AppCompatActivity{
   private final String APK ="l7xxfa281c47f54b4b8d866946553f981932";
   private final int SCALE = 8;
   private final int SCALE2 = 10;
-  double lat;
-  double lon;
-
+  private double lat;
+  private double lon;
+  private String way;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -62,8 +62,8 @@ public class Health_Hospital extends AppCompatActivity{
         health_hospital_map.addView(tMapView);
 
         marker();
-//        setGps();
-        tMapView.setCenterPoint(126.988205, 37.551135);
+        setGps();
+//        tMapView.setCenterPoint(126.988205, 37.551135);
 
         tMapView.setOnCalloutRightButtonClickListener(new TMapView.OnCalloutRightButtonClickCallback() {
             @Override
@@ -71,11 +71,11 @@ public class Health_Hospital extends AppCompatActivity{
 
                 lat = tMapMarkerItem.latitude; //위도
                 lon = tMapMarkerItem.longitude; //경도
-
+                way = tMapMarkerItem.getName();
                 TMapTapi tMapTapi = new TMapTapi(mcontext);
                 boolean isTmapApp = tMapTapi.isTmapApplicationInstalled();
-                if(isTmapApp){
-                    tMapTapi.invokeRoute("출발지",(float)lon,(float)lat);
+                if(isTmapApp ==true){
+                    tMapTapi.invokeRoute(way,(float)lon,(float)lat);
                 }else{
                     Toast.makeText(mcontext,"티맵깔아씹년아",Toast.LENGTH_SHORT).show();
                 }
