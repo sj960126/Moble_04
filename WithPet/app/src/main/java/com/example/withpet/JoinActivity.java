@@ -4,11 +4,34 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Objects;
+
 public class JoinActivity extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference reference;
+    private EditText nickname;
+    private EditText email;
+    private EditText pw;
+    private EditText pwcheck;
+    private String etEmail, etNickname, etPw, etPw2, etName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +39,18 @@ public class JoinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_join);
         //화면전환시 아래에서 위로 올라오는 애니메이션 제거
         overridePendingTransition(0, 0);
+
+        //파베 접근 설정
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        reference = firebaseDatabase.getReference("User");
+
+        nickname = (EditText)  findViewById(R.id.joinEt_nickname);
+        email = (EditText) findViewById(R.id.joinEt_email);
+        pw = (EditText) findViewById(R.id.joinEt_pw);
+        pwcheck = (EditText) findViewById(R.id.joinEt_pw2);
+
 
     }
 
@@ -31,10 +66,46 @@ public class JoinActivity extends AppCompatActivity {
                 Toast.makeText(this, "이메일인증확인", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.joinBtn_ok:
-                Toast.makeText(this, "회원가입", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                etEmail = email.getText().toString().trim();
+                etNickname = nickname.getText().toString().trim();
+                etPw = pw.getText().toString().trim();
+                etPw2 = pwcheck.getText().toString().trim();
+
+                //비밀번호 = 비밀번호 확인
+                if(etPw.equals(etPw2)){
+                    //신규 계정 등록
+                    firebaseAuth.createUserWithEmailAndPassword(etEmail,etPw).addOnCompleteListener(JoinActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            //가입 성공시
+                            if(task.isSuccessful()){
+                               /* FirebaseUser user = firebaseAuth.getCurrentUser();
+                                String email = user.getEmail();
+                                String uid = user.getUid();
+
+                                //해쉬맵으로 파베 저장
+                                HashMap<Object, String> hashMap = new HashMap<>();
+
+                                hashMap.put("uid",uid);
+                                hashMap.put("email", email);
+                                hashMap.put("name", etName);
+
+                                reference.child(uid).setValue(hashMap);
+*/
+                                Toast.makeText(JoinActivity.this, "회원가입", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(JoinActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else{
+                                Toast.makeText(JoinActivity.this, "이미 존재하는 회원정보입니다.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

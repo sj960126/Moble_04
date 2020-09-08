@@ -111,7 +111,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                 }
             });
         }
-        
+
     }
 
 }
