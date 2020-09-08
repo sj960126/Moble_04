@@ -66,12 +66,16 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         TextView context;
         Button like;
         Button reply;
+        //button 클릭시 확인
+        int btn1;
+        int btn2;
 
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
             like = (Button) itemView.findViewById(R.id.mainBtn_like);
             reply = (Button) itemView.findViewById(R.id.mainBtn_reply);
 
+            //button 디폴트 이미지 설정
             like.setBackgroundResource(R.drawable.iconlike);
             reply.setBackgroundResource(R.drawable.iconreply);
 
@@ -82,16 +86,32 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    like.setBackgroundResource(R.drawable.iconlike2);
+                    int likecount = 0;
+                    btn1++;
+                    //button 클릭할때마다 이미지 변경
+                    if(btn1 == 0 || btn1 %2 ==0){
+                        like.setBackgroundResource(R.drawable.iconlike);
+                    }
+                    else {
+                        like.setBackgroundResource(R.drawable.iconlike2);
+                    }
+
                 }
             });
             reply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    reply.setBackgroundResource(R.drawable.iconreply2);
+                    btn2++;
+                    if(btn2 == 0 || btn2 %2 == 0){
+                        reply.setBackgroundResource(R.drawable.iconreply);
+                    }
+                    else{
+                        reply.setBackgroundResource(R.drawable.iconreply2);
+                    }
                 }
             });
         }
+        
     }
 
 }

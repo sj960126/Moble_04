@@ -3,6 +3,7 @@ package com.example.withpet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class Menu3frag extends Fragment {
     private View rootview;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private ArrayList<Walk_news> walkfeed;
+    private ArrayList<Walk_boardUpload> walkfeed;
     private RecyclerView.LayoutManager layoutManager;
     private Walk_Adapter walk_adpater;
     private FloatingActionButton walkFab_write;
@@ -49,15 +50,15 @@ public class Menu3frag extends Fragment {
 
         database = FirebaseDatabase.getInstance();
 
-        databaseReference = database.getReference("Walk");
+        databaseReference = database.getReference("walk-board");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 walkfeed.clear();
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Walk_news walk_news = snapshot.getValue(Walk_news.class);
-                    walkfeed.add(walk_news);
+                    Walk_boardUpload walk_boardUpload = snapshot.getValue(Walk_boardUpload.class);
+                    walkfeed.add(walk_boardUpload);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -70,7 +71,6 @@ public class Menu3frag extends Fragment {
         //******************
         adapter = new Walk_Adapter(walkfeed, getContext());
         recyclerView.setAdapter(adapter);
-        //adapter = new Walk_Adapter()
 
         //글작성 버튼
         walkFab_write = (FloatingActionButton) rootview.findViewById(R.id.fab);
