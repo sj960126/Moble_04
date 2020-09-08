@@ -58,9 +58,6 @@ public class Menu3frag extends Fragment {
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Walk_boardUpload walk_boardUpload = snapshot.getValue(Walk_boardUpload.class);
-                    Log.i("confirm", walk_boardUpload.getWalkboard_content());
-                    Log.i("confirm", walk_boardUpload.getWalkboard_title());
-                    Log.i("confirm", snapshot.getValue().toString());
                     walkfeed.add(walk_boardUpload);
                 }
                 adapter.notifyDataSetChanged();
