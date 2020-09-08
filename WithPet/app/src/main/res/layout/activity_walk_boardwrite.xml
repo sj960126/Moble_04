@@ -104,7 +104,7 @@
             tools:text="내용" />
 
         <EditText
-            android:id="@+id/walk_title"
+            android:id="@+id/walk_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

@@ -15,27 +15,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
+
         <activity android:name=".Test"></activity>
         <activity android:name=".Walk_boardwrite" />
-=======
         <activity android:name=".health_diary"></activity>
-        <activity android:name=".MainActivity" />
->>>>>>> 598a3197ecfee4ccdb822c44b9895bb698f8aec4
         <activity android:name=".Health_Hospital" />
         <activity android:name=".NewsGalleryActivity" />
         <activity android:name=".NewsWriteActivity" />
         <activity android:name=".iot_streaming_area" />
         <activity android:name=".ProfileModifyActivity" />
-<<<<<<< HEAD
-        <activity android:name=".MainActivity">
-=======
+        <activity android:name=".MainActivity"/>
         <activity android:name=".JoinActivity" />
         <activity android:name=".LoginActivity">
->>>>>>> 598a3197ecfee4ccdb822c44b9895bb698f8aec4
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
