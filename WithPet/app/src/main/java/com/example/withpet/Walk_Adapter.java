@@ -56,8 +56,6 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
         TextView tv_title;
         TextView tv_contents;
 
-
-
         public CustomViewholder(@NonNull View itemView) {
             super(itemView);
             this.iv_profile = itemView.findViewById(R.id.imageView);
