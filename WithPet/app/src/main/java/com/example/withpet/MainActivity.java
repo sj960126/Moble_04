@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     Menu3frag m3;
     Menu4frag m4;
     Menu5frag m5;
+    Walk_boarddetail m6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         m3 = new Menu3frag();
         m4 = new Menu4frag();
         m5 = new Menu5frag();
-
+        m6 = new Walk_boarddetail();
         Intent intent = getIntent();
         int frag = intent.getIntExtra("frag",0);
         setFrag(frag);
@@ -96,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 4:
                 ft.replace(R.id.main, m5);
+                ft.commit();
+                break;
+            case 5:
+                ft.replace(R.id.main, m6);
                 ft.commit();
                 break;
         }

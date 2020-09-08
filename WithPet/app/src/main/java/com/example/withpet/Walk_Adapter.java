@@ -1,6 +1,7 @@
 package com.example.withpet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +72,9 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
                     Toast.makeText(context, "제목 : " + arrayList.get(pos).getWalkboard_title() + "내용 : " + arrayList.get(pos).getWalkboard_content(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context,MainActivity.class);
+                    intent.putExtra("frag",5); // 작성한 글 frag로 가기위해 intent값 전달
+                    context.startActivity(intent);
 
                     if (pos != RecyclerView.NO_POSITION){
 
