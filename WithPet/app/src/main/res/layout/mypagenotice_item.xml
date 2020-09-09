@@ -9,21 +9,21 @@
     <ImageView
         android:id="@+id/mypageNoticeIv_item1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="130dp"
         android:layout_weight="1"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/mypageNoticeIv_item2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="130dp"
         android:layout_weight="1"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/mypageNoticeIv_item3"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="130dp"
         android:layout_weight="1"
         tools:srcCompat="@tools:sample/avatars" />
 

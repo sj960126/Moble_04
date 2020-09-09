@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.withpet">
+    package="com.withpet">
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- //health_지도 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- //health_지도 -->
@@ -15,17 +15,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Walk_boarddetail"></activity>
-        <activity android:name=".Walk_boardwrite" />
-        <activity android:name=".health_diary" />
-        <activity android:name=".Health_Hospital" />
-        <activity android:name=".NewsGalleryActivity" />
-        <activity android:name=".NewsWriteActivity" />
-        <activity android:name=".iot_streaming_area" />
-        <activity android:name=".ProfileModifyActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".JoinActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".walk.Walk_boardwrite" />
+        <activity android:name=".health.health_diary" />
+        <activity android:name=".health.HealthHospitalActivity" />
+        <activity android:name=".newsfeed.NewsGalleryActivity" />
+        <activity android:name=".newsfeed.NewsWriteActivity" />
+        <activity android:name=".iot.iot_streaming_area" />
+        <activity android:name=".mypage.ProfileModifyActivity" />
+        <activity android:name=".main.MainActivity" />
+        <activity android:name=".main.JoinActivity"/>
+        <activity android:name=".main.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

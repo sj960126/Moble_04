@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">WithPet</string>
-    <string name="menu1">홈</string>
-    <string name="menu2">건강</string>
-    <string name="menu3">산책</string>
-    <string name="menu4">내정보</string>
-    <string name="menu5">IOT</string>
+    <string name="home">홈</string>
+    <string name="health">건강</string>
+    <string name="walk">산책</string>
+    <string name="mypage">내정보</string>
+    <string name="iot">IOT</string>
     <string name="login">로그인</string>
     <string name="join">회원가입</string>
 </resources>

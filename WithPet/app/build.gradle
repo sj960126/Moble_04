@@ -6,7 +6,7 @@ android {
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.example.withpet"
+        applicationId "com.withpet"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
@@ -41,4 +41,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0' //이미지라이브러리 glide
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
 }

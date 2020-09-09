@@ -47,7 +47,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:4736701025:android:a08ec7d56ee6b0a3215020",
         "android_client_info": {
-          "package_name": "com.example.withpet"
+          "package_name": "com.withpet"
         }
       },
       "oauth_client": [
@@ -55,7 +55,7 @@
           "client_id": "4736701025-dkg6v667acpretq2r6m6q6e3k652hu9d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.withpet",
+            "package_name": "com.withpet",
             "certificate_hash": "459ea9a07f53521c1636e08abb0a73b97bbd0d50"
           }
         },

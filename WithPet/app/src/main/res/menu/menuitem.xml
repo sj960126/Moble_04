@@ -2,24 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menu1"
-        android:title="@string/menu1"
-        android:icon="@drawable/iconnews"/>
+        android:id="@+id/menu_home"
+        android:icon="@drawable/iconnews"
+        android:title="@string/home" />
     <item
-        android:id="@+id/menu2"
-        android:title="@string/menu2"
-        android:icon="@drawable/iconhealth"/>
+        android:id="@+id/menu_health"
+        android:icon="@drawable/iconhealth"
+        android:title="@string/health" />
     <item
-        android:id="@+id/menu3"
-        android:title="@string/menu3"
-        android:icon="@drawable/iconwalk"/>
+        android:id="@+id/menu_walk"
+        android:icon="@drawable/iconwalk"
+        android:title="@string/walk" />
     <item
-        android:id="@+id/menu5"
-        android:title="@string/menu5"
-        android:icon="@drawable/iconiot"/>
+        android:id="@+id/menu_iot"
+        android:icon="@drawable/iconiot"
+        android:title="@string/iot" />
     <item
-        android:id="@+id/menu4"
-        android:title="@string/menu4"
-        android:icon="@drawable/iconmy"/>
+        android:id="@+id/menu_mypage"
+        android:icon="@drawable/iconmy"
+        android:title="@string/mypage" />
 
 </menu>
