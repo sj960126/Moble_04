@@ -3,6 +3,7 @@ package com.withpet.newsfeed;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,11 +71,15 @@ public class NewsWriteActivity extends AppCompatActivity {
         });
     }
 
-    //파베 데이터 작성 함수
-    private void writeNewUser(String num, String id, String context, String imgUrl) {
+    //파베 데베에 데이터 작성
+    private void writeNewUser(String boardName, String id, String context, String imgUrl) {
+        //객체 데이터
         News news = new News(id, imgUrl, context);
 
-        dbreference.child(num).setValue(news)
+        //dbreference 는 feed 테이블과 연결
+        //feed > boardName > news data 추가
+        //addOnSuccessListener 와 addOnFailureListener 개발가이드
+        dbreference.child(boardName).setValue(news)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -91,7 +96,7 @@ public class NewsWriteActivity extends AppCompatActivity {
                 });
     }
 
-    //파베 저장소에 feed 폴더에 사진 저장
+    //파베 저장소의 feed 폴더에 사진 저장
     public void uploadImage(String input){
         Uri file = Uri.fromFile(new File(input));
         imgRf = storageRf.child("feed/"+file.getLastPathSegment());
@@ -111,16 +116,24 @@ public class NewsWriteActivity extends AppCompatActivity {
 
     //파베 저장소에서 url 다운로드 해서 데베 등록
     public void Image(final String input){
-        String[] path = input.split("/");
+        final String[] path = input.split("/");
 
         storageRf.child("feed/" +path[path.length - 1]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                // Got the download URL for 'users/me/profile.png'
+                //게시글 내용
                 EditText et =findViewById(R.id.mainwEt_context);
                 inputContext = et.getText().toString();
 
-                writeNewUser( "gkgkgk" ,"dfsdfsfd",inputContext, uri.toString());
+                //사진이미지에서 . 대신에 공백 why? 파이어베이스 데베에서 . # $ [] 등과 같은 특수문자 허용 안됨.
+                //보통 사진이미지에서 사용되는 특수문자는 ㅡ . 이기에 .만 제거했움...
+                String board_name = path[path.length-1];
+                board_name = board_name.replace(".","");
+                //Log.i("name ::: ", board_name);
+
+                //파이어베이스에 등록
+                //게시글 이름을 사용자ID + 작성한이미지이름
+                writeNewUser( "ididid" + board_name ,"ididididdi",inputContext, uri.toString());
             }
         });
     }
