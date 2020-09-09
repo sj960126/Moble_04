@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: ./libs/com.skt.Tmap_1.66.jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/com.skt.Tmap_1.66.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
