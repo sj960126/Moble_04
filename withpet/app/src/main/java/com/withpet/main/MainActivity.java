@@ -3,7 +3,6 @@ package com.withpet.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -28,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     IotFrag iotFrag;
     Walk_boarddetailFrag walkBoarddetail;
     int board_nb = 0;
-    String title = "title";
-    String content = "content";
-
 
 
     @Override
@@ -85,9 +81,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("board_nb",board_nb);
         walkBoarddetail.setArguments(bundle);
-
         setFrag(frag);
-
     }
 
     //각 메뉴의 레이아웃 화면 설정
@@ -122,5 +116,4 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
 }

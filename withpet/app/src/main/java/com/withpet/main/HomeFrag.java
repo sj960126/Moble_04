@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +57,7 @@ public class HomeFrag extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.activity_news,container,false);
         btn_wirte = rootview.findViewById(R.id.walkBtn_write);
+
 
         Button btn1 = (Button) rootview.findViewById(R.id.walkBtn_write);
         Button btn2 = (Button) rootview.findViewById(R.id.mainBtn_chatt);

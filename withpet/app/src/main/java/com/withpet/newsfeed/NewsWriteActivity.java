@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -30,22 +32,21 @@ public class NewsWriteActivity extends AppCompatActivity {
 
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
-    private String input;
-    private String inputContext;
     private FirebaseStorage storage;
     private StorageReference storageRf;
     private StorageReference imgRf;
-    private String imgToken;
+    private String inputContext, strImage,userNickname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_write);
+
         //화면전환시 아래에서 위로 올라오는 애니메이션 제거
         overridePendingTransition(0, 0);
 
-        Button btn = (Button) findViewById(R.id.mainwBtn_finish);
-        btn.setBackgroundResource(R.drawable.iconcheck);
+        Button btnUpload = (Button) findViewById(R.id.mainwBtn_finish);
+        btnUpload.setBackgroundResource(R.drawable.iconcheck);
 
         //파베 연결 및 연동
         db = FirebaseDatabase.getInstance();
@@ -53,17 +54,22 @@ public class NewsWriteActivity extends AppCompatActivity {
         storage= FirebaseStorage.getInstance();
         storageRf = storage.getReference();
 
-        input = getIntent().getStringExtra("imgId");
+        strImage = getIntent().getStringExtra("imgId");
+
         //선택한 사진 불러오기
         ImageView iv = (ImageView) findViewById(R.id.mainwIv_thumbnail);
-        Glide.with(this).load(input).override(1000).into(iv);
+        Glide.with(this).load(strImage).override(1000).into(iv);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadImage(input);
-                Image(input);
-                //페이지 이동
+
+                //파베 저장소에 사진업로드
+                uploadImage(strImage);
+                //파베 게시글 등록
+                uploadBoard(strImage);
+
+                //작성 페이지 > 메인페이지 이동
                 Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -100,6 +106,7 @@ public class NewsWriteActivity extends AppCompatActivity {
     public void uploadImage(String input){
         Uri file = Uri.fromFile(new File(input));
         imgRf = storageRf.child("feed/"+file.getLastPathSegment());
+        //Log.i("dfdfdf"," 성공");
         UploadTask uploadTask = imgRf.putFile(file);
 
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -115,7 +122,7 @@ public class NewsWriteActivity extends AppCompatActivity {
     }
 
     //파베 저장소에서 url 다운로드 해서 데베 등록
-    public void Image(final String input){
+    public void uploadBoard(final String input){
         final String[] path = input.split("/");
 
         storageRf.child("feed/" +path[path.length - 1]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -124,16 +131,18 @@ public class NewsWriteActivity extends AppCompatActivity {
                 //게시글 내용
                 EditText et =findViewById(R.id.mainwEt_context);
                 inputContext = et.getText().toString();
+                //Log.i("img :::: ", ""+uri.toString());
 
                 //사진이미지에서 . 대신에 공백 why? 파이어베이스 데베에서 . # $ [] 등과 같은 특수문자 허용 안됨.
                 //보통 사진이미지에서 사용되는 특수문자는 ㅡ . 이기에 .만 제거했움...
                 String board_name = path[path.length-1];
                 board_name = board_name.replace(".","");
                 //Log.i("name ::: ", board_name);
-
                 //파이어베이스에 등록
-                //게시글 이름을 사용자ID + 작성한이미지이름
-                writeNewUser( "ididid" + board_name ,"ididididdi",inputContext, uri.toString());
+                //게시글 이름을 사용자닉네임 + 작성한이미지이름
+                userNickname =getIntent().getStringExtra("loginUserNickname");
+                //Log.i("UserNickName", userNickname);
+                writeNewUser( userNickname + board_name , userNickname,inputContext, uri.toString());
             }
         });
     }

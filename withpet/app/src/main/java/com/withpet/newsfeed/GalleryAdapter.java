@@ -2,6 +2,7 @@ package com.withpet.newsfeed;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,16 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
+import com.withpet.main.User;
 
 import java.util.ArrayList;
 
@@ -77,8 +87,32 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
             public void onClick(View view) {
                 // 메인에서 갤러리 사진 선택 액티비티 띄웠을 때
                 if((int)view.getTag() == R.integer.newsRequestcode){
-                    activity.startActivity(intentw);
-                    activity.finish();
+                    FirebaseDatabase firebaseDatabase= FirebaseDatabase.getInstance();
+                    DatabaseReference dbRef= firebaseDatabase.getReference("User");
+                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    Query findUserNickName =dbRef.orderByChild("uid").equalTo(firebaseUser.getUid());
+
+                    findUserNickName.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                for(DataSnapshot user : snapshot.getChildren()){
+                                    //Log.i("user uid",""+user);
+                                    User tmp = user.getValue(User.class);
+                                    //해당 페이지로 이동
+                                    intentw.putExtra("loginUserNickname", tmp.getNickname());
+                                    activity.startActivity(intentw);
+                                    activity.finish();
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.i("query error :: ", "fail");
+                        }
+                    });
+
                 }
                 // 프로필 수정에서 갤러리 사진 선택 액티비티 띄웠을 때
                 else if((int)view.getTag() == R.integer.profileModifyRequestcode){
