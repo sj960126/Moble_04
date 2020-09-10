@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".walk.Walk_boardwrite" />
+        <activity android:name=".walk.Walk_boardwriteActivity" />
         <activity android:name=".health.health_diary" />
         <activity android:name=".health.HealthHospitalActivity" />
         <activity android:name=".newsfeed.NewsGalleryActivity" />
