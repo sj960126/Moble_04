@@ -3,11 +3,6 @@ package com.withpet.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-<<<<<<< HEAD
-import android.se.omapi.Session;
-=======
->>>>>>> fabd51e0fc77a622569421b526817a925ff2f4f1
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -17,13 +12,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.withpet.walk.*;
 import com.withpet.*;
 
@@ -39,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     IotFrag iotFrag;
     Walk_boarddetailFrag walkBoarddetail;
     int board_nb = 0;
-    String title = "title";
-    String content = "content";
-
 
 
     @Override
@@ -91,16 +76,11 @@ public class MainActivity extends AppCompatActivity {
         walkFrag = new WalkFrag();
         mypageFrag = new MypageFrag();
         iotFrag = new IotFrag();
-<<<<<<< HEAD
-        walkBoarddetail = new Walk_boarddetail();
-=======
         walkBoarddetail = new Walk_boarddetailFrag();
 
         Bundle bundle = new Bundle();
         bundle.putInt("board_nb",board_nb);
         walkBoarddetail.setArguments(bundle);
-
->>>>>>> fabd51e0fc77a622569421b526817a925ff2f4f1
         setFrag(frag);
     }
 
