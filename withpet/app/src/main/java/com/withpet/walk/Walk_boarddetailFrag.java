@@ -40,7 +40,7 @@ public class Walk_boarddetailFrag extends Fragment {
             title = bundle.getString("board_title");
             content = bundle.getString("board_content");
         }
-
+        // 클릭한 게시물 번호에 관련된 firebase 제목 내용 갖고 오기
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("walk-board").child(Integer.toString(borad_nb));
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {

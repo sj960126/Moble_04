@@ -63,7 +63,7 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
     public int getItemCount() {
         return (arrayList != null ? arrayList.size() : 0);
     }
-
+//recyclerview 산책 메인
     public class CustomViewholder extends RecyclerView.ViewHolder {
       //  ImageView iv_profile;
         TextView tv_title;
@@ -78,38 +78,16 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
                 @Override
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
-                    Toast.makeText(context, "게시글 번호 : " +  arrayList.get(pos).getWalkboard_nb(), Toast.LENGTH_SHORT).show();
-                    String board_nb = Integer.toString(arrayList.get(pos).getWalkboard_nb());
 
-                    /*database = FirebaseDatabase.getInstance();
-                    databaseReference = database.getReference("walk-board").child(board_nb);
-                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                 //   String board_nb = Integer.toString(arrayList.get(pos).getWalkboard_nb());
 
-                            Walk_boardUpload walk_boardUpload = dataSnapshot.getValue(Walk_boardUpload.class);
-                            walkboard_title = walk_boardUpload.getWalkboard_title();
-                            walkboard_content = walk_boardUpload.getWalkboard_content();
-
-                            Walk_boarddetailFrag walk_boarddetailFrag = new Walk_boarddetailFrag();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("board_title",walkboard_title);
-                            bundle.putString("board_content",walkboard_content);
-                            walk_boarddetailFrag.setArguments(bundle);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-
-*/
 
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("frag",5); // 작성한 글 frag로 가기위해 intent값 전달
                     intent.putExtra("board_nb",arrayList.get(pos).getWalkboard_nb());
+               //     Log.i("adapter_nb",""+arrayList.get(pos).getWalkboard_nb());
                     context.startActivity(intent);
+
 
                     if (pos != RecyclerView.NO_POSITION){
 

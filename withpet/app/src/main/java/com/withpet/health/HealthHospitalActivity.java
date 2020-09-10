@@ -65,6 +65,7 @@ public class HealthHospitalActivity extends AppCompatActivity {
 
     mcontext =this;
     LinearLayout health_hospital_map =(LinearLayout)findViewById(R.id.health_hospital_map);
+
     tMapView = new TMapView(this);
     tMapView.setSKTMapApiKey(APK);
     health_hospital_map.addView(tMapView);

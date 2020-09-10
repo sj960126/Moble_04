@@ -50,6 +50,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
         walkTv_title = findViewById(R.id.walk_title);
         walkTv_content = findViewById(R.id.walk_content);
 
+        //
         databaseReference = FirebaseDatabase.getInstance().getReference("walk-board");
         walkBtn_add.setOnClickListener(new Button.OnClickListener() { //글작성하기
             @Override
@@ -65,11 +66,9 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
     private  void a(){
 
     }
-
+    //산책 글 작성 제목, 내용 firebase에 업로드
     private void walk_upload(){
-        Log.i("check2:",""+uploadId);
         uploadId_str = Integer.toString(uploadId);
-
         Walk_boardUpload upload = new Walk_boardUpload(walkTv_title.getText().toString().trim(), walkTv_content.getText().toString().trim(),uploadId);
         databaseReference.child(uploadId_str).setValue(upload);
     }

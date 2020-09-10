@@ -1,5 +1,6 @@
 package com.withpet.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     String content = "content";
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int frag = intent.getIntExtra("frag",0);
         board_nb = intent.getIntExtra("board_nb",0);
-
 
         //bottomNavigationView 클릭시 이벤트
         bottomNavigationView =findViewById(R.id.bottomNV);
@@ -84,14 +85,6 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("board_nb",board_nb);
         walkBoarddetail.setArguments(bundle);
-
-        homeFrag = new HomeFrag();
-        healthFrag = new HealthFrag();
-        walkFrag = new WalkFrag();
-        mypageFrag = new MypageFrag();
-        iotFrag = new IotFrag();
-        walkBoarddetail = new Walk_boarddetailFrag();
-
 
         setFrag(frag);
 
