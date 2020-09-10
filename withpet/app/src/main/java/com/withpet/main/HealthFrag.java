@@ -5,39 +5,37 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.withpet.iot.*;
-import com.withpet.mypage.*;
-import com.withpet.newsfeed.*;
 import com.withpet.health.*;
-import com.withpet.walk.*;
 import com.withpet.*;
 
-//Mypage page
-public class iot_frag extends Fragment {
 
+
+//Health page
+public class HealthFrag extends Fragment {
     private View rootview;
-    private Button gostreaming_btn;
+    ImageView hospital_btn;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootview = inflater.inflate(R.layout.activity_iot,container,false);
-        // test주석입니다.
-        gostreaming_btn = rootview.findViewById(R.id.button6);
+        rootview = inflater.inflate(R.layout.activity_health,container,false);
 
-        gostreaming_btn.setOnClickListener(new View.OnClickListener() {
+        //건강 메인 선택창 Java
+        hospital_btn = (ImageView) rootview.findViewById(R.id.H_btn);
+        hospital_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), iot_streaming_area.class);
+                Intent intent = new Intent(view.getContext(), HealthHospitalActivity.class);
                 startActivity(intent);
             }
         });
 
         return rootview;
     }
+
 }

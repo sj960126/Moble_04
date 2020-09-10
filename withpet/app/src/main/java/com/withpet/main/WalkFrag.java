@@ -25,7 +25,7 @@ import com.withpet.*;
 
 import java.util.ArrayList;
 
-public class walk_frag extends Fragment {
+public class WalkFrag extends Fragment {
 
     private View rootview;
     private RecyclerView recyclerView;

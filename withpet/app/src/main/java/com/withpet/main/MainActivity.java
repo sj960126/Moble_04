@@ -20,15 +20,17 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView; // 바텀 네비게이션 뷰
     FragmentManager fm;
     FragmentTransaction ft;
-    home_frag homeFrag;
-    health_frag healthFrag;
-    walk_frag walkFrag;
-    mypage_frag mypageFrag;
-    iot_frag iotFrag;
+    HomeFrag homeFrag;
+    HealthFrag healthFrag;
+    WalkFrag walkFrag;
+    MypageFrag mypageFrag;
+    IotFrag iotFrag;
     Walk_boarddetailFrag walkBoarddetail;
     int board_nb = 0;
     String title = "title";
     String content = "content";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,16 +74,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        homeFrag = new home_frag();
-        healthFrag = new health_frag();
-        walkFrag = new walk_frag();
-        mypageFrag = new mypage_frag();
-        iotFrag = new iot_frag();
+        homeFrag = new HomeFrag();
+        healthFrag = new HealthFrag();
+        walkFrag = new WalkFrag();
+        mypageFrag = new MypageFrag();
+        iotFrag = new IotFrag();
         walkBoarddetail = new Walk_boarddetailFrag();
 
         Bundle bundle = new Bundle();
         bundle.putInt("board_nb",board_nb);
         walkBoarddetail.setArguments(bundle);
+
+        homeFrag = new HomeFrag();
+        healthFrag = new HealthFrag();
+        walkFrag = new WalkFrag();
+        mypageFrag = new MypageFrag();
+        iotFrag = new IotFrag();
+        walkBoarddetail = new Walk_boarddetailFrag();
+
 
         setFrag(frag);
 
