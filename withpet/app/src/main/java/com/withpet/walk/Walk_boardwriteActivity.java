@@ -1,6 +1,7 @@
 package com.withpet.walk;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,11 +29,10 @@ import java.util.Collections;
 public class Walk_boardwriteActivity extends AppCompatActivity {
 
     private Button walkBtn_add;
+    private Button walkBtn_tmap;
     private TextView walkTv_title;
     private TextView walkTv_content;
     private DatabaseReference databaseReference;
-    private int[] nb_arr;
-    int id_int;
     int uploadId;
     String uploadId_str;
 
@@ -45,7 +45,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         uploadId = intent.getIntExtra("id",0);
-
+        walkBtn_tmap = findViewById(R.id.walkBtn_tmap);
         walkBtn_add = findViewById(R.id.addbtn);
         walkTv_title = findViewById(R.id.walk_title);
         walkTv_content = findViewById(R.id.walk_content);
@@ -59,6 +59,14 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
 
                 setResult(RESULT_OK);
                 finish();
+            }
+        });
+
+        walkBtn_tmap.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_tmap = new Intent(Walk_boardwriteActivity.this,Walk_tmap.class);
+                startActivity(intent_tmap);
             }
         });
     }
