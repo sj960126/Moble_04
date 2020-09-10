@@ -1,6 +1,9 @@
 package com.withpet.main;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.withpet.*;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class JoinActivity extends AppCompatActivity {
 
@@ -33,8 +37,7 @@ public class JoinActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
-        //화면전환시 아래에서 위로 올라오는 애니메이션 제거
-        overridePendingTransition(0, 0);
+
 
         //파베 접근 설정
         firebaseAuth = FirebaseAuth.getInstance();
@@ -47,6 +50,21 @@ public class JoinActivity extends AppCompatActivity {
         etEmail = (EditText) findViewById(R.id.joinEt_email);
         etPw = (EditText) findViewById(R.id.joinEt_pw);
         etPwcheck = (EditText) findViewById(R.id.joinEt_pw2);
+
+        //NcikName filter :: 영문자(소, 대)/숫자/특수문자_ 만 입력가능
+        InputFilter filter_nickName = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
+                Pattern ps = Pattern.compile("^[a-zA-Z0-9_]*$");
+                if(!ps.matcher(charSequence).matches()){
+                    Toast.makeText(JoinActivity.this, "영문자, 숫자, 특수문자 '_'으로 조합해야합니다.", Toast.LENGTH_SHORT).show();
+                    return "";
+                }
+                return null;
+            }
+        };
+
+        etNickName.setFilters(new InputFilter[]{filter_nickName});
     }
 
     public void checkClick(View view) {
@@ -77,12 +95,15 @@ public class JoinActivity extends AppCompatActivity {
                                         hashMap.put("uid",uid);
                                         hashMap.put("email",email);
                                         hashMap.put("name",strName);
-                                        hashMap.put("ncikname", strNickname);
+                                        hashMap.put("nickname", strNickname);
 
                                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                        DatabaseReference reference = database.getReference("Users");
-                                        reference.child(email).setValue(hashMap);
+                                        DatabaseReference reference = database.getReference("User");
+                                        reference.child(uid).setValue(hashMap);
 
+                                        Intent main = new Intent(JoinActivity.this, LoginActivity.class);
+                                        startActivity(main);
+                                        finish();
                                     } else {
                                         // 1. 회원정보가 존재할때
                                         // 2. 입력한 이메일과 비밀번호가 일치하지 않을때

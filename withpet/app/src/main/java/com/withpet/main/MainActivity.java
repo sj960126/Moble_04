@@ -2,6 +2,8 @@ package com.withpet.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.se.omapi.Session;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -11,6 +13,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.withpet.walk.*;
 import com.withpet.*;
 
@@ -73,9 +82,7 @@ public class MainActivity extends AppCompatActivity {
         mypageFrag = new MypageFrag();
         iotFrag = new IotFrag();
         walkBoarddetail = new Walk_boarddetail();
-
         setFrag(frag);
-
     }
 
     //각 메뉴의 레이아웃 화면 설정
@@ -109,5 +116,4 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
 }
