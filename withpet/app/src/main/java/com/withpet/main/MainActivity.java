@@ -1,8 +1,12 @@
 package com.withpet.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.se.omapi.Session;
+=======
+>>>>>>> fabd51e0fc77a622569421b526817a925ff2f4f1
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -33,7 +37,12 @@ public class MainActivity extends AppCompatActivity {
     WalkFrag walkFrag;
     MypageFrag mypageFrag;
     IotFrag iotFrag;
-    Walk_boarddetail walkBoarddetail;
+    Walk_boarddetailFrag walkBoarddetail;
+    int board_nb = 0;
+    String title = "title";
+    String content = "content";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int frag = intent.getIntExtra("frag",0);
+        board_nb = intent.getIntExtra("board_nb",0);
 
         //bottomNavigationView 클릭시 이벤트
         bottomNavigationView =findViewById(R.id.bottomNV);
@@ -81,12 +91,22 @@ public class MainActivity extends AppCompatActivity {
         walkFrag = new WalkFrag();
         mypageFrag = new MypageFrag();
         iotFrag = new IotFrag();
+<<<<<<< HEAD
         walkBoarddetail = new Walk_boarddetail();
+=======
+        walkBoarddetail = new Walk_boarddetailFrag();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("board_nb",board_nb);
+        walkBoarddetail.setArguments(bundle);
+
+>>>>>>> fabd51e0fc77a622569421b526817a925ff2f4f1
         setFrag(frag);
     }
 
     //각 메뉴의 레이아웃 화면 설정
     private void setFrag(int n) {
+
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
         switch (n) {

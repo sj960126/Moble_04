@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.2.0'
     implementation 'com.google.firebase:firebase-auth:19.3.2'
     implementation files('libs\\com.skt.Tmap_1.66.jar')
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0' //로딩
     testImplementation 'junit:junit:4.13'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0' //이미지라이브러리 glide
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
