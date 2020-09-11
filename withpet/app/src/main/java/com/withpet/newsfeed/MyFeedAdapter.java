@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -104,6 +105,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                    }
                    else {
                        view.setBackgroundResource(R.drawable.iconlike2);
+                       //Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
                    }
                    break;
                case R.id.mainBtn_reply:

@@ -1,7 +1,9 @@
 package com.withpet.newsfeed;
 
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +30,7 @@ import com.withpet.*;
 import com.withpet.main.*;
 
 import java.io.File;
+import java.util.Date;
 
 public class NewsWriteActivity extends AppCompatActivity {
 
@@ -61,26 +65,45 @@ public class NewsWriteActivity extends AppCompatActivity {
         Glide.with(this).load(strImage).override(1000).into(iv);
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
+                //파베 저장소의 feed 폴더에 사진 업로드
+                Uri file = Uri.fromFile(new File(strImage));
+                imgRf = storageRf.child("feed/"+file.getLastPathSegment());
+                UploadTask uploadTask = imgRf.putFile(file);
 
-                //파베 저장소에 사진업로드
-                uploadImage(strImage);
-                //파베 게시글 등록
-                uploadBoard(strImage);
 
-                //작성 페이지 > 메인페이지 이동
-                Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        //저장소에 업로드가 실패했을 경우
+                        Toast.makeText(NewsWriteActivity.this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        //저장소에 업로드가 성공했을 경우
+                        Toast.makeText(NewsWriteActivity.this, "사진 업로드 성공", Toast.LENGTH_SHORT).show();
+
+                        //파베 게시글 등록
+                        uploadBoard(strImage);
+
+                        //작성 페이지 > 메인페이지 이동
+                        Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
             }
         });
     }
 
     //파베 데베에 데이터 작성
-    private void writeNewUser(String boardName, String id, String context, String imgUrl) {
+    private void writeNewUser(String boardName, String id, String context, String imgUrl, String newsName, String date) {
         //객체 데이터
-        News news = new News(id, imgUrl, context);
+        News news = new News(id, imgUrl, context, newsName, date);
 
         //dbreference 는 feed 테이블과 연결
         //feed > boardName > news data 추가
@@ -102,30 +125,12 @@ public class NewsWriteActivity extends AppCompatActivity {
                 });
     }
 
-    //파베 저장소의 feed 폴더에 사진 저장
-    public void uploadImage(String input){
-        Uri file = Uri.fromFile(new File(input));
-        imgRf = storageRf.child("feed/"+file.getLastPathSegment());
-        //Log.i("dfdfdf"," 성공");
-        UploadTask uploadTask = imgRf.putFile(file);
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(NewsWriteActivity.this, "업로드 성공", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     //파베 저장소에서 url 다운로드 해서 데베 등록
     public void uploadBoard(final String input){
         final String[] path = input.split("/");
 
         storageRf.child("feed/" +path[path.length - 1]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(Uri uri) {
                 //게시글 내용
@@ -138,11 +143,19 @@ public class NewsWriteActivity extends AppCompatActivity {
                 String board_name = path[path.length-1];
                 board_name = board_name.replace(".","");
                 //Log.i("name ::: ", board_name);
-                //파이어베이스에 등록
-                //게시글 이름을 사용자닉네임 + 작성한이미지이름
                 userNickname =getIntent().getStringExtra("loginUserNickname");
                 //Log.i("UserNickName", userNickname);
-                writeNewUser( userNickname + board_name , userNickname,inputContext, uri.toString());
+
+                //휴대푠 현재 날짜 시간 값 가져오기
+                //2020911_110935
+                long now = System.currentTimeMillis();
+                Date mDate = new Date(now);
+                SimpleDateFormat mFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                String getTime = mFormat.format(mDate);
+                Log.i("date :::::: ", "" + getTime);
+
+                //게시글 이름을 사용자닉네임 + 현재 날짜시간
+                writeNewUser( userNickname + getTime , userNickname, inputContext, uri.toString(),userNickname + board_name, getTime);
             }
         });
     }

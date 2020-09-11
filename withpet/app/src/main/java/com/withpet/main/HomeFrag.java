@@ -19,18 +19,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import com.withpet.iot.*;
-import com.withpet.mypage.*;
 import com.withpet.newsfeed.*;
-import com.withpet.health.*;
 import com.withpet.*;
 
 
@@ -65,17 +61,20 @@ public class HomeFrag extends Fragment {
         btn1.setBackgroundResource(R.drawable.iconadd);
         btn2.setBackgroundResource(R.drawable.iconchatt);
 
+        layoutManager = new LinearLayoutManager(getActivity());
         list = rootview.findViewById(R.id.mainRv);
         list.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
-        layoutManager = new LinearLayoutManager(getActivity());
         list.setLayoutManager(layoutManager);
         myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
 
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
 
+        Query createNewsFeed =dbreference.orderByChild("date");
+
+
         //실시간으로 앱데이터를 업데이트 함수
-        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+        createNewsFeed.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
@@ -83,7 +82,9 @@ public class HomeFrag extends Fragment {
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     //반복문으로 데이터 리스트를 추출
                     News news = snapshot.getValue(News.class); //만들어뒀던 news 객체에 데이터를 담음
-                    myfeed.add(news); //담은 데이터들을 배열리스터에 넣고 리사이클뷰로 보낼 준비
+                    //배열리스트에 역순으로 게시글을 저장
+                    myfeed.add(0,snapshot.getValue(News.class));
+                    //myfeed.add(news); //담은 데이터들을 배열리스터에 넣고 리사이클뷰로 보낼 준비
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
@@ -91,7 +92,7 @@ public class HomeFrag extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 //데베 데이터를 가져오던 중 에러 발생 시
-                Toast.makeText(getActivity(), "에러라라고오오옹", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
         adapter = new MyFeedAdapter(myfeed, getContext());
@@ -100,7 +101,6 @@ public class HomeFrag extends Fragment {
         btn_wirte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "클릭햇어......", Toast.LENGTH_SHORT).show();
                 //권한설정 함수 실행
                 Permission();
             }

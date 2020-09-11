@@ -16,7 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".walk.Walk_boardwriteActivity" />
-
         <activity android:name=".health.loding_Activity"></activity>
         <activity android:name=".health.health_diary" />
         <activity android:name=".health.HealthHospitalActivity" />

@@ -87,6 +87,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
             public void onClick(View view) {
                 // 메인에서 갤러리 사진 선택 액티비티 띄웠을 때
                 if((int)view.getTag() == R.integer.newsRequestcode){
+                    //로그인한 회원의 닉네임 찾기
                     FirebaseDatabase firebaseDatabase= FirebaseDatabase.getInstance();
                     DatabaseReference dbRef= firebaseDatabase.getReference("User");
                     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -100,7 +101,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                                 for(DataSnapshot user : snapshot.getChildren()){
                                     //Log.i("user uid",""+user);
                                     User tmp = user.getValue(User.class);
-                                    //해당 페이지로 이동
+                                    //해당 페이지로 이동 + 닉네임 전달
                                     intentw.putExtra("loginUserNickname", tmp.getNickname());
                                     activity.startActivity(intentw);
                                     activity.finish();
@@ -112,7 +113,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                             Log.i("query error :: ", "fail");
                         }
                     });
-
                 }
                 // 프로필 수정에서 갤러리 사진 선택 액티비티 띄웠을 때
                 else if((int)view.getTag() == R.integer.profileModifyRequestcode){
@@ -121,7 +121,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                     activity.setResult(activity.RESULT_OK,intent);
                     activity.finish();
                 }
-
             }
         });
     }
