@@ -16,8 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,6 +46,8 @@ public class HomeFrag extends Fragment {
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
 
+    private SwipeRefreshLayout refreshLayout;
+
     private Button btn_wirte;
 
     private String[] permission_list = {Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -54,9 +58,10 @@ public class HomeFrag extends Fragment {
         rootview = inflater.inflate(R.layout.activity_news,container,false);
         btn_wirte = rootview.findViewById(R.id.walkBtn_write);
 
-
         Button btn1 = (Button) rootview.findViewById(R.id.walkBtn_write);
         Button btn2 = (Button) rootview.findViewById(R.id.mainBtn_chatt);
+
+        refreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.refresh);
 
         btn1.setBackgroundResource(R.drawable.iconadd);
         btn2.setBackgroundResource(R.drawable.iconchatt);
@@ -72,7 +77,6 @@ public class HomeFrag extends Fragment {
 
         Query createNewsFeed =dbreference.orderByChild("date");
 
-
         //실시간으로 앱데이터를 업데이트 함수
         createNewsFeed.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -84,19 +88,23 @@ public class HomeFrag extends Fragment {
                     News news = snapshot.getValue(News.class); //만들어뒀던 news 객체에 데이터를 담음
                     //배열리스트에 역순으로 게시글을 저장
                     myfeed.add(0,snapshot.getValue(News.class));
-                    //myfeed.add(news); //담은 데이터들을 배열리스터에 넣고 리사이클뷰로 보낼 준비
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 //데베 데이터를 가져오던 중 에러 발생 시
                 Toast.makeText(getActivity(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
-        adapter = new MyFeedAdapter(myfeed, getContext());
-        list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+               Refresh();
+               refreshLayout.setRefreshing(false);
+            }
+        });
 
         btn_wirte.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +113,16 @@ public class HomeFrag extends Fragment {
                 Permission();
             }
         });
+
+        adapter = new MyFeedAdapter(myfeed, getContext());
+        list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
+
         return rootview;
+    }
+
+    public void Refresh(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
     //권한설정 _ 안드로이드스튜디오개발가이드 + 구글링

@@ -2,4 +2,6 @@
 <resources>
     <integer name="newsRequestcode">1010</integer>
     <integer name="profileModifyRequestcode">1020</integer>
+    <integer name="key_NewsName">1030</integer>
+    <integer name="NewsFeedLikeCount">1040</integer>
 </resources>
