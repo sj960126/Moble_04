@@ -16,7 +16,7 @@ import com.withpet.*;
 import com.withpet.newsfeed.*;
 
 import java.util.ArrayList;
-
+//종희
 public class MyPageNoticeAdapter extends RecyclerView.Adapter<MyPageNoticeAdapter.MyPageNoticeViewHolder> {
 
     private ArrayList<News> myfeed;

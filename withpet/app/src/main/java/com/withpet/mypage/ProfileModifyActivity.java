@@ -3,6 +3,8 @@ package com.withpet.mypage;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,26 +18,65 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.withpet.*;
 import com.withpet.newsfeed.*;
+import com.withpet.main.*;
+import java.io.File;
+//종희
+//사진을 선택안했을 때 예외 처리 해야함 - 사진 변화 체크한 다음 값 하나하나씩 넣어줘야할듯
 
 public class ProfileModifyActivity extends AppCompatActivity {
     String shape;
     ArrayAdapter adapter;
     private String[] permission_list = {Manifest.permission.READ_EXTERNAL_STORAGE};
+    private String imgId;
+    private FirebaseStorage storage;
+    private DatabaseReference dbreference;
+    private StorageReference storageRf; // 스토리지 주소 담는 객체
+    private StorageReference imgRf;
+    private FirebaseDatabase db;
+    private FirebaseUser firebaseUser;
+    private ProfileInfo pinfo;  // 사용자 프로필 정보 담은 객체
+    private String userNickname;
+    private ImageView iv_profilephoto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mypage_modify);
+        Intent intent = getIntent();
         Spinner spinner = findViewById(R.id.modifySp_shape);
+        iv_profilephoto = findViewById(R.id.modifyIv_profile);
+        ((EditText)findViewById(R.id.modifyEt_UserName)).setText(intent.getStringExtra("nickname"));
         findViewById(R.id.modifyBtn_Ok).setOnClickListener(onclickListener);
         findViewById(R.id.modifyBtn_cancel).setOnClickListener(onclickListener);
         findViewById(R.id.modifyBtn_help).setOnClickListener(onclickListener);
-        findViewById(R.id.modifyIv_profile).setOnClickListener(onclickListener);
+        iv_profilephoto.setOnClickListener(onclickListener);
+        imgId = intent.getStringExtra("userimgid");
+        Glide.with(this).load(imgId).override(800).into(iv_profilephoto);
+        //파베 연결 및 연동
+        db = FirebaseDatabase.getInstance();
+        dbreference = db.getReference("Profile");
+        storage= FirebaseStorage.getInstance();
+        storageRf = storage.getReference();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Spinner(콤보박스)에 사용할 아이템 리스트 adapter 생성(R.array.shape : 아이템리스트, R.layout.support~ : 안드로이드 제공 콤보박스 아이템 기본 레이아웃)
         adapter = ArrayAdapter.createFromResource(this, R.array.shape, R.layout.support_simple_spinner_dropdown_item);
@@ -55,42 +96,6 @@ public class ProfileModifyActivity extends AppCompatActivity {
         });
     }
 
-    // 버튼 클릭 메소드
-    View.OnClickListener onclickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = getIntent();
-            switch (view.getId()){
-                case R.id.modifyBtn_cancel:
-                    setResult(RESULT_CANCELED,intent);
-                    finish();
-                    break;
-                case R.id.modifyBtn_Ok:
-                    String meal = ((EditText)findViewById(R.id.modifyEt_Meal)).getText().toString();
-                    String username = ((EditText)findViewById(R.id.modifyEt_UserName)).getText().toString();
-                    ProfileInfo pinfo = checkProfileInfo(username, shape, meal);
-                    Log.i("username:", ""+pinfo.getUsername());
-                    Log.i("shape:", pinfo.getShape());
-                    Log.i("meal:", ""+pinfo.getMeal());
-                    intent.putExtra("profileinfo", pinfo);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                    break;
-                case R.id.modifyBtn_help:
-                    Modify_help helpdialog = new Modify_help(view.getContext());
-                    ViewGroup.LayoutParams params = helpdialog.getWindow().getAttributes();
-                    params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    helpdialog.getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
-                    helpdialog.setCancelable(true);
-                    helpdialog.show();
-                    break;
-                case R.id.modifyIv_profile:
-                    Permission();
-                    break;
-            }
-        }
-    };
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Intent mintent = data;
@@ -98,7 +103,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK){
             ImageView iv = findViewById(R.id.modifyIv_profile);
             // 갤러리에서 선택한 이미지 가져오기
-            Glide.with(this).load(mintent.getStringExtra("imgId")).override(800).into(iv);
+            imgId =data.getStringExtra("choiceimgId");
+            Glide.with(this).load(imgId).override(800).into(iv);
         }
     }
     // 입력 정보를 판단(입력 정보 중 공백을 판단)해서 ProfileInfo 객체를 반환하는 메소드
@@ -142,7 +148,6 @@ public class ProfileModifyActivity extends AppCompatActivity {
                 if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
                     //페이지 이동
                     Intent intent = new Intent(this, NewsGalleryActivity.class);
-
                     startActivity(intent);
 
                 }
@@ -154,4 +159,80 @@ public class ProfileModifyActivity extends AppCompatActivity {
         }
     }
 
+    // 버튼 클릭 메소드
+    View.OnClickListener onclickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = getIntent();
+            switch (view.getId()){
+                case R.id.modifyBtn_cancel:
+                    setResult(RESULT_CANCELED,intent);
+                    finish();
+                    break;
+                case R.id.modifyBtn_Ok:
+                    String meal = ((EditText)findViewById(R.id.modifyEt_Meal)).getText().toString();
+                    String username = ((EditText)findViewById(R.id.modifyEt_UserName)).getText().toString();
+                    userNickname = username;
+                    pinfo = checkProfileInfo(username, shape, meal);
+                    pinfo.setImgUrl(imgId); // 핸드폰 저장소 사진 경로 추가
+                    pinfo.setUid(firebaseUser.getUid());
+                    Log.i("username:", ""+pinfo.getUsername());
+                    Log.i("shape:", pinfo.getShape());
+                    Log.i("meal:", ""+pinfo.getMeal());
+
+                    //파베 저장소의 feed 폴더에 사진 업로드
+                    Uri file = Uri.fromFile(new File(imgId));
+                    // 파이어베이스 저장소에 선택한 파일의 이름으로 이미지 저장 경로 생성
+                    imgRf = storageRf.child("Profile/"+file.getLastPathSegment());
+                    UploadTask uploadTask = imgRf.putFile(file);    // 파이어 베이스 저장소에 이미지 저장
+
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        //저장소에 업로드가 실패했을 경우
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Toast.makeText(ProfileModifyActivity.this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        //저장소에 업로드가 성공했을 경우
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(ProfileModifyActivity.this, "사진 업로드 성공", Toast.LENGTH_SHORT).show();
+                            //파이어베이스 데이터베이스에 저장
+                            uploadProfile();
+                            //프로필 수정 > 마이페이지 이동
+                            finish();
+                        }
+                    });
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    break;
+                case R.id.modifyBtn_help:
+                    Modify_help helpdialog = new Modify_help(view.getContext());
+                    ViewGroup.LayoutParams params = helpdialog.getWindow().getAttributes();
+                    params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    helpdialog.getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+                    helpdialog.setCancelable(true);
+                    helpdialog.show();
+                    break;
+                case R.id.modifyIv_profile:
+                    Permission();
+                    break;
+            }
+        }
+    };
+    //파베 저장소 사진의 액세스토큰 및 데이터 데베 등록
+    public void uploadProfile(){
+        final String[] path = pinfo.getImgUrl().split("/");
+        storageRf.child("Profile/" +path[path.length - 1]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onSuccess(Uri uri) {
+                pinfo.setImgUrl(uri.toString());    //파이어베이스 저장소에 저장한 사진의 액세스 토큰 주소
+                dbreference.child(pinfo.getUid()).setValue(pinfo);
+                DatabaseReference userdb = db.getReference("User");
+                userdb.child(firebaseUser.getUid()).child("nickname").setValue(userNickname);
+            }
+        });
+    }
 }

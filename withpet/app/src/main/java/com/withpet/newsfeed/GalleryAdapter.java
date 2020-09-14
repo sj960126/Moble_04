@@ -60,20 +60,20 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         //news_galleryitems 레이아웃은 cardview 안에 ImageView가 포함된 형식
         //하나의 사진마다 이 둘이 한세트로 생성됨!
         CardView cardView = holder.layout.findViewById(R.id.mainCv);
-        ImageView iv = holder.layout.findViewById(R.id.mainIv_gal);
+        ImageView iv_galleryItem = holder.layout.findViewById(R.id.mainIv_gal);
 
         //사용자의 갤러리에서 가져온 갤러리 하나하나 불러오는 이미지라이브러리
         //load 이미지 경로로 사진을 불러옴!
         //override 화소설정
         //into 어느위치에 사진을 나오게할지
-        Glide.with(activity).load(mDataset.get(position)).override(300).into(iv);
+        Glide.with(activity).load(mDataset.get(position)).override(300).into(iv_galleryItem);
 
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImageView iv2 = (ImageView) activity.findViewById(R.id.mainwIv_choice);
+                ImageView iv_choice = (ImageView) activity.findViewById(R.id.mainwIv_choice);
                 //mDataset.get(holder.getAdapterPosition()) : 상수
-                Glide.with(activity).load(mDataset.get(holder.getAdapterPosition())).override(800).into(iv2);
+                Glide.with(activity).load(mDataset.get(holder.getAdapterPosition())).override(800).into(iv_choice);
                 //다음페이지에 선택한 값을 전달하기 위해 intent 작성
                 intentw = new Intent(activity, NewsWriteActivity.class);
                 intentw.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
@@ -81,8 +81,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
             }
         });
 
-        Button btn1  = (Button) activity.findViewById(R.id.mainwBtn_next);
-        btn1.setOnClickListener(new View.OnClickListener() {
+        Button btn_next  = (Button) activity.findViewById(R.id.mainwBtn_next);
+        btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 메인에서 갤러리 사진 선택 액티비티 띄웠을 때
@@ -118,7 +118,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 else if((int)view.getTag() == R.integer.profileModifyRequestcode){
                     if(clickposition != -1){
                         Intent intent = activity.getIntent();
-                        intent.putExtra("imgId",mDataset.get(clickposition));
+                        intent.putExtra("choiceimgId",mDataset.get(clickposition));
                         activity.setResult(activity.RESULT_OK,intent);
                         activity.finish();
                     }
