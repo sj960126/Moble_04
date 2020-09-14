@@ -1,5 +1,6 @@
 package com.withpet.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -7,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -16,28 +18,52 @@ import com.withpet.*;
 
 //Main
 public class MainActivity extends AppCompatActivity {
-    BottomNavigationView bottomNavigationView; // 바텀 네비게이션 뷰
-    FragmentManager fm;
-    FragmentTransaction ft;
-    HomeFrag homeFrag;
-    HealthFrag healthFrag;
-    WalkFrag walkFrag;
-    MypageFrag mypageFrag;
-    IotFrag iotFrag;
-    Walk_boarddetail walkBoarddetail;
+    private BottomNavigationView bottomNavigationView; // 바텀 네비게이션 뷰
+    private FragmentManager fm;
+    private FragmentTransaction ft;
+    private HomeFrag homeFrag;
+    private HealthFrag healthFrag;
+    private WalkFrag walkFrag;
+    private MypageFrag mypageFrag;
+    private IotFrag iotFrag;
+    private Walk_boarddetailFrag walkBoarddetail;
+    private int board_nb = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //화면전환시 아래에서 위로 올라오는 애니메이션 제거
         overridePendingTransition(0, 0);
 
         Intent intent = getIntent();
         int frag = intent.getIntExtra("frag",0);
+        board_nb = intent.getIntExtra("board_nb",0);
 
-        //bottomNavigationView 클릭시 이벤트
+        //하단메뉴바 초기화
         bottomNavigationView =findViewById(R.id.bottomNV);
+
+        //각 메뉴페이지 초기화
+        homeFrag = new HomeFrag();
+        healthFrag = new HealthFrag();
+        walkFrag = new WalkFrag();
+        mypageFrag = new MypageFrag();
+        iotFrag = new IotFrag();
+        walkBoarddetail = new Walk_boarddetailFrag();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("board_nb",board_nb);
+        walkBoarddetail.setArguments(bundle);
+        setFrag(frag);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //하단바 클릭 이벤트 : 해당 메뉴 페이지로 이동
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -66,48 +92,36 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        homeFrag = new HomeFrag();
-        healthFrag = new HealthFrag();
-        walkFrag = new WalkFrag();
-        mypageFrag = new MypageFrag();
-        iotFrag = new IotFrag();
-        walkBoarddetail = new Walk_boarddetail();
-
-        setFrag(frag);
-
     }
 
     //각 메뉴의 레이아웃 화면 설정
     private void setFrag(int n) {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
+        Fragment fragment = null;
         switch (n) {
             case 0:
-                ft.replace(R.id.main, homeFrag);
-                ft.commit();
+                fragment = homeFrag;
                 break;
             case 1:
-                ft.replace(R.id.main, healthFrag);
-                ft.commit();
+                fragment = healthFrag;
                 break;
             case 2:
-                ft.replace(R.id.main, walkFrag);
-                ft.commit();
+                fragment = walkFrag;
                 break;
             case 3:
-                ft.replace(R.id.main, mypageFrag);
-                ft.commit();
+                fragment = mypageFrag;
                 break;
             case 4:
-                ft.replace(R.id.main, iotFrag);
-                ft.commit();
+                fragment = iotFrag;
                 break;
             case 5:
-                ft.replace(R.id.main, walkBoarddetail);
-                ft.commit();
+                fragment = walkBoarddetail;
                 break;
+            default:
+                return;
         }
+        ft.replace(R.id.main, fragment);
+        ft.commit();
     }
-
 }

@@ -1,7 +1,9 @@
 package com.withpet.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.withpet.iot.*;
-import com.withpet.mypage.*;
-import com.withpet.newsfeed.*;
-import com.withpet.health.*;
 import com.withpet.walk.*;
 import com.withpet.*;
 
@@ -38,6 +36,8 @@ public class WalkFrag extends Fragment {
     private FloatingActionButton walkFab_write;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    int board_nb;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +48,32 @@ public class WalkFrag extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         walkfeed = new ArrayList<>();
+
+
+
+        //글작성 버튼
+        walkFab_write = (FloatingActionButton) rootview.findViewById(R.id.fab);
+        walkFab_write.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), Walk_boardwriteActivity.class);
+                intent.putExtra("id", board_nb);
+                startActivityForResult(intent, 8);
+
+            }
+        });
+
+        return rootview;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("walk-board");
@@ -62,6 +88,11 @@ public class WalkFrag extends Fragment {
                     walkfeed.add(walk_boardUpload);
                 }
                 adapter.notifyDataSetChanged();
+
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    Walk_boardUpload tmp = ds.getValue(Walk_boardUpload.class);
+                    board_nb = tmp.getWalkboard_nb()+1;
+                }
             }
 
             @Override
@@ -69,24 +100,8 @@ public class WalkFrag extends Fragment {
 
             }
         });
-        //******************
-        adapter = new Walk_Adapter(walkfeed, getContext());
+
+        adapter = new Walk_Adapter(walkfeed, getContext(), getActivity());
         recyclerView.setAdapter(adapter);
-
-        //글작성 버튼
-        walkFab_write = (FloatingActionButton) rootview.findViewById(R.id.fab);
-        walkFab_write.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), Walk_boardwrite.class);
-                startActivity(intent);
-
-            }
-        });
-
-        return rootview;
     }
-
-
-
 }

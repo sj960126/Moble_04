@@ -9,7 +9,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 
 import com.withpet.*;
-
+// 종희
 public class Modify_help extends Dialog implements View.OnClickListener {
     Context mContext;
     public Modify_help(@NonNull Context context) {

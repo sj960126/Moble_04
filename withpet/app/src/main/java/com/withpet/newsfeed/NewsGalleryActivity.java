@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -22,31 +23,36 @@ public class NewsGalleryActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
+    private Button btnNextPage;
+    private ImageView ivDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_gallery);
+
         //화면전환시 아래에서 위로 올라오는 애니메이션 제거
         overridePendingTransition(0, 0);
 
-        Intent  intent = getIntent();
-        int requestcode = intent.getIntExtra("request", -1);
         //상단 next 버튼 이미지 설정
-        Button btn1 = (Button) findViewById(R.id.mainwBtn_next);
+        btnNextPage = (Button) findViewById(R.id.mainwBtn_next);
+        Intent intent = getIntent();
+        int requestcode = intent.getIntExtra("request", -1);
+
+        // 게시글 작성 버튼 클릭 > 갤러리 선택 액티비티 실행
         if(requestcode == R.integer.newsRequestcode){
-            btn1.setBackgroundResource(R.drawable.iconnext);
-            btn1.setTag(requestcode);
+            btnNextPage.setBackgroundResource(R.drawable.iconnext);
+            btnNextPage.setTag(requestcode);
         }
         // 프로필 수정에서 갤러리 사진 선택 액티비티 실행시
         else if(requestcode == R.integer.profileModifyRequestcode){
-            btn1.setBackgroundResource(R.drawable.iconcheck);
-            btn1.setTag(requestcode);
+            btnNextPage.setBackgroundResource(R.drawable.iconcheck);
+            btnNextPage.setTag(requestcode);
         }
 
         //선택한 이미지 보는 imageView 디폴트 사진 설정
-        ImageView iv2 = (ImageView) findViewById(R.id.mainwIv_choice);
-        iv2.setImageResource(R.drawable.dog);
+        ivDefault = (ImageView) findViewById(R.id.mainwIv_choice);
+        ivDefault.setImageResource(R.drawable.dog);
 
         //Gridview 행의 수
         final int clo = 4;
@@ -82,5 +88,4 @@ public class NewsGalleryActivity extends AppCompatActivity {
         }
         return list;
     }
-
 }
