@@ -1,17 +1,19 @@
 package com.withpet.mypage;
-
-import java.io.Serializable;
-
-public class ProfileInfo implements Serializable {
+//종희
+public class ProfileInfo {
     private String username;
     private String shape;
     private String imgUrl;
+    private String uid="userid";
     private int meal;
 
     public ProfileInfo(String username, String shape, int meal){
         this.username = username;
         this.shape = shape;
         this.meal= meal;
+    }
+    public  ProfileInfo(){
+
     }
 
     public String getImgUrl() {
@@ -46,4 +48,7 @@ public class ProfileInfo implements Serializable {
         this.meal = meal;
     }
 
+    public String getUid() { return uid; }
+
+    public void setUid(String userid) { this.uid = userid; }
 }

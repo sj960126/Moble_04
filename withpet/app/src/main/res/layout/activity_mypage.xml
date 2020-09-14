@@ -53,7 +53,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/myPageIv_profile"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 app:srcCompat="@drawable/dog"
