@@ -1,5 +1,6 @@
 package com.withpet.newsfeed;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.withpet.*;
 
 import java.util.ArrayList;
@@ -32,7 +39,6 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         this.context = context;
     }
 
-
     //리스트뷰아이템 생성 실행되는 곳
     @NonNull
     @Override
@@ -46,33 +52,30 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     //이미지 서버에서 이미지 불러오기
     @Override
     public void onBindViewHolder(@NonNull FeedViewHolder holder, int position) {
-        Log.i("url",""+myfeed.get(position).getImgUrl());
         Glide.with(holder.itemView)
                     .load(myfeed.get(position).getImgUrl())
                     //.placeholder(R.drawable.dog)
                     .into(holder.img);
-
         holder.name.setText(myfeed.get(position).getId());
         holder.context.setText(myfeed.get(position).getContext());
+        // 좋아요 버튼에 해당 개시글 이름을 tag에 저장
+        holder.btnLike.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
+        holder.btnLike.setOnClickListener(onClickListener);
     }
 
     @Override
     public int getItemCount() {
-
         return (myfeed != null ? myfeed.size():0);
     }
 
     //viewHolder = listItem
     public class FeedViewHolder extends RecyclerView.ViewHolder {
         //listitem
-        TextView name;
+        TextView name, tvCountLike;
         ImageView img;
         TextView context;
         Button btnLike;
         Button btnReply;
-        //button 클릭시 확인
-        int btn1;
-        int btn2;
 
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,10 +89,8 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
             this.name = itemView.findViewById(R.id.mainTv_name);
             this.img = itemView.findViewById(R.id.mainImage);
             this.context = itemView.findViewById(R.id.mainTv_context);
-            btnLike.setOnClickListener(onClickListener);
-            btnReply.setOnClickListener(onClickListener);
+            this.tvCountLike = itemView.findViewById(R.id.mainTv_renum);
         }
-
     }
 
    View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -97,15 +98,30 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
        public void onClick(View view) {
            switch (view.getId()){
                case R.id.mainBtn_like:
-                   int likecount = 0;
+                   String newsFeedName = ""+view.getTag(R.integer.key_NewsName);
                    like_click = !like_click;
-                   //button 클릭할때마다 이미지 변경
+
+                   //Like 테이블 파베 연동
+                   FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                   FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                   DatabaseReference dbRef = firebaseDatabase.getReference("Like");
+
                    if(like_click){
                        view.setBackgroundResource(R.drawable.iconlike);
+                       //Like 테이블에서 로그인 유저의 좋아요 삭제
+                       dbRef.child(newsFeedName).child(user.getUid()).removeValue();
                    }
                    else {
                        view.setBackgroundResource(R.drawable.iconlike2);
-                       //Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+                       //Like 테이블에서 로그인 유저의 좋아요 등록
+                       dbRef.child(newsFeedName).child(user.getUid()).setValue(1)
+                               .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                   @Override
+                                   public void onSuccess(Void aVoid) {
+                                       // Write was successful!
+                                       Toast.makeText(context, "좋아요!", Toast.LENGTH_SHORT).show();
+                                   }
+                               });
                    }
                    break;
                case R.id.mainBtn_reply:

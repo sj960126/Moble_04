@@ -40,16 +40,20 @@ public class NewsWriteActivity extends AppCompatActivity {
     private StorageReference storageRf;
     private StorageReference imgRf;
     private String inputContext, strImage,userNickname;
+    private Button btnUpload;
+    private ImageView iv;
 
+    //필요한 리소스 초기화
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_write);
+        Log.i("index","onCreate");
 
         //화면전환시 아래에서 위로 올라오는 애니메이션 제거
         overridePendingTransition(0, 0);
 
-        Button btnUpload = (Button) findViewById(R.id.mainwBtn_finish);
+        btnUpload = (Button) findViewById(R.id.mainwBtn_finish);
         btnUpload.setBackgroundResource(R.drawable.iconcheck);
 
         //파베 연결 및 연동
@@ -61,7 +65,16 @@ public class NewsWriteActivity extends AppCompatActivity {
         strImage = getIntent().getStringExtra("imgId");
 
         //선택한 사진 불러오기
-        ImageView iv = (ImageView) findViewById(R.id.mainwIv_thumbnail);
+        iv = (ImageView) findViewById(R.id.mainwIv_thumbnail);
+    }
+
+    // 사용자와의 상호작용 (터치이벤트 및 등등)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("index","onResume");
+
+        //선택한 사진 불러오기
         Glide.with(this).load(strImage).override(1000).into(iv);
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
@@ -72,8 +85,6 @@ public class NewsWriteActivity extends AppCompatActivity {
                 Uri file = Uri.fromFile(new File(strImage));
                 imgRf = storageRf.child("feed/"+file.getLastPathSegment());
                 UploadTask uploadTask = imgRf.putFile(file);
-
-
 
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -99,6 +110,7 @@ public class NewsWriteActivity extends AppCompatActivity {
             }
         });
     }
+
 
     //파베 데베에 데이터 작성
     private void writeNewUser(String boardName, String id, String context, String imgUrl, String newsName, String date) {
@@ -138,11 +150,12 @@ public class NewsWriteActivity extends AppCompatActivity {
                 inputContext = et.getText().toString();
                 //Log.i("img :::: ", ""+uri.toString());
 
-                //사진이미지에서 . 대신에 공백 why? 파이어베이스 데베에서 . # $ [] 등과 같은 특수문자 허용 안됨.
+/*                //사진이미지에서 . 대신에 공백 why? 파이어베이스 데베에서 . # $ [] 등과 같은 특수문자 허용 안됨.
                 //보통 사진이미지에서 사용되는 특수문자는 ㅡ . 이기에 .만 제거했움...
                 String board_name = path[path.length-1];
                 board_name = board_name.replace(".","");
-                //Log.i("name ::: ", board_name);
+                //Log.i("name ::: ", board_name);*/
+
                 userNickname =getIntent().getStringExtra("loginUserNickname");
                 //Log.i("UserNickName", userNickname);
 
@@ -152,10 +165,10 @@ public class NewsWriteActivity extends AppCompatActivity {
                 Date mDate = new Date(now);
                 SimpleDateFormat mFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
                 String getTime = mFormat.format(mDate);
-                Log.i("date :::::: ", "" + getTime);
+                //Log.i("date :::::: ", "" + getTime);
 
                 //게시글 이름을 사용자닉네임 + 현재 날짜시간
-                writeNewUser( userNickname + getTime , userNickname, inputContext, uri.toString(),userNickname + board_name, getTime);
+                writeNewUser( userNickname + getTime , userNickname, inputContext, uri.toString(),userNickname + getTime, getTime);
             }
         });
     }
