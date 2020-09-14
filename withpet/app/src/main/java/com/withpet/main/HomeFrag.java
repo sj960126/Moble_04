@@ -38,7 +38,7 @@ import java.util.ArrayList;
 //NewsFeed page
 public class HomeFrag extends Fragment {
     private View rootview;
-    private RecyclerView list;
+    private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<News> myfeed;
@@ -47,31 +47,39 @@ public class HomeFrag extends Fragment {
     private DatabaseReference dbreference;
 
     private SwipeRefreshLayout refreshLayout;
-
-    private Button btn_wirte;
-
+    private Button btnWrite, btnChatt;
     private String[] permission_list = {Manifest.permission.READ_EXTERNAL_STORAGE};
 
+    //액티비티 onCreate와 동일
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.activity_news,container,false);
-        btn_wirte = rootview.findViewById(R.id.walkBtn_write);
 
-        Button btn1 = (Button) rootview.findViewById(R.id.walkBtn_write);
-        Button btn2 = (Button) rootview.findViewById(R.id.mainBtn_chatt);
-
+        btnWrite = (Button) rootview.findViewById(R.id.walkBtn_write);
+        btnChatt = (Button) rootview.findViewById(R.id.mainBtn_chatt);
         refreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.refresh);
+        recyclerView = (RecyclerView) rootview.findViewById(R.id.mainRv);
 
-        btn1.setBackgroundResource(R.drawable.iconadd);
-        btn2.setBackgroundResource(R.drawable.iconchatt);
+        //버튼 기본 이미지 설정
+        btnWrite.setBackgroundResource(R.drawable.iconadd);
+        btnChatt.setBackgroundResource(R.drawable.iconchatt);
 
         layoutManager = new LinearLayoutManager(getActivity());
-        list = rootview.findViewById(R.id.mainRv);
-        list.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
-        list.setLayoutManager(layoutManager);
-        myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
 
+        //리사이클러뷰 설정
+        recyclerView.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
+        recyclerView.setLayoutManager(layoutManager);
+
+        return rootview;
+    }
+
+    //사용자와의 상호작용
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
 
@@ -98,28 +106,29 @@ public class HomeFrag extends Fragment {
             }
         });
 
+        adapter = new MyFeedAdapter(myfeed, getContext());
+        recyclerView.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
+
+        //리사이클러뷰 새로고침 이벤트
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               Refresh();
-               refreshLayout.setRefreshing(false);
+                Refresh();
+                refreshLayout.setRefreshing(false);
             }
         });
 
-        btn_wirte.setOnClickListener(new View.OnClickListener() {
+        //작성버튼 클릭이벤트 : 권한 설정 함수 실행
+        btnWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //권한설정 함수 실행
                 Permission();
             }
         });
-
-        adapter = new MyFeedAdapter(myfeed, getContext());
-        list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
-
-        return rootview;
     }
 
+    //프레그먼트 새로고침
     public void Refresh(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
