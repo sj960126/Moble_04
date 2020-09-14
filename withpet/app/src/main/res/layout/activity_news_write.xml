@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="15dp"
     android:orientation="vertical"
-    tools:context=".NewsWriteActivity">
+    tools:context=".newsfeed.NewsWriteActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -35,6 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:weightSum="3">
 
         <ImageView
@@ -43,7 +45,8 @@
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:scaleType="centerCrop"/>
 
         <EditText
             android:id="@+id/mainwEt_context"
@@ -62,7 +65,8 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:scaleType="centerCrop"/>
 
     </LinearLayout>
 

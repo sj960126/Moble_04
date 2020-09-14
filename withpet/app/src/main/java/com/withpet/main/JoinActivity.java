@@ -38,18 +38,21 @@ public class JoinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
-
-        //파베 접근 설정
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        reference = firebaseDatabase.getReference("User");
-
         etName = (EditText) findViewById(R.id.joinEt_name);
         etNickName = (EditText)  findViewById(R.id.joinEt_nickname);
         etEmail = (EditText) findViewById(R.id.joinEt_email);
         etPw = (EditText) findViewById(R.id.joinEt_pw);
         etPwcheck = (EditText) findViewById(R.id.joinEt_pw2);
+
+        //파베 접근 설정
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        reference = firebaseDatabase.getReference("User");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         //NcikName filter :: 영문자(소, 대)/숫자/특수문자_ 만 입력가능
         InputFilter filter_nickName = new InputFilter() {

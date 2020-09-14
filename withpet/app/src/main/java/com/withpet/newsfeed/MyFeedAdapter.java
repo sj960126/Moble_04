@@ -25,6 +25,8 @@ import com.withpet.*;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 //MyFeedAdapter function
 public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHolder> {
 
@@ -71,20 +73,25 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     //viewHolder = listItem
     public class FeedViewHolder extends RecyclerView.ViewHolder {
         //listitem
-        TextView name, tvCountLike;
+        TextView name, tvCountLike,context;
         ImageView img;
-        TextView context;
-        Button btnLike;
-        Button btnReply;
+        CircleImageView replyImg;
+        Button btnLike, btnReply, btnMenu, btnReplyEnter;
 
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
             btnLike = (Button) itemView.findViewById(R.id.mainBtn_like);
             btnReply = (Button) itemView.findViewById(R.id.mainBtn_reply);
+            btnMenu =(Button) itemView.findViewById(R.id.newsBtn_menu);
+            btnReplyEnter = (Button) itemView.findViewById(R.id.newsBtn_reply);
+            replyImg = (CircleImageView) itemView.findViewById(R.id.newsIv_reply);
 
             //button 디폴트 이미지 설정
             btnLike.setBackgroundResource(R.drawable.iconlike);
             btnReply.setBackgroundResource(R.drawable.iconreply);
+            btnMenu.setBackgroundResource(R.drawable.iconmenu);
+            replyImg.setImageResource(R.drawable.dog);
+            //Glide.with(this).load(R.drawable.sample).circleCrop().into(view2);
 
             this.name = itemView.findViewById(R.id.mainTv_name);
             this.img = itemView.findViewById(R.id.mainImage);
@@ -133,10 +140,11 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                        view.setBackgroundResource(R.drawable.iconreply2);
                    }
                    break;
+               case R.id.newsBtn_menu:
+                   break;
+               case R.id.newsBtn_reply:
+                   break;
            }
        }
    };
-
-
-
 }

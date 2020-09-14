@@ -111,7 +111,6 @@ public class NewsWriteActivity extends AppCompatActivity {
         });
     }
 
-
     //파베 데베에 데이터 작성
     private void writeNewUser(String boardName, String id, String context, String imgUrl, String newsName, String date) {
         //객체 데이터
