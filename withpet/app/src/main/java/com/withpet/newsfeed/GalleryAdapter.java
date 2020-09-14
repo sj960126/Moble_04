@@ -29,11 +29,10 @@ import java.util.ArrayList;
 
 //리사이클러뷰 어댑터 함수 _ 개발가이드에 나와있음
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
-
     private ArrayList<String> mDataset; //사진은 경로로 저장하기 때문에 String 타입의 ArrayList 사용
     private Activity activity; //어댑터는 activity가 존재하지 않음! 현재 어댑터가 실행되는 activity의 정보를 가져오기 위해 선언!
     private Intent intentw;
-
+    private int clickposition = -1;
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public CardView layout;
         public MyViewHolder(CardView l) {
@@ -78,6 +77,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 //다음페이지에 선택한 값을 전달하기 위해 intent 작성
                 intentw = new Intent(activity, NewsWriteActivity.class);
                 intentw.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
+                clickposition = holder.getAdapterPosition();
             }
         });
 
@@ -116,10 +116,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 }
                 // 프로필 수정에서 갤러리 사진 선택 액티비티 띄웠을 때
                 else if((int)view.getTag() == R.integer.profileModifyRequestcode){
-                    Intent intent = activity.getIntent();
-                    intent.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
-                    activity.setResult(activity.RESULT_OK,intent);
-                    activity.finish();
+                    if(clickposition != -1){
+                        Intent intent = activity.getIntent();
+                        intent.putExtra("imgId",mDataset.get(clickposition));
+                        activity.setResult(activity.RESULT_OK,intent);
+                        activity.finish();
+                    }
+
                 }
             }
         });
