@@ -90,10 +90,10 @@ public class HomeFrag extends Fragment {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    //반복문으로 데이터 리스트를 추출
-                    News news = snapshot.getValue(News.class); //만들어뒀던 news 객체에 데이터를 담음
                     //배열리스트에 역순으로 게시글을 저장
                     myfeed.add(0,snapshot.getValue(News.class));
+                    //Log.i("feed", ""+snapshot.getValue());
+                    //Log.i("feed array ", myfeed.get(0).getId());
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
