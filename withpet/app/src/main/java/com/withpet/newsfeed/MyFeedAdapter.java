@@ -2,6 +2,7 @@ package com.withpet.newsfeed;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     private Context context; //선택한 activity action 내용
     private boolean like_click = false;
     private boolean reply_click = false;
+    private Intent nextReply;
 
     //생성자
     public MyFeedAdapter(ArrayList<News> myfeed, Context context) {
@@ -63,6 +65,11 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         // 좋아요 버튼에 해당 개시글 이름을 tag에 저장
         holder.btnLike.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
         holder.btnLike.setOnClickListener(onClickListener);
+        // 댓글 버튼에 해당 개시글 이름을 tag에 저장
+        holder.btnReply.setTag(R.integer.NewsFeedReply, myfeed.get(position).getNewsName());
+        holder.btnReply.setOnClickListener(onClickListener);
+        holder.btnMenu.setOnClickListener(onClickListener);
+        holder.btnReplyEnter.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -75,8 +82,9 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         //listitem
         TextView name, tvCountLike,context;
         ImageView img;
-        CircleImageView replyImg;
-        Button btnLike, btnReply, btnMenu, btnReplyEnter;
+        CircleImageView loginUserImg;
+        Button btnLike;
+        Button btnReply, btnMenu, btnReplyEnter;
 
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,13 +92,13 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
             btnReply = (Button) itemView.findViewById(R.id.mainBtn_reply);
             btnMenu =(Button) itemView.findViewById(R.id.newsBtn_menu);
             btnReplyEnter = (Button) itemView.findViewById(R.id.newsBtn_reply);
-            replyImg = (CircleImageView) itemView.findViewById(R.id.newsIv_reply);
+            loginUserImg = (CircleImageView) itemView.findViewById(R.id.newsIv_reply);
 
             //button 디폴트 이미지 설정
             btnLike.setBackgroundResource(R.drawable.iconlike);
             btnReply.setBackgroundResource(R.drawable.iconreply);
             btnMenu.setBackgroundResource(R.drawable.iconmenu);
-            replyImg.setImageResource(R.drawable.dog);
+            loginUserImg.setImageResource(R.drawable.dog);
             //Glide.with(this).load(R.drawable.sample).circleCrop().into(view2);
 
             this.name = itemView.findViewById(R.id.mainTv_name);
@@ -132,13 +140,12 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                    }
                    break;
                case R.id.mainBtn_reply:
-                   reply_click = !reply_click;
-                   if(reply_click){
-                       view.setBackgroundResource(R.drawable.iconreply);
-                   }
-                   else{
-                       view.setBackgroundResource(R.drawable.iconreply2);
-                   }
+                   //게시글 번호
+                   String newsFeedReply = ""+view.getTag(R.integer.NewsFeedReply);
+                   //댓글페이지에 현재 게시글 내용 전달
+                   nextReply = new Intent(context, ReplyActivity.class);
+                   nextReply.putExtra("boardName", newsFeedReply);
+                   context.startActivity(nextReply);
                    break;
                case R.id.newsBtn_menu:
                    break;

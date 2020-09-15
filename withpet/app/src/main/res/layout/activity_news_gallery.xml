@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="15dp"
     android:orientation="vertical"
     tools:context=".newsfeed.NewsGalleryActivity">
 
@@ -19,22 +18,24 @@
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="fill"
             android:text="@string/app_name"
             android:textSize="30sp" />
+
         <Button
             android:id="@+id/mainwBtn_next"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="10sp"
             android:layout_marginRight="10dp"
-            android:backgroundTint="@color/text"/>
+            android:backgroundTint="@color/text" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="vertical">
 
         <ImageView
@@ -42,8 +43,8 @@
             android:layout_width="match_parent"
             android:layout_height="280dp"
             android:layout_marginBottom="5dp"
-            tools:srcCompat="@tools:sample/avatars"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mainwGv"
