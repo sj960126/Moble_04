@@ -65,7 +65,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                     //.placeholder(R.drawable.dog)
                     .into(holder.img);
         //Glide.with(holder.itemView).load().circleCrop().into(holder.loginUserImg);
-        holder.name.setText(myfeed.get(position).getId());
+        holder.name.setText(myfeed.get(position).getUid());
         holder.context.setText(myfeed.get(position).getContext());
 
         // 좋아요 버튼에 해당 개시글 이름을 tag에 저장

@@ -60,6 +60,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
 
     public class ReplyViewHolder extends RecyclerView.ViewHolder {
         TextView name, context;
+        CircleImageView img;
 
     public ReplyViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -67,6 +68,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
         this.name = itemView.findViewById(R.id.replyTv_nickname);
         //img = itemView.findViewById(R.id.mainImage);
         this.context = itemView.findViewById(R.id.replyTv_re);
+        this.img = itemView.findViewById(R.id.replyCiv_re);
+
+        img.setImageResource(R.drawable.userdefault);
 
     }
 }

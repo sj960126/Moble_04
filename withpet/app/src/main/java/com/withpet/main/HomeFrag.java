@@ -81,8 +81,10 @@ public class HomeFrag extends Fragment {
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
 
+        //최근 순서
+        Query latelyFeed = dbreference.orderByChild("date");
         //실시간으로 앱데이터를 업데이트 함수
-        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+        latelyFeed.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳

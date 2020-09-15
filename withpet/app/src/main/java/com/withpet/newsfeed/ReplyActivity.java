@@ -77,7 +77,7 @@ public class ReplyActivity extends AppCompatActivity {
                 if(snapshot.exists()){
                     for(DataSnapshot user : snapshot.getChildren()){
                         News news = user.getValue(News.class);
-                        tvNewsId.setText(news.getId());
+                        tvNewsId.setText(news.getUid());
                         tvNewsContext.setText(news.getContext());
                     }
                 }
