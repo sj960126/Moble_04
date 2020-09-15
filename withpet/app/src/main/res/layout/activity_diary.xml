@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".health.diaryActivity">
+    tools:context=".health.diaryActivity"
+    android:orientation="vertical">
 
-    <CalendarView
-        android:id="@+id/calendar"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusedMonthDateColor="#EC5656"
+            android:maxDate="12/31/2023"
+            android:minDate="01/01/2020"
+            android:selectedWeekBackgroundColor="#d6b6ba"
+            android:showWeekNumber="false"
+            android:unfocusedMonthDateColor="#0000ff"
+            android:weekSeparatorLineColor="#00ff00"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="20dp"
-        android:focusedMonthDateColor="#EC5656"
-        android:maxDate="12/31/2023"
-        android:minDate="01/01/2020"
-        android:selectedWeekBackgroundColor="#ffff00"
-        android:showWeekNumber="false"
-        android:unfocusedMonthDateColor="#0000ff"
-        android:weekSeparatorLineColor="#00ff00" />
+        android:layout_marginTop="20dp">
 
-    <ImageButton
-        android:id="@+id/plus"
-        android:layout_width="23dp"
-        android:layout_height="26dp"
-        android:layout_marginLeft="370dp"
-        android:layout_marginTop="348dp"
-        android:layout_marginBottom="20dp"
-        app:srcCompat="@drawable/plus" />
+        <TextView
+            android:id="@+id/day_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today"
+            android:layout_weight="3"/>
 
-    <TextView
-        android:id="@+id/Eat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="350dp"
-        android:layout_marginBottom="20dp"
-        android:text="식사 내역" />
-
+        <ImageButton
+            android:id="@+id/plus"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_toEndOf="@+id/day_change"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/plus" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/diary_rc"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="380dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_height="match_parent" />
 
 
-
-
-</RelativeLayout>
+</LinearLayout>

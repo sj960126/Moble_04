@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".health.diary_addActivity">
 
     <TextView
@@ -22,16 +23,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:textSize="15dp"
-        android:layout_marginTop="85dp"
-        android:layout_marginBottom="20dp"
         android:text="오늘 식사는 어땠나요?" />
 
     <TextView
         android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
         android:text="종류" />
 
     <RadioGroup
@@ -39,23 +38,77 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="170dp">
+        android:layout_marginTop="10dp">
 
         <RadioButton
             android:id="@+id/radioButton"
-            android:layout_width="80dp"
-            android:layout_height="116dp"
-            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
             android:layout_weight="1"
-            android:button="@drawable/eat" />
+            android:button="@drawable/radiobtn1" />
 
         <RadioButton
             android:id="@+id/radioButton2"
-            android:layout_width="80dp"
-            android:layout_height="116dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:button="@drawable/eat4" />
+            android:button="@drawable/radiobtn2" />
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="시간" />
 
-</RelativeLayout>
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:spinnerMode="dialog"
+        android:entries="@array/eat"/>
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="사료명" />
+
+    <EditText
+        android:id="@+id/input_brand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="사료명을 입력해 주세요" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="양" />
+
+    <EditText
+        android:id="@+id/input_eat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="급여량을 입력해주세요" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/c4"
+        android:text="등록 완료"
+        android:layout_marginTop="40dp"
+        android:textColor="#ffffff" />
+</LinearLayout>

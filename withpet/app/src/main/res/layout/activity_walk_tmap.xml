@@ -24,7 +24,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/checkview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ㅇㅋㅇㅋ" />
@@ -34,5 +34,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="이건 왜 작어" />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
 
 </LinearLayout>
