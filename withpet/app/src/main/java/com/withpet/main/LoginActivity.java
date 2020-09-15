@@ -11,12 +11,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 
 import androidx.annotation.NonNull;
@@ -43,8 +37,10 @@ public class LoginActivity extends AppCompatActivity {
     public void btnClick(View view){
         switch (view.getId()){
             case R.id.loginBtn_login:
+                //로그인할 이메일과 비밀번호
                 strEmail = etEmail.getText().toString().trim();
                 strPw = etPw.getText().toString().trim();
+                //파이어베이스 '인증' >> 이메일로그인
                 firebaseAuth.signInWithEmailAndPassword(strEmail, strPw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -58,7 +54,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
                 break;
             case R.id.loginBtn_join:
                 Intent intent = new Intent(LoginActivity.this, JoinActivity.class);

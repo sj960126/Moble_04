@@ -1,12 +1,39 @@
 package com.withpet.main;
 
 public class User {
-    String name;
-    String nickname;
-    String email;
-    String uid;
+    private String name;
+    private String nickname;
+    private String email;
+    private String uid;
+    private String shape;
+    private String imgUrl;
+    private int meal;
 
     User(){    }
+
+    public String getShape() {
+        return shape;
+    }
+
+    public void setShape(String shape) {
+        this.shape = shape;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public int getMeal() {
+        return meal;
+    }
+
+    public void setMeal(int meal) {
+        this.meal = meal;
+    }
 
     public String getName() {
         return name;

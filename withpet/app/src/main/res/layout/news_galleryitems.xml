@@ -12,5 +12,6 @@
         android:id="@+id/mainIv_gal"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:scaleType="centerCrop"/>
 </androidx.cardview.widget.CardView>

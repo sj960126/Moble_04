@@ -20,6 +20,7 @@ import com.withpet.*;
 public class HealthFrag extends Fragment {
     private View rootview;
     ImageView hospital_btn;
+    ImageView diary_btn;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -27,6 +28,8 @@ public class HealthFrag extends Fragment {
 
         //건강 메인 선택창 Java
         hospital_btn = (ImageView) rootview.findViewById(R.id.H_btn);
+        diary_btn =(ImageView) rootview.findViewById(R.id.D_btn);
+
         hospital_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,6 +37,15 @@ public class HealthFrag extends Fragment {
                 startActivity(intent);
             }
         });
+
+        diary_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), diaryActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         return rootview;
     }

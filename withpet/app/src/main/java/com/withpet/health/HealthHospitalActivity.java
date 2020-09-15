@@ -230,7 +230,6 @@ public class HealthHospitalActivity extends AppCompatActivity {
             }
 
             list = arrayList;
-
             for (int i=0;i<list.size();i++) {
                 TMapPoint point = new TMapPoint(Double.parseDouble(list.get(i).getX()), Double.parseDouble(list.get(i).getY()));
                 TMapMarkerItem markerItem = new TMapMarkerItem();
@@ -261,7 +260,6 @@ public class HealthHospitalActivity extends AppCompatActivity {
             return null;
         }
     }
-
 }
 
 
