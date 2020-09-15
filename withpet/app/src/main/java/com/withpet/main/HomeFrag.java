@@ -31,8 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.withpet.newsfeed.*;
 import com.withpet.*;
 
-
-
 import java.util.ArrayList;
 
 //NewsFeed page

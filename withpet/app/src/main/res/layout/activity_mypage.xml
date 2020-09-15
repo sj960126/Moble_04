@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="15dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textView11"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="fill"
             android:text="WithPet"
             android:textSize="30sp" />
 
@@ -31,7 +27,7 @@
             android:layout_height="30dp"
             android:layout_marginLeft="10sp"
             android:layout_marginRight="10dp"
-            android:backgroundTint="@color/text"/>
+            android:backgroundTint="@color/text" />
     </LinearLayout>
 
     <LinearLayout
@@ -40,11 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:orientation="horizontal"
-        android:weightSum="3"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        android:weightSum="3">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -55,7 +47,7 @@
             <ImageView
                 android:id="@+id/myPageIv_profile"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="110dp"
                 app:srcCompat="@drawable/dog"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -81,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:text="100"
                 android:textAlignment="center"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -89,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:text="게시물"
                 android:textAlignment="center"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -113,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:text="관심"
                 android:textAlignment="center"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -122,11 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/myPageListview_mynotice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/myPageBtn_modify"
@@ -138,11 +126,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myPageListview_mynotice"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

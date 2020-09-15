@@ -3,13 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="15dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +17,8 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="fill"
             android:text="@string/app_name"
             android:textSize="30sp" />
     </LinearLayout>
@@ -40,14 +40,20 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="아이디"
+<<<<<<< HEAD
+            android:text="dydwns1801@naver.com"
+            android:inputType="textPersonName" />
+=======
             android:inputType="textPersonName"
             android:text="fbpqd48@gmail.com" />
+>>>>>>> 57e537e3419ad1e3cce97f6065f7d6578cf2fa3e
 
         <EditText
             android:id="@+id/loginEt_pw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:text="k350a77"
             android:hint="비밀번호"
             android:inputType="textPassword"
             android:text="mi1*707mi" />
