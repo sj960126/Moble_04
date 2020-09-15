@@ -14,15 +14,6 @@
         android:layout_height="60dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="fill"
-            android:text="@string/app_name"
-            android:textSize="30sp" />
-
         <Button
             android:id="@+id/replyBtn_before"
             android:layout_width="30dp"
@@ -31,6 +22,57 @@
             android:layout_marginRight="10dp"
             android:backgroundTint="@color/text" />
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="fill"
+            android:text="댓글"
+            android:textSize="26sp" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/newsFeed"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/replyIv_newimg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/replyTv_newid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="게시글 아이디"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/replyTv_newcontext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3dp"
+                android:text="게시글 내용" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/replyRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
