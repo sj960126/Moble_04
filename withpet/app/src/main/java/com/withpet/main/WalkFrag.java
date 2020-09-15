@@ -76,8 +76,8 @@ public class WalkFrag extends Fragment {
         super.onResume();
 
         database = FirebaseDatabase.getInstance();
-
         databaseReference = database.getReference("walk-board");
+
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
