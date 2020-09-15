@@ -2,6 +2,8 @@ package com.withpet.newsfeed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.withpet.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -34,6 +38,8 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     private Context context; //선택한 activity action 내용
     private boolean like_click = false;
     private Intent nextReply;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();;
 
     //생성자
     public MyFeedAdapter(ArrayList<News> myfeed, Context context) {
@@ -58,7 +64,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                     .load(myfeed.get(position).getImgUrl())
                     //.placeholder(R.drawable.dog)
                     .into(holder.img);
-        //Glide.with(holder.itemView).load(myfeed.get(position).getImgUrl()).circleCrop().into(holder.loginUserImg);
+        //Glide.with(holder.itemView).load().circleCrop().into(holder.loginUserImg);
         holder.name.setText(myfeed.get(position).getId());
         holder.context.setText(myfeed.get(position).getContext());
 
@@ -103,7 +109,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
             btnLike.setBackgroundResource(R.drawable.iconlike);
             btnReply.setBackgroundResource(R.drawable.iconreply);
             btnMenu.setBackgroundResource(R.drawable.iconmenu);
-            loginUserImg.setImageResource(R.drawable.userdefault);
+            //loginUserImg.setImageResource(R.drawable.userdefault);
 
             this.name = itemView.findViewById(R.id.mainTv_name);
             this.img = itemView.findViewById(R.id.mainImage);
@@ -113,6 +119,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
             //댓글 작성 버튼 이벤트
             // holder.btnReplyEnter.setOnClickListener(onClickListener); :: 이방법으로 진행할경우 EditText 가 Null 됨ㅠㅠ
             btnReplyEnter.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onClick(View view) {
                     String strReply = etReply.getText().toString();
@@ -120,15 +127,16 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                     //게시글 번호
                     String newsReplyEnter = ""+view.getTag(R.integer.key_NewsName);
 
+                    //댓글 번호
+                    long now = System.currentTimeMillis();
+                    Date mDate = new Date(now);
+                    SimpleDateFormat mFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                    String getTime = mFormat.format(mDate);
+
                     //Reply 테이블 파베 연동
-                    FirebaseDatabase firebaseDatabaseReply = FirebaseDatabase.getInstance();
-                    FirebaseUser userReply = FirebaseAuth.getInstance().getCurrentUser();
-                    DatabaseReference dbRefReply = firebaseDatabaseReply.getReference("Reply");
-
-                    //댓글 데이터
-                    Reply reply = new Reply(strReply, userReply.getUid());
-
-                    dbRefReply.child(newsReplyEnter).child(userReply.getUid()).setValue(reply);
+                    DatabaseReference dbRefReply = firebaseDatabase.getReference("Reply");
+                    Reply inputReply = new Reply(loginUser.getUid()+getTime,loginUser.getUid(),newsReplyEnter, strReply);
+                    dbRefReply.child(loginUser.getUid()+getTime).setValue(inputReply);
                 }
             });
         }
@@ -143,26 +151,16 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                    like_click = !like_click;
 
                    //Like 테이블 파베 연동
-                   FirebaseDatabase firebaseDatabaseLike = FirebaseDatabase.getInstance();
-                   FirebaseUser userLike = FirebaseAuth.getInstance().getCurrentUser();
-                   DatabaseReference dbRefLike = firebaseDatabaseLike.getReference("Like");
-
+                   DatabaseReference dbRefLike = firebaseDatabase.getReference("Like");
                    if(like_click){
                        view.setBackgroundResource(R.drawable.iconlike);
                        //Like 테이블에서 로그인 유저의 좋아요 삭제
-                       dbRefLike.child(newsFeedName).child(userLike.getUid()).removeValue();
+                       dbRefLike.child(newsFeedName).child(loginUser.getUid()).removeValue();
                    }
                    else {
                        view.setBackgroundResource(R.drawable.iconlike2);
                        //Like 테이블에서 로그인 유저의 좋아요 등록
-                       dbRefLike.child(newsFeedName).child(userLike.getUid()).setValue(1)
-                               .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                   @Override
-                                   public void onSuccess(Void aVoid) {
-                                       // Write was successful!
-                                       Toast.makeText(context, "좋아요!", Toast.LENGTH_SHORT).show();
-                                   }
-                               });
+                       dbRefLike.child(newsFeedName).child(loginUser.getUid()).setValue(1);
                    }
                    break;
                case R.id.mainBtn_reply:

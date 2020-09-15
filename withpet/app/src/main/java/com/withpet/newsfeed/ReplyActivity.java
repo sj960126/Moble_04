@@ -66,7 +66,6 @@ public class ReplyActivity extends AppCompatActivity {
         super.onResume();
         Log.i("wirteUserId",""+boardName);
 
-        feedReply = new ArrayList<>();
         FirebaseDatabase NewsFeedDB =  FirebaseDatabase.getInstance();
         DatabaseReference NewsFeedDBR = NewsFeedDB.getReference("Feed");
 
@@ -85,27 +84,23 @@ public class ReplyActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
-        FirebaseDatabase Replydb = FirebaseDatabase.getInstance();
-        DatabaseReference Replydbr = Replydb.getReference("Reply");
-
-        Replydbr.child(boardName).addListenerForSingleValueEvent(new ValueEventListener() {
+        feedReply = new ArrayList<>();
+        DatabaseReference Replydbr = NewsFeedDB.getReference("Reply");
+        Query findReply = Replydbr.orderByChild("boardName").equalTo(boardName);
+        findReply.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 feedReply.clear();
                 for(DataSnapshot reply: snapshot.getChildren()){
-                    feedReply.add(0,snapshot.getValue(Reply.class));
-                    Log.i("reply ", ""+snapshot.getValue());
+                    feedReply.add(0,reply.getValue(Reply.class));
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 

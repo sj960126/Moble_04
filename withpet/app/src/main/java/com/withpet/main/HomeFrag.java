@@ -81,10 +81,8 @@ public class HomeFrag extends Fragment {
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
 
-        Query createNewsFeed =dbreference.orderByChild("date");
-
         //실시간으로 앱데이터를 업데이트 함수
-        createNewsFeed.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
@@ -92,8 +90,6 @@ public class HomeFrag extends Fragment {
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     //배열리스트에 역순으로 게시글을 저장
                     myfeed.add(0,snapshot.getValue(News.class));
-                    //Log.i("feed", ""+snapshot.getValue());
-                    //Log.i("feed array ", myfeed.get(0).getId());
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
