@@ -11,34 +11,34 @@
         android:id="@+id/diary_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="TextView"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="50dp"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:text="TextView"
+        android:textSize="20dp" />
 
     <TextView
         android:id="@+id/textView24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:textSize="15dp"
-        android:text="오늘 식사는 어땠나요?" />
+        android:text="오늘 식사는 어땠나요?"
+        android:textSize="15dp" />
 
     <TextView
         android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
         android:text="종류" />
 
     <RadioGroup
         android:id="@+id/radiogroup"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/radioButton"
@@ -60,8 +60,8 @@
         android:id="@+id/textView25"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:text="시간" />
 
     <Spinner
@@ -70,15 +70,15 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:spinnerMode="dialog"
-        android:entries="@array/eat"/>
+        android:entries="@array/eat"
+        android:spinnerMode="dialog" />
 
     <TextView
         android:id="@+id/textView21"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:text="사료명" />
 
     <EditText
@@ -92,8 +92,8 @@
         android:id="@+id/textView22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:text="양" />
 
     <EditText
@@ -107,8 +107,8 @@
         android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
         android:background="@color/c4"
         android:text="등록 완료"
-        android:layout_marginTop="40dp"
         android:textColor="#ffffff" />
 </LinearLayout>

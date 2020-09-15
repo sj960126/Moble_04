@@ -109,7 +109,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
             btnLike.setBackgroundResource(R.drawable.iconlike);
             btnReply.setBackgroundResource(R.drawable.iconreply);
             btnMenu.setBackgroundResource(R.drawable.iconmenu);
-            //loginUserImg.setImageResource(R.drawable.userdefault);
+            loginUserImg.setImageResource(R.drawable.userdefault);
 
             this.name = itemView.findViewById(R.id.mainTv_name);
             this.img = itemView.findViewById(R.id.mainImage);
