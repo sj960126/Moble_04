@@ -69,8 +69,7 @@ public class HealthHospitalActivity extends AppCompatActivity {
     tMapView = new TMapView(this);
     tMapView.setSKTMapApiKey(APK);
     health_hospital_map.addView(tMapView);
-
-//    setGps();
+    //setGps();
     tMapView.setCenterPoint(126.988205, 37.551135);
 
     tMapView.setOnCalloutRightButtonClickListener(new TMapView.OnCalloutRightButtonClickCallback() {
