@@ -1,7 +1,6 @@
 package com.withpet.mypage;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,34 +8,34 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.withpet.*;
+import com.withpet.main.*;
 import com.withpet.newsfeed.*;
-
 import java.util.ArrayList;
+
 //종희
 public class MyPageNoticeAdapter extends RecyclerView.Adapter<MyPageNoticeAdapter.MyPageNoticeViewHolder> {
 
     private ArrayList<News> myfeed;
+    private TransUser user;
     private Context context; //선택한 activity action 내용
-    private  int count = 0;       // 파이어베이스에서 데이터를 가져올 때 3개씩 가져오기위한 변수
-    private  int share = 0;       // ArrayList 사이즈를 3으로 나눠 나온 몫의 횟수만큼 사용하기 위한 변수
-    private  boolean draw = false;  // 파이어베이스에 있는 내용을 다 출력했는지를 저장하는 변수
 
     //생성자
-    public MyPageNoticeAdapter(ArrayList<News> myfeed, Context context) {
+    public MyPageNoticeAdapter(ArrayList<News> myfeed, Context context, TransUser tuser) {
         this.myfeed = myfeed;
         this.context = context;
+        user = tuser;
     }
-
 
     //리스트뷰아이템 생성 실행되는 곳
     @NonNull
     @Override
     public MyPageNoticeAdapter.MyPageNoticeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mypagenotice_item, parent, false);
+        CardView view = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.mypagenotice_item, parent, false);
         MyPageNoticeAdapter.MyPageNoticeViewHolder holder = new MyPageNoticeAdapter.MyPageNoticeViewHolder(view);
         return holder;
     }
@@ -46,54 +45,16 @@ public class MyPageNoticeAdapter extends RecyclerView.Adapter<MyPageNoticeAdapte
     //코드내용 줄여보기
     @Override
     public void onBindViewHolder(@NonNull MyPageNoticeAdapter.MyPageNoticeViewHolder holder, int position) {
-        /* onBindViewHolder은 화면에 보여질 수 있을 만큼 실행 됨
-           position은 화면에 보여지는 수만큼 연결한 ArrayList 항목을 가르킴
-           ex) 화면에 출력되는 내용이 4개면 onBindViewHolder은 4번 실행되고 position은 0,1,2,3이 된다.
-
-        */
-
-        if (!draw) {
-            // 게시물 내용 3개씩 끊어서 출력하기 위한  if문
-            // ex) 파이어베이스에 저장된 데이터가 5개면 한 번은 3개를 그리고 한 번은 2개를 그리기 위함
-            if(share < (myfeed.size()/3) ){
-                int index = 0;
-                for(; count< (position+1)*3 ; count++){
-                    /*Log.i("count1:",""+count);
-                    Log.i("iter:",""+((position+1)*3));
-                    Log.i("index:",""+index);*/
-                    Glide.with(holder.itemView)
-                            .load(myfeed.get(count).getImgUrl())
-                            //.placeholder(R.drawable.dog)
-                            .into(holder.img[index]);
-                    holder.img[index].setTag(count);
-                    holder.img[index].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Toast.makeText(context, "게시자명 : "+ myfeed.get((int)view.getTag()).getId(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    index++;
-                }
-                share++;
-            }
-            else{
-                for(int i = 0; i < (myfeed.size()%3) ; i++){
-                    //Log.i("count2:",""+count);
-                    Glide.with(holder.itemView)
-                            .load(myfeed.get(count).getImgUrl())
-                            //.placeholder(R.drawable.dog)
-                            .into(holder.img[i]);
-                    holder.img[i].setTag(count++);
-                    holder.img[i].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Toast.makeText(context, "게시자명 : "+ myfeed.get((int)view.getTag()).getId(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-                draw = true;
-            }
-        }
+        CardView cardView = holder.layout.findViewById(R.id.myPageCv);
+        ImageView iv_noticeitem = holder.layout.findViewById(R.id.mypageNoticeIv_item);
+        /*
+        if(myfeed.get(position).getId().equals(user.getNickname())){
+            Glide.with(context).load(myfeed.get(position).getImgUrl()).override(800).into(iv_noticeitem);
+            iv_noticeitem.setTag(R.integer.MyNoticeItem, myfeed.get(position));
+        }*/
+        Glide.with(context).load(myfeed.get(position).getImgUrl()).override(800).into(iv_noticeitem);
+        iv_noticeitem.setTag(R.integer.MyNoticeItem, myfeed.get(position));
+        iv_noticeitem.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -103,15 +64,22 @@ public class MyPageNoticeAdapter extends RecyclerView.Adapter<MyPageNoticeAdapte
 
     //viewHolder = listItem
     public class MyPageNoticeViewHolder extends RecyclerView.ViewHolder {
-        //listitem
-        ImageView[] img = new ImageView[3];
-
-        public MyPageNoticeViewHolder(@NonNull View itemView) {
-            super(itemView);
-            // 리소스 객체로 줄일 수 있음 같은그림 찾기 소스파일 볼 것
-            img[0] = itemView.findViewById(R.id.mypageNoticeIv_item1);
-            img[1] = itemView.findViewById(R.id.mypageNoticeIv_item2);
-            img[2] = itemView.findViewById(R.id.mypageNoticeIv_item3);
+        public CardView layout;
+        public MyPageNoticeViewHolder(CardView l) {
+            super(l);
+            layout = l;
         }
     }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.mypageNoticeIv_item:
+                    News news = (News)view.getTag(R.integer.MyNoticeItem);
+                    Toast.makeText(context, "nick : "+news.getId() + ", context : " + news.getContext()+ ", date : "+news.getDate(), Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 }

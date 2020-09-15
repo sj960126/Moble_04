@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,7 +51,7 @@ public class MypageFrag extends Fragment {
     private FirebaseUser firebaseUser;
     private TransUser loginuser;
     final  int requestcode = 1001;
-    // 로그인한 사람의 게시글만 보이게 변경
+    // 로그인한 사람의 게시글만 보이게 변경(로그인 정보 가져와야함)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,14 +64,15 @@ public class MypageFrag extends Fragment {
 
         list = rootview.findViewById(R.id.myPageListview_mynotice);
         list.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
-        layoutManager = new LinearLayoutManager(getActivity());
+        final int col = 3;
+        layoutManager = new GridLayoutManager(rootview.getContext(), col);
         list.setLayoutManager(layoutManager);
         myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
 
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        adapter = new MyPageNoticeAdapter(myfeed, getContext());
+        adapter = new MyPageNoticeAdapter(myfeed, getContext(), loginuser);
         list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
         // 파이어베이스에서 가져온 닉네임, 사진정보 프로필 수정 액태비티로 전달
         rootview.findViewById(R.id.myPageBtn_modify).setOnClickListener(new View.OnClickListener() {
@@ -93,6 +95,24 @@ public class MypageFrag extends Fragment {
     public void onStart() {
         super.onStart();
         Log.i("resume start", "resume start");
+        //파이어베이스에서 로그인유저 nickname 정보 가져오기
+        DatabaseReference userdbreference = db.getReference("User");
+        userdbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren()){
+                    if(ds.getKey().equals(firebaseUser.getUid())){
+                        loginuser = new TransUser(ds.getValue(User.class));
+                        tv_nickname.setText(loginuser.getNickname());
+                        Glide.with(rootview).load(loginuser.getImgUrl()).override(800).into(iv_profilephoto);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
         dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -113,24 +133,8 @@ public class MypageFrag extends Fragment {
                 Toast.makeText(getActivity(), "에러라라고오오옹", Toast.LENGTH_SHORT).show();
             }
         });
-
-        //파이어베이스에서 로그인유저 nickname 정보 가져오기
-        DatabaseReference userdbreference = db.getReference("User");
-        userdbreference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.getKey().equals(firebaseUser.getUid())){
-                        loginuser = new TransUser(ds.getValue(User.class));
-                        tv_nickname.setText(loginuser.getNickname());
-                        Glide.with(rootview).load(loginuser.getImgUrl()).override(800).into(iv_profilephoto);
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    }
+    public TransUser getLoginuser(){
+        return loginuser;
     }
 }
