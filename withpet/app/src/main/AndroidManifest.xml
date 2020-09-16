@@ -21,8 +21,9 @@
         <activity android:name=".walk.Walk_tmap" />
         <activity android:name=".walk.Walk_boardwriteActivity" />
         <activity android:name=".health.loding_Activity" />
-        <activity android:name=".health.health_diary" />
         <activity android:name=".health.HealthHospitalActivity" />
+        <activity android:name=".health.diaryActivity"/>
+        <activity android:name=".health.diary_addActivity"/>
         <activity android:name=".newsfeed.NewsGalleryActivity" />
         <activity android:name=".newsfeed.NewsWriteActivity" />
         <activity android:name=".iot.iot_streaming_area" />

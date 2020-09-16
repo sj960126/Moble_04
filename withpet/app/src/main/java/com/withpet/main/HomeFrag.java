@@ -81,17 +81,15 @@ public class HomeFrag extends Fragment {
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
 
-        Query createNewsFeed =dbreference.orderByChild("date");
-
+        //최근 순서
+        Query latelyFeed = dbreference.orderByChild("date");
         //실시간으로 앱데이터를 업데이트 함수
-        createNewsFeed.addListenerForSingleValueEvent(new ValueEventListener() {
+        latelyFeed.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    //반복문으로 데이터 리스트를 추출
-                    News news = snapshot.getValue(News.class); //만들어뒀던 news 객체에 데이터를 담음
                     //배열리스트에 역순으로 게시글을 저장
                     myfeed.add(0,snapshot.getValue(News.class));
                 }

@@ -77,7 +77,7 @@ public class MyPageNoticeAdapter extends RecyclerView.Adapter<MyPageNoticeAdapte
             switch (view.getId()){
                 case R.id.mypageNoticeIv_item:
                     News news = (News)view.getTag(R.integer.MyNoticeItem);
-                    Toast.makeText(context, "nick : "+news.getId() + ", context : " + news.getContext()+ ", date : "+news.getDate(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "nick : "+news.getUid() + ", context : " + news.getContext()+ ", date : "+news.getDate(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

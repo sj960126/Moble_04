@@ -35,6 +35,8 @@ import com.withpet.*;
 import com.withpet.newsfeed.*;
 import com.withpet.main.*;
 import java.io.File;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 //종희
 //사진을 선택안했을 때 예외 처리 해야함 - 사진 변화 체크한 다음 값 하나하나씩 넣어줘야할듯
 
@@ -46,7 +48,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
     private StorageReference storageRf; // 스토리지 주소 담는 객체
     private StorageReference imgRf;
     private FirebaseUser firebaseUser;
-    private ImageView iv_profilephoto;
+    private CircleImageView iv_profilephoto;
     private User loginuser;     // 로그인 한 사용자 정보 담은 객체
     private String shape;
     private String imgId;

@@ -99,13 +99,14 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/newsIv_reply"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
+                android:layout_width="10dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <EditText
-                android:id="@+id/newsTv_reply"
+                android:id="@+id/newsEt_reply"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"

@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/myPageIv_profile"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"

@@ -36,12 +36,14 @@ import com.withpet.*;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 //Mypage page 종희
 public class MypageFrag extends Fragment {
 
     private View rootview;
     private RecyclerView list;
-    private ImageView iv_profilephoto;
+    private CircleImageView iv_profilephoto;
     private TextView tv_nickname;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
