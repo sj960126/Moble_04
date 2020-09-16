@@ -6,6 +6,15 @@ public class diary {
     private String time; // 날짜
     private String brand;
 
+    diary(){
+
+    }
+    diary(String kind,String eat,String time,String brand){
+        this.kind=kind;
+        this.eat=eat;
+        this.time=time;
+        this.brand=brand;
+    }
     public String getKind() {
         return kind;
     }
