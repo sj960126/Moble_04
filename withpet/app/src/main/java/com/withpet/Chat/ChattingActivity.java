@@ -3,6 +3,7 @@ package com.withpet.Chat;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import com.withpet.*;
 
 public class ChattingActivity extends AppCompatActivity {
 
