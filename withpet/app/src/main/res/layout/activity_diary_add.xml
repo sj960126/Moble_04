@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".health.diary_addActivity">
 
@@ -12,7 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="50dp"
         android:layout_marginBottom="20dp"
         android:text="TextView"
         android:textSize="20dp" />
@@ -104,9 +103,9 @@
         android:hint="급여량을 입력해주세요" />
 
     <Button
-        android:id="@+id/submit"
+        android:id="@+id/diaryBtn_submit"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:background="@color/c4"
         android:text="등록 완료"

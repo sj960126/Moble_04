@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +18,8 @@ import android.view.View;
 import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,11 +37,14 @@ public class diaryActivity extends AppCompatActivity {
     private CalendarView cal;
     private String date;
     private TextView change;
+    private ArrayList<Diary_Day_Info> day_list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //로그인 처리 //새로고침 //삭제
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
         //로그인에서 id가지고 오기
+        day_list = new ArrayList<Diary_Day_Info>();
         change = findViewById(R.id.day_change);
         Date system_date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
@@ -50,22 +54,34 @@ public class diaryActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        arrayList= new ArrayList<>(); //객체를 담을 (어댑터쪽으로)
+        arrayList= new ArrayList<diary>(); //객체를 담을 (어댑터쪽으로)
         database =FirebaseDatabase.getInstance(); //파이어베이스 데이터베이스 연동
-        databaseReference = database.getReference("Diary").child("song");//db테이블 연결
+        try {
+            databaseReference = database.getReference("Diary").child("song");//db테이블 연결 경로 액세스
+        }catch (Exception e){
+            Toast.makeText(this,"없어요",Toast.LENGTH_SHORT).show();
+        }
 
         cal = findViewById(R.id.calendar);
         add = findViewById(R.id.plus);
 
 
-
-
-
         cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                date = String.valueOf(i)+"-"+String.valueOf(i1)+"-"+String.valueOf(i2);
+                date = String.valueOf(i)+"-0"+String.valueOf(i1+1)+"-"+String.valueOf(i2);
+                arrayList.clear();
+                for(Diary_Day_Info day : day_list ){
+                    if(day.getDate().equals(date)){
+                        for(diary d : day.getDiaryArrayList()){
+                            arrayList.add(d);
+                        }
+                        break;
+                    }
+                }
+                adapter.notifyDataSetChanged();
                 change.setText(date);
+
             }
         });
 
@@ -73,35 +89,32 @@ public class diaryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), diary_addActivity.class);
+                intent.putExtra("day",date);
                 startActivity(intent);
             }
         });
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume() { // 액티비티 단위, 액티비티가 다시 켜질 때(인텐트로 넘어간 후 다시 돌아올때, intent startactivity)
         super.onResume();
-
-
-
-
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //파이어베이스 데이터베이스의 데이터를 받아오는 곳
-                arrayList.clear(); //기존 배열 초기화 존재하지 않게 초기화
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){ //반복문으로 데이터 리스트를 추출
-                    diary Diary = snapshot.getValue(diary.class);
-                    arrayList.add(Diary); //담은 데이터들을 배열리스트에 넣고 리사이클러뷰로 보낼 준비
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren()){  //  ds : 날짜 (2020-09-15)
+                    Log.i("con : ", ds.getValue().toString());
+                    Diary_Day_Info td = new Diary_Day_Info();
+                    td.setDate(ds.getKey());
+                    for(DataSnapshot ids : ds.getChildren()){
+                        td.addDiaryArrayList(ids.getValue(diary.class));
+                    }
+                    day_list.add(td);
                 }
-                adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                //디비를 가져오던중 에러 발생 시
-                Log.e("Diary",String.valueOf(error.toException()));
+
             }
         });
         adapter = new diary_Adapter(arrayList,this);
