@@ -5,36 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Chat.ChattingActivity"
-    android:weightSum="1">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chattingRv_chat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+    tools:context=".Chat.FindUserActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        tools:visibility="visible">
 
         <EditText
-            android:id="@+id/chattingEt_input"
+            android:id="@+id/findUserEt_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:hint="닉네임 입력"
+            android:inputType="textPersonName" />
 
         <Button
-            android:id="@+id/chattingBtn_send"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="send" />
+            android:id="@+id/findUserBtn_find"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="검" />
+
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/findUserRv_List"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import com.withpet.Chat.ChatListActivity;
 import com.withpet.newsfeed.*;
 import com.withpet.*;
 
@@ -120,6 +121,15 @@ public class HomeFrag extends Fragment {
             public void onClick(View view) {
                 //권한설정 함수 실행
                 Permission();
+            }
+        });
+
+        //채팅 버튼 클릭 이벤트 : 채팅방 목록 페이지로 이동
+        btnChatt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ChatListActivity.class);
+                startActivity(intent);
             }
         });
     }
