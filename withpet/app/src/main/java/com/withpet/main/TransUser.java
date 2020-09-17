@@ -11,7 +11,7 @@ public class TransUser implements Serializable {
     private String imgUrl;
     private int meal;
 
-    TransUser(User user){
+    public TransUser(User user){
         name = user.getName();
         nickname = user.getNickname();
         email = user.getEmail();

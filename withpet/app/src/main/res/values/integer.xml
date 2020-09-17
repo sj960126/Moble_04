@@ -4,4 +4,5 @@
     <integer name="profileModifyRequestcode">1020</integer>
     <integer name="key_NewsName">1030</integer>
     <integer name="MyNoticeItem">1060</integer>
+    <integer name="userinfo">1070</integer>
 </resources>
