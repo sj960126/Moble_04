@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".newsfeed.ReplyActivity"></activity>
+        <activity android:name=".newsfeed.ReplyActivity" />
         <activity android:name=".walk.Walk_tmap" />
         <activity android:name=".walk.Walk_boardwriteActivity" />
         <activity android:name=".health.loding_Activity" />
@@ -34,6 +34,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBLaYTPSCp-sYkDgXEYo0gTtrgaig82iX0" />
     </application>
 
 </manifest>

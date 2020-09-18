@@ -40,23 +40,17 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="아이디"
-<<<<<<< HEAD
             android:text="dydwns1801@naver.com"
             android:inputType="textPersonName" />
-=======
-            android:inputType="textPersonName"
-            android:text="fbpqd48@gmail.com" />
->>>>>>> 57e537e3419ad1e3cce97f6065f7d6578cf2fa3e
 
         <EditText
             android:id="@+id/loginEt_pw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:text="k350a77"
             android:hint="비밀번호"
             android:inputType="textPassword"
-            android:text="mi1*707mi" />
+            android:text="k350a77" />
 
         <Button
             android:id="@+id/loginBtn_login"

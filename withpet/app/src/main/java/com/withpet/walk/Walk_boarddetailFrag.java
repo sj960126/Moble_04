@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.skt.Tmap.TMapView;
 import com.withpet.*;
 
 public class Walk_boarddetailFrag extends Fragment {
@@ -28,10 +30,18 @@ public class Walk_boarddetailFrag extends Fragment {
     private FirebaseDatabase database;
     private TextView title_tv;
     private TextView content_tv;
+    private double spot[][] = new double[100][2];
+    private TMapView tMapView;
+    private final String APK ="l7xxfa281c47f54b4b8d866946553f981932";
+    private LinearLayout tmap;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_walk_boarddetail,container,false);
+        tmap = view.findViewById(R.id.detail_tmap);
+        tMapView = new TMapView(getContext());
+        tMapView.setSKTMapApiKey(APK);
+        tmap.addView(tMapView);
 
         Bundle bundle = this.getArguments();
         if(bundle != null){
@@ -49,6 +59,16 @@ public class Walk_boarddetailFrag extends Fragment {
                     Walk_boardUpload tmp = dataSnapshot.getValue(Walk_boardUpload.class);
                     title = tmp.getWalkboard_title();
                     content = tmp.getWalkboard_content();
+
+                    spot[0][0] = tmp.getLat0();
+                    spot[0][1] = tmp.getLong0();
+                    spot[1][0] = tmp.getLat1();
+                    spot[1][1] = tmp.getLong1();
+                    spot[2][0] = tmp.getLat2();
+                    spot[2][1] = tmp.getLong2();
+                    spot[3][0] = tmp.getLat3();
+                    spot[3][1] = tmp.getLong3();
+
                     title_tv = (TextView) view.findViewById(R.id.walkTv_title);
                     content_tv = (TextView) view.findViewById(R.id.walkTv_content);
 

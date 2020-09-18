@@ -36,9 +36,15 @@
         android:text="이건 왜 작어" />
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/clearBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Clear" />
+
+    <Button
+        android:id="@+id/mapsavebtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="완료" />
 
 </LinearLayout>
