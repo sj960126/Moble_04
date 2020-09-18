@@ -1,12 +1,24 @@
 package com.withpet.health;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
+import com.withpet.main.MainActivity;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
@@ -31,9 +43,11 @@ public class diary_Adapter extends RecyclerView.Adapter<diary_Adapter.CustomView
 
     @Override//실제 매칭
     public void onBindViewHolder(@NonNull CustomViewholder holder, int position) {
-        holder.date.setText(arrayList.get(position).getDay());
+
+        holder.time.setText(arrayList.get(position).getTime());
         holder.kind.setText(arrayList.get(position).getKind());
-        holder.eat.setText(arrayList.get(position).getSize());
+        holder.eat.setText(arrayList.get(position).getEat());
+        holder.brand.setText(arrayList.get(position).getBrand());
     }
 
     @Override
@@ -44,14 +58,55 @@ public class diary_Adapter extends RecyclerView.Adapter<diary_Adapter.CustomView
     //
     public class CustomViewholder extends RecyclerView.ViewHolder {
         TextView kind;
-        TextView date;
+        TextView time;
         TextView eat;
+        TextView brand;
 
-        public CustomViewholder(@NonNull View itemView) {
+        public CustomViewholder(@NonNull final View itemView) {
             super(itemView);
-            this.date = itemView.findViewById(R.id.date);
+            this.time = itemView.findViewById(R.id.time);
             this.kind = itemView.findViewById(R.id.kind);
             this.eat = itemView.findViewById(R.id.eat);
+            this.brand = itemView.findViewById(R.id.brand);
+
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int pos = getAdapterPosition();
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("입력 정보 부족").setMessage("입력 정보를 다시 하번 확인해 주세요.");
+                    builder.setPositiveButton("아니요", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            FirebaseDatabase database =FirebaseDatabase.getInstance(); //파이어베이스 데이터베이스 연동
+                            DatabaseReference databaseReference = database.getReference("Diary");
+                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                    snapshot.getRef().removeValue();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+                    });
+                    final AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                    return false;
+                }
+            });
+
         }
     }
 

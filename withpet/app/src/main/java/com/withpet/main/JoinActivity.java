@@ -99,6 +99,7 @@ public class JoinActivity extends AppCompatActivity {
                                         hashMap.put("email",email);
                                         hashMap.put("name",strName);
                                         hashMap.put("nickname", strNickname);
+                                        hashMap.put("imgUrl", "https://firebasestorage.googleapis.com/v0/b/practice-d557f.appspot.com/o/Profile%2Fuserdefault.png?alt=media&token=bc81fd8f-be4d-40a5-a76d-268ad90085af");
 
                                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                                         DatabaseReference reference = database.getReference("User");

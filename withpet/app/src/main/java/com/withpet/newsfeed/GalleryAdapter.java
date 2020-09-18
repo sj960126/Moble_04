@@ -33,6 +33,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     private Activity activity; //어댑터는 activity가 존재하지 않음! 현재 어댑터가 실행되는 activity의 정보를 가져오기 위해 선언!
     private Intent intentw;
     private int clickposition = -1;
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public CardView layout;
         public MyViewHolder(CardView l) {

@@ -156,6 +156,7 @@ public class NewsWriteActivity extends AppCompatActivity {
                 //Log.i("name ::: ", board_name);*/
 
                 userNickname =getIntent().getStringExtra("loginUserNickname");
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 //Log.i("UserNickName", userNickname);
 
                 //휴대푠 현재 날짜 시간 값 가져오기
@@ -167,7 +168,7 @@ public class NewsWriteActivity extends AppCompatActivity {
                 //Log.i("date :::::: ", "" + getTime);
 
                 //게시글 이름을 사용자닉네임 + 현재 날짜시간
-                writeNewUser( userNickname + getTime , userNickname, inputContext, uri.toString(),userNickname + getTime, getTime);
+                writeNewUser( getTime+ userNickname , user.getUid(), inputContext, uri.toString(),userNickname + getTime, getTime);
             }
         });
     }

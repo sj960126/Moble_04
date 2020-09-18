@@ -40,8 +40,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="아이디"
-            android:text="dydwns1801@naver.com"
             android:inputType="textPersonName" />
+
 
         <EditText
             android:id="@+id/loginEt_pw"
@@ -49,8 +49,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="비밀번호"
-            android:inputType="textPassword"
-            android:text="k350a77" />
+            android:inputType="textPassword" />
+
+
 
         <Button
             android:id="@+id/loginBtn_login"

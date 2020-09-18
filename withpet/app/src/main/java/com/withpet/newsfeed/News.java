@@ -1,27 +1,27 @@
 package com.withpet.newsfeed;
 
 public class News {
-    String id;
+    String uid;
     String imgUrl;
     String context;
     String date;
     String newsName;
 
     News(){}
-    News(String id, String imgUrl, String context, String newsName, String date){
-        this.id = id;
+    News(String uid, String imgUrl, String context, String newsName, String date){
+        this.uid = uid;
         this.imgUrl = imgUrl;
         this.context = context;
         this.newsName = newsName;
         this.date = date;
     }
 
-    public String getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUid(String id) {
+        this.uid = id;
     }
 
     public String getImgUrl() {

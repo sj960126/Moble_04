@@ -1,18 +1,34 @@
 package com.withpet.health;
 
 public class diary {
-    private String kind;
-    private String time;
-    private String size;
-    private String id;
-    private String day;
+    private String kind; //종류
+    private String eat; // 사료량
+    private String time; // 날짜
+    private String brand;
 
+    diary(){
+
+    }
+    diary(String kind,String eat,String time,String brand){
+        this.kind=kind;
+        this.eat=eat;
+        this.time=time;
+        this.brand=brand;
+    }
     public String getKind() {
         return kind;
     }
 
     public void setKind(String kind) {
         this.kind = kind;
+    }
+
+    public String getEat() {
+        return eat;
+    }
+
+    public void setEat(String eat) {
+        this.eat = eat;
     }
 
     public String getTime() {
@@ -23,27 +39,11 @@ public class diary {
         this.time = time;
     }
 
-    public String getSize() {
-        return size;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }
