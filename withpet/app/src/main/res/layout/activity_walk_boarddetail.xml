@@ -59,11 +59,11 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView2"
+        <LinearLayout
+            android:id="@+id/detail_tmap"
             android:layout_width="match_parent"
-            android:layout_height="285dp"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            android:layout_height="268dp"
+            android:orientation="horizontal"></LinearLayout>
 
         <TextView
             android:id="@+id/walkTv_content"

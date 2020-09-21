@@ -40,7 +40,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="아이디"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            />
 
 
         <EditText
@@ -49,7 +50,10 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="비밀번호"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+             />
+
+
 
         <Button
             android:id="@+id/loginBtn_login"

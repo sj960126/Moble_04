@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -93,6 +94,7 @@ public class WalkFrag extends Fragment {
                     Walk_boardUpload tmp = ds.getValue(Walk_boardUpload.class);
                     board_nb = tmp.getWalkboard_nb()+1;
                 }
+
             }
 
             @Override

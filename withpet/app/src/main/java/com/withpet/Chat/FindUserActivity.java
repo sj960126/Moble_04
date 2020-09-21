@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,20 +28,23 @@ public class FindUserActivity extends AppCompatActivity {
     private EditText et_finduserinput;
     private ArrayList<User> userlist;
     private ArrayList<User> finduserlist;
+    private String loginuserid;
 
-
+    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_user);
         et_finduserinput = findViewById(R.id.findUserEt_input);
         finduserlistRecyclerView = findViewById(R.id.findUserRv_List);
+        loginuserid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         userlist = new ArrayList<User>();
         finduserlist = new ArrayList<User>();
+
         layoutManager = new LinearLayoutManager(this);
         finduserlistRecyclerView.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
         finduserlistRecyclerView.setLayoutManager(layoutManager);
-
         finduserlistwAdapter = new FindUserAdapter(this, finduserlist);
         finduserlistRecyclerView.setAdapter(finduserlistwAdapter);
     }
@@ -78,7 +82,8 @@ public class FindUserActivity extends AppCompatActivity {
                 if(!findid.equals("")){
                     for(User user : userlist){
                         if(user.getNickname().contains(findid)){
-                            finduserlist.add(user);
+                            if(!user.getUid().equals(loginuserid))
+                                finduserlist.add(user);
                         }
 
                     }
