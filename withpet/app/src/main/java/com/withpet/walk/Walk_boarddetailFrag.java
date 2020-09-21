@@ -1,6 +1,7 @@
 package com.withpet.walk;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.skt.Tmap.TMapData;
+import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 import com.withpet.*;
 
@@ -34,7 +39,9 @@ public class Walk_boarddetailFrag extends Fragment {
     private TMapView tMapView;
     private final String APK ="l7xxfa281c47f54b4b8d866946553f981932";
     private LinearLayout tmap;
-
+    int line_nb = 0;
+    int repeat;
+    double a;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_walk_boarddetail,container,false);
@@ -74,6 +81,13 @@ public class Walk_boarddetailFrag extends Fragment {
 
                     title_tv.setText(title);
                     content_tv.setText(content);
+
+                    if(spot[3][0] == 0.0)repeat=2;
+                    else if(spot[2][0] == 0.0)repeat=1;
+                    else repeat = 3;
+                    for(int i =0; i<repeat; i++) {
+                        path(spot[i][0], spot[i][1], spot[i+1][0], spot[i+1][1]);
+                    }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -81,7 +95,28 @@ public class Walk_boarddetailFrag extends Fragment {
         });
 
 
-
         return view;
+    }
+
+    public void path(final double a, final double b, final double c, final double d){
+
+        new Thread(){
+            @Override
+            public void run(){
+                try{
+
+                    TMapPoint start_point = new TMapPoint(a,b);
+                    TMapPoint end_point = new TMapPoint(c,d);
+
+                    TMapPolyLine tMapPolyLine = new TMapData().findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH, start_point, end_point);
+                    tMapPolyLine.setLineColor(Color.BLUE);
+                    tMapPolyLine.setLineWidth(3);
+                    tMapView.addTMapPolyLine("Line"+line_nb, tMapPolyLine);
+                    line_nb++;
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 }

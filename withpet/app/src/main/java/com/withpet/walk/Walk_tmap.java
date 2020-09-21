@@ -66,7 +66,7 @@ public class Walk_tmap extends AppCompatActivity  {
         tMapView.setSKTMapApiKey(APK);
         walk_map.addView(tMapView);
        // tMapView.setIconVisibility(true);// 현재위치로 표시될 아잉콘을 표시할 여부 설정
-      //  setGps(); //초기 화면 현위치 지정
+        setGps(); //초기 화면 현위치 지정
 
 
 
