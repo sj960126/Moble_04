@@ -51,6 +51,8 @@
             android:hint="비밀번호"
             android:inputType="textPassword" />
 
+
+
         <Button
             android:id="@+id/loginBtn_login"
             android:layout_width="match_parent"

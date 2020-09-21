@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,11 +40,14 @@ public class Walk_tmap extends AppCompatActivity  {
     private double currentLatitude;
     private double currentLongitude;
     private Context context =null;
+    private Button walkclear_Btn;
+    private Button walksave_Btn;
     String Address = " ";
     TMapData tmapdata;
     TMapMarkerItem tItem = new TMapMarkerItem();
     TMapPoint start_point;// = new TMapPoint(36.809685, 127.147962);
     TMapPoint end_point;
+    int a = -1;
     int id = 0;
     int array_nb = -1;
     double spot[][] = new double[100][2];
@@ -52,47 +56,70 @@ public class Walk_tmap extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walk_tmap);
         LinearLayout walk_map = findViewById(R.id.walk_map);
-
-
+        walkclear_Btn = findViewById(R.id.clearBtn);
+        walksave_Btn = findViewById(R.id.mapsavebtn);
         context= this;
+        Intent uploadid = getIntent();
+        final int uploadId = uploadid.getIntExtra("uploadId",99);
+
         tMapView = new TMapView(this);
         tMapView.setSKTMapApiKey(APK);
         walk_map.addView(tMapView);
-     //   tMapView.setIconVisibility(true);// 현재위치로 표시될 아잉콘을 표시할 여부 설정
-        setGps(); //초기 화면 현위치 지정
-       // path();//보행자가 지정한 경로 그어주기
+       // tMapView.setIconVisibility(true);// 현재위치로 표시될 아잉콘을 표시할 여부 설정
+      //  setGps(); //초기 화면 현위치 지정
 
 
 
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
             @Override
             public void onLongPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint) {
-                Toast.makeText(context, "유럽 가봤니?" + tMapPoint.getLatitude()+","+tMapPoint.getLongitude() , Toast.LENGTH_SHORT).show();
                 array_nb++;
                 spot[array_nb][0] = tMapPoint.getLatitude();
                 spot[array_nb][1] = tMapPoint.getLongitude();
 
-                marker(spot[array_nb][0],spot[array_nb][1]);
+                if(array_nb <= 3) {
+                    marker(spot[array_nb][0], spot[array_nb][1]);
+                }
+                if(array_nb >= 1 && array_nb <= 3) {
+                    path();
+                }
+                if(array_nb > 3) Toast.makeText(context, "경유지는 최대 2개 입니다. ", Toast.LENGTH_SHORT).show();
 
-
-                if(array_nb >= 1) path();
             }
 
         });
-        tMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback() {
-            @Override
-            public boolean onPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, final TMapPoint tMapPoint, PointF pointF) {
 
-                return false;
-            }
-
+        walkclear_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onPressUpEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
-                return false;
+            public void onClick(View view) {
+                for(int i = 0; i <50; i++) {
+                    tMapView.removeMarkerItem("marker" + i);
+                    tMapView.removeTMapPolyLine("Line"+i);
+                    spot[i][0] = 0;
+                    spot[i][1] = 0;
+                }
+                array_nb = -1;
+                a = -1;
             }
         });
 
+        walksave_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Intent intent = new Intent(Walk_tmap.this,Walk_boardwriteActivity.class);
+                intent.putExtra("lat0",spot[0][0]);
+                intent.putExtra("long0",spot[0][1]);
+                intent.putExtra("lat1",spot[1][0]);
+                intent.putExtra("long1",spot[1][1]);
+                intent.putExtra("lat2", spot[2][0]);
+                intent.putExtra("long2", spot[2][1]);
+                intent.putExtra("lat3", spot[3][0]);
+                intent.putExtra("long3", spot[3][1]);
+                intent.putExtra("upload",uploadId);
+                startActivity(intent);
+            }
+        });
 
     }
     // 보행자 경로 그어주기
@@ -101,15 +128,16 @@ public class Walk_tmap extends AppCompatActivity  {
             @Override
             public void run(){
                 try{
-                        for(int i = 0; i <array_nb; i++) {
-                            start_point = new TMapPoint(spot[i][0],spot[i][1]);
-                            end_point = new TMapPoint(spot[i+1][0],spot[i+1][1]);
+
+                            a++;
+                            start_point = new TMapPoint(spot[a][0],spot[a][1]);
+                            end_point = new TMapPoint(spot[a+1][0],spot[a+1][1]);
 
                             TMapPolyLine tMapPolyLine = new TMapData().findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH, start_point, end_point);
                             tMapPolyLine.setLineColor(Color.BLUE);
-                            tMapPolyLine.setLineWidth(5);
-                            tMapView.addTMapPolyLine("Line1"+i, tMapPolyLine);
-                        }
+                            tMapPolyLine.setLineWidth(3);
+                            tMapView.addTMapPolyLine("Line"+a, tMapPolyLine);
+
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -125,8 +153,8 @@ public class Walk_tmap extends AppCompatActivity  {
             if(location != null){
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
-                tMapView.setLocationPoint(longitude,latitude);
-                tMapView.setCenterPoint(longitude,latitude);
+                tMapView.setLocationPoint(latitude,longitude);
+                tMapView.setCenterPoint(latitude,longitude);
             }
         }
     };
