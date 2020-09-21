@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,7 +54,6 @@ public class ReplyActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.replyRv);
 
         //기본설정
-        civNewsUser.setImageResource(R.drawable.userdefault);
         btnBefore.setBackgroundResource(R.drawable.iconbefore);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -64,7 +66,6 @@ public class ReplyActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("wirteUserId",""+boardName);
 
         FirebaseDatabase NewsFeedDB =  FirebaseDatabase.getInstance();
         DatabaseReference NewsFeedDBR = NewsFeedDB.getReference("Feed");
@@ -77,8 +78,16 @@ public class ReplyActivity extends AppCompatActivity {
                 if(snapshot.exists()){
                     for(DataSnapshot user : snapshot.getChildren()){
                         News news = user.getValue(News.class);
-                        tvNewsId.setText(news.getUid());
+
+                        //자세히 보기 게시글의 닉네임, 프로필이미지
+                        SharedPreferences preferences = getSharedPreferences(news.getUid(), Context.MODE_PRIVATE);
+                        String nickName = preferences.getString("nickName", "host");
+                        String feedImg = preferences.getString("img","");
+
+                        //댓글 게시글 자세히 보기 설정
+                        tvNewsId.setText(nickName);
                         tvNewsContext.setText(news.getContext());
+                        Glide.with(recyclerView).load(feedImg).circleCrop().into(civNewsUser);
                     }
                 }
             }

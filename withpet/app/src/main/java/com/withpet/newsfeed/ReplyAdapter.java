@@ -2,6 +2,7 @@ package com.withpet.newsfeed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +50,16 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
     @Override
     public void onBindViewHolder(@NonNull ReplyViewHolder holder, int position) {
         //Glide.with(holder.itemView).load(myfeed.get(position).getImgUrl()).circleCrop().into(holder.loginUserImg);
-        holder.name.setText(reply.get(position).getUid());
+
+        //각 게시글의 닉네임, 프로필이미지
+        SharedPreferences preferences = context.getSharedPreferences(reply.get(position).getUid(), Context.MODE_PRIVATE);
+        String nickName = preferences.getString("nickName", "host");
+        String feedImg = preferences.getString("img","");
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        holder.name.setText(nickName);
         holder.context.setText(reply.get(position).getContext());
+        Glide.with(holder.itemView).load(feedImg).circleCrop().into(holder.img);
     }
 
     @Override

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -85,21 +86,33 @@ public class HomeFrag extends Fragment {
         //최근 순서
         Query latelyFeed = dbreference.orderByChild("date");
         //실시간으로 앱데이터를 업데이트 함수
-        latelyFeed.addListenerForSingleValueEvent(new ValueEventListener() {
+        latelyFeed.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
-                myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    //배열리스트에 역순으로 게시글을 저장
-                    myfeed.add(0,snapshot.getValue(News.class));
-                }
+                //배열리스트에 역순으로 게시글을 저장
+                myfeed.add(0,snapshot.getValue(News.class));
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //데베 데이터를 가져오던 중 에러 발생 시
-                Toast.makeText(getActivity(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
