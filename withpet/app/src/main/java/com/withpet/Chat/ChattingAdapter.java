@@ -68,10 +68,18 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
         else{
             holder.tv_nickname.setText(other.getNickname());
             holder.tv_msg.setText(chat.getContent());
-            Glide.with(holder.rootView).load(other.getImgUrl()).override(800).into(holder.iv_profilephoto);
+            if(previousId != null && previousId.equals(other.getUid())){
+                holder.iv_profilephoto.setVisibility(View.INVISIBLE);
+            }
+            else{
+                holder.iv_profilephoto.setVisibility(View.VISIBLE);
+                Glide.with(holder.rootView).load(other.getImgUrl()).override(800).into(holder.iv_profilephoto);
+            }
+
             holder.tv_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
         }
+        previousId = chat.getUid();
     }
     @Override
     public int getItemCount() {  return chattingList != null ? chattingList.size() : 0 ;  }
