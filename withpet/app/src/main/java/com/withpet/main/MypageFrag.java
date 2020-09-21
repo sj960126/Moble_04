@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -73,6 +74,7 @@ public class MypageFrag extends Fragment {
 
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        
 
         adapter = new MyPageNoticeAdapter(myfeed, getContext(), loginuser);
         list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
@@ -94,22 +96,36 @@ public class MypageFrag extends Fragment {
 
     //이미지 새로고침 안됨 프로필 수정 후 다시 마이페이지 돌아왔을때 프사 안바뀜
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         Log.i("resume start", "resume start");
         //파이어베이스에서 로그인유저 nickname 정보 가져오기
-        DatabaseReference userdbreference = db.getReference("User");
-        userdbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference userdbreference = db.getReference("User");
+        userdbreference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.getKey().equals(firebaseUser.getUid())){
-                        loginuser = new TransUser(ds.getValue(User.class));
-                        tv_nickname.setText(loginuser.getNickname());
-                        Glide.with(rootview).load(loginuser.getImgUrl()).override(800).into(iv_profilephoto);
-                    }
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                if(snapshot.getKey().equals(firebaseUser.getUid())){
+                    loginuser = new TransUser(snapshot.getValue(User.class));
+                    tv_nickname.setText(loginuser.getNickname());
+                    Glide.with(rootview).load(loginuser.getImgUrl()).override(800).into(iv_profilephoto);
                 }
             }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

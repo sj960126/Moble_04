@@ -89,7 +89,9 @@ public class ChattingActivity extends AppCompatActivity {
                         // 다른 리스너의 경우 chat으로 DatabaseReference로 Chat을 설정한 경우 .getChildren을 해야 대화방 정보가 나옴
                         // previousChildName : 현재 child 이전의 child이름
                         Chat chat = snapshot.getValue(Chat.class);
-                        ((ChattingAdapter)chattingAdapter).addChat(chat);
+                        chattingList.add(chat);
+                        chattingAdapter.notifyDataSetChanged();
+                        //((ChattingAdapter)chattingAdapter).addChat(chat);
                     }
 
                     @Override
