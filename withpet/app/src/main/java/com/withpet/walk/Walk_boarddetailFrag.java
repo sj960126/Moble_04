@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class Walk_boarddetailFrag extends Fragment {
     private String title ="title";
     private String content = "content";
     private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference_reply;
     private FirebaseDatabase database;
     private TextView title_tv;
     private TextView content_tv;
@@ -39,6 +41,8 @@ public class Walk_boarddetailFrag extends Fragment {
     private TMapView tMapView;
     private final String APK ="l7xxfa281c47f54b4b8d866946553f981932";
     private LinearLayout tmap;
+    private TextView replyTv;
+    private Button replyaddBtn;
     int line_nb = 0;
     int repeat;
     double a;
@@ -46,6 +50,10 @@ public class Walk_boarddetailFrag extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_walk_boarddetail,container,false);
         tmap = view.findViewById(R.id.detail_tmap);
+        replyTv = view.findViewById(R.id.walkreplyTv_add);
+        replyaddBtn =view.findViewById(R.id.walkreplyBtn_add);
+        database = FirebaseDatabase.getInstance();
+
         tMapView = new TMapView(getContext());
         tMapView.setSKTMapApiKey(APK);
         tmap.addView(tMapView);
@@ -57,8 +65,20 @@ public class Walk_boarddetailFrag extends Fragment {
             title = bundle.getString("board_title");
             content = bundle.getString("board_content");
         }
+
+        //replyTv.getText().toString().trim()
+        replyaddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseReference_reply = database.getReference("walk-reply").child(Integer.toString(borad_nb));
+                Walk_ReplyUpload walk_replyUpload = new Walk_ReplyUpload(borad_nb,replyTv.getText().toString().trim(),"random");
+                databaseReference_reply.setValue(walk_replyUpload);
+
+            }
+        });
+
+
         // 클릭한 게시물 번호에 관련된 firebase 제목 내용 갖고 오기
-        database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("walk-board").child(Integer.toString(borad_nb));
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

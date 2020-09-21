@@ -85,7 +85,6 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("frag",5); // 작성한 글 frag로 가기위해 intent값 전달
                     intent.putExtra("board_nb",arrayList.get(pos).getWalkboard_nb());
-               //     Log.i("adapter_nb",""+arrayList.get(pos).getWalkboard_nb());
                     context.startActivity(intent);
 
 
