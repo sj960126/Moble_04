@@ -130,27 +130,31 @@ public class ProfileModifyActivity extends AppCompatActivity {
                     //파베 저장소의 feed 폴더에 사진 업로드
                     if(imgId != null) {
                         Uri file = Uri.fromFile(new File(imgId));
-                        // 파이어베이스 저장소에 선택한 파일의 이름으로 이미지 저장 경로 생성
-                        imgRf = storageRf.child("Profile/" + file.getLastPathSegment());
-                        UploadTask uploadTask = imgRf.putFile(file);    // 파이어 베이스 저장소에 이미지 저장
+                                // 파이어베이스 저장소에 선택한 파일의 이름으로 이미지 저장 경로 생성
+                                imgRf = storageRf.child("Profile/" + file.getLastPathSegment());
+                                UploadTask uploadTask = imgRf.putFile(file);    // 파이어 베이스 저장소에 이미지 저장
 
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            //저장소에 업로드가 실패했을 경우
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                Toast.makeText(ProfileModifyActivity.this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            //저장소에 업로드가 성공했을 경우
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Toast.makeText(ProfileModifyActivity.this, "사진 업로드 성공", Toast.LENGTH_SHORT).show();
-                                //파이어베이스 데이터베이스에 저장
-                                uploadProfile();
-                                //프로필 수정 > 마이페이지 이동
-                                finish();
+                                uploadTask.addOnFailureListener(new OnFailureListener() {
+                                    //저장소에 업로드가 실패했을 경우
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        Toast.makeText(ProfileModifyActivity.this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    //저장소에 업로드가 성공했을 경우
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        Toast.makeText(ProfileModifyActivity.this, "사진 업로드 성공", Toast.LENGTH_SHORT).show();
+                                        //파이어베이스 데이터베이스에 저장
+                                        uploadProfile();
+                                        //프로필 수정 > 마이페이지 이동
+                                        finish();
                             }
                         });
+                    }
+                    else{
+                        uploadProfile();
+                        finish();
                     }
                     setResult(RESULT_OK, intent);
                     finish();
