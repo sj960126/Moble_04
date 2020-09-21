@@ -28,7 +28,7 @@ public class FindUserActivity extends AppCompatActivity {
     private ArrayList<User> userlist;
     private ArrayList<User> finduserlist;
 
-
+    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
