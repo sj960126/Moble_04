@@ -74,6 +74,7 @@ public class MypageFrag extends Fragment {
 
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        
 
         adapter = new MyPageNoticeAdapter(myfeed, getContext(), loginuser);
         list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
