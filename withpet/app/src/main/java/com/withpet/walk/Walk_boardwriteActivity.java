@@ -161,8 +161,6 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
                 }
             }
         }.start();
-        band++;
-        Toast.makeText(context, ""+band, Toast.LENGTH_SHORT).show();
     }
 
 
