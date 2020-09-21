@@ -2,6 +2,7 @@ package com.withpet.newsfeed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.util.Log;
@@ -60,12 +61,24 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     //이미지 서버에서 이미지 불러오기
     @Override
     public void onBindViewHolder(@NonNull FeedViewHolder holder, int position) {
+
+        //각 게시글의 닉네임, 프로필이미지
+        SharedPreferences preferences = context.getSharedPreferences(myfeed.get(position).getUid(), Context.MODE_PRIVATE);
+        String nickName = preferences.getString("nickName", "host");
+        String feedImg = preferences.getString("img","");
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        //로그인한 사용자의 프로필이미지
+        SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);
+        String loginImg = sharedPreferences.getString("img", "");
+        Log.i("login img", ""+ loginImg);
+
         Glide.with(holder.itemView)
                     .load(myfeed.get(position).getImgUrl())
-                    //.placeholder(R.drawable.dog)
                     .into(holder.img);
-        //Glide.with(holder.itemView).load().circleCrop().into(holder.loginUserImg);
-        holder.name.setText(myfeed.get(position).getUid());
+
+        Glide.with(holder.itemView).load(loginImg).circleCrop().into(holder.loginUserImg);
+        holder.name.setText(nickName);
         holder.context.setText(myfeed.get(position).getContext());
 
         // 좋아요 버튼에 해당 개시글 이름을 tag에 저장
@@ -109,7 +122,6 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
             btnLike.setBackgroundResource(R.drawable.iconlike);
             btnReply.setBackgroundResource(R.drawable.iconreply);
             btnMenu.setBackgroundResource(R.drawable.iconmenu);
-            loginUserImg.setImageResource(R.drawable.userdefault);
 
             this.name = itemView.findViewById(R.id.mainTv_name);
             this.img = itemView.findViewById(R.id.mainImage);
