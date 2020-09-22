@@ -67,14 +67,14 @@ public class MypageFrag extends Fragment {
 
         list = rootview.findViewById(R.id.myPageListview_mynotice);
         list.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
-        final int col = 3;
-        layoutManager = new GridLayoutManager(rootview.getContext(), col);
+
+        final int col = 3;  // 그리드 뷰 컬럼 수
+        layoutManager = new GridLayoutManager(rootview.getContext(), col);  // 그리드 뷰 레이아웃으로 설정
         list.setLayoutManager(layoutManager);
         myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
 
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
 
         adapter = new MyPageNoticeAdapter(myfeed, getContext(), loginuser);
         list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결

@@ -9,7 +9,7 @@ public class User {
     private String imgUrl;
     private int meal;
 
-    User(){    }
+    public User(){    }
 
     public String getShape() {
         return shape;

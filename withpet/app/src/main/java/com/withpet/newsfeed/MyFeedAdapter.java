@@ -1,5 +1,6 @@
 package com.withpet.newsfeed;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,7 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.withpet.*;
-
+import com.withpet.main.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -40,7 +41,8 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     private boolean like_click = false;
     private Intent nextReply;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();;
+    private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
+    private ArrayList<String> userinfo;
 
     //생성자
     public MyFeedAdapter(ArrayList<News> myfeed, Context context) {
@@ -65,8 +67,15 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         //각 게시글의 닉네임, 프로필이미지
         SharedPreferences preferences = context.getSharedPreferences(myfeed.get(position).getUid(), Context.MODE_PRIVATE);
         String nickName = preferences.getString("nickName", "host");
-        String feedImg = preferences.getString("img","");
+        String feeduserImg = preferences.getString("img","");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //추가 부분
+        userinfo = new ArrayList<String>();
+        userinfo.add(0,myfeed.get(position).getUid());
+        userinfo.add(1,nickName);
+        userinfo.add(2,feeduserImg);
+
+
 
         //로그인한 사용자의 프로필이미지
         SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);
@@ -79,6 +88,9 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
 
         Glide.with(holder.itemView).load(loginImg).circleCrop().into(holder.loginUserImg);
         holder.name.setText(nickName);
+        //추가 부분
+        holder.name.setOnClickListener(onClickListener);
+        holder.name.setTag(R.integer.userinfo, userinfo);
         holder.context.setText(myfeed.get(position).getContext());
 
         // 좋아요 버튼에 해당 개시글 이름을 tag에 저장
@@ -185,6 +197,14 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                    break;
                case R.id.newsBtn_menu:
                    Toast.makeText(context, "게시글 옵션", Toast.LENGTH_SHORT).show();
+                   break;
+                   //추가부분
+               case R.id.mainTv_name:
+                   Intent intent = new Intent(context, MainActivity.class);
+                   intent.putExtra("frag", R.integer.mypagefrag);
+                   intent.putExtra("userinfo", userinfo);
+                   context.startActivity(intent);
+                   ((Activity)context).finish();
                    break;
            }
        }
