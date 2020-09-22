@@ -98,8 +98,7 @@ public class ReplyActivity extends AppCompatActivity {
 
         feedReply = new ArrayList<>();
         DatabaseReference Replydbr = NewsFeedDB.getReference("Reply");
-        Query findReply = Replydbr.orderByChild("boardName").equalTo(boardName);
-        findReply.addListenerForSingleValueEvent(new ValueEventListener() {
+        Replydbr.child(boardName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 feedReply.clear();

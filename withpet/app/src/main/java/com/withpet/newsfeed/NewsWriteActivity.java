@@ -40,6 +40,7 @@ public class NewsWriteActivity extends AppCompatActivity {
     private StorageReference storageRf;
     private StorageReference imgRf;
     private String inputContext, strImage,userNickname;
+    private String modifyContext, modifyImg, modifyName, modifyDate, modifyUid;
     private Button btnUpload;
     private ImageView iv;
 
@@ -48,7 +49,6 @@ public class NewsWriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_write);
-        Log.i("index","onCreate");
 
         //화면전환시 아래에서 위로 올라오는 애니메이션 제거
         overridePendingTransition(0, 0);
@@ -64,6 +64,12 @@ public class NewsWriteActivity extends AppCompatActivity {
 
         strImage = getIntent().getStringExtra("imgId");
 
+        modifyName = getIntent().getStringExtra("modifyName");
+        modifyImg = getIntent().getStringExtra("modifyImg");
+        modifyContext = getIntent().getStringExtra("modifyContext");
+        modifyUid = getIntent().getStringExtra("modifyUid");
+        modifyDate = getIntent().getStringExtra("modifyDate");
+
         //선택한 사진 불러오기
         iv = (ImageView) findViewById(R.id.mainwIv_thumbnail);
     }
@@ -72,43 +78,57 @@ public class NewsWriteActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("index","onResume");
 
-        //선택한 사진 불러오기
-        Glide.with(this).load(strImage).override(1000).into(iv);
 
-        btnUpload.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                //파베 저장소의 feed 폴더에 사진 업로드
-                Uri file = Uri.fromFile(new File(strImage));
-                imgRf = storageRf.child("feed/"+file.getLastPathSegment());
-                UploadTask uploadTask = imgRf.putFile(file);
+        if(modifyContext == null && modifyImg == null && modifyName == null){
+            //선택한 사진 불러오기
+            Glide.with(this).load(strImage).override(1000).into(iv);
 
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        //저장소에 업로드가 실패했을 경우
-                        Toast.makeText(NewsWriteActivity.this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //저장소에 업로드가 성공했을 경우
-                        Toast.makeText(NewsWriteActivity.this, "사진 업로드 성공", Toast.LENGTH_SHORT).show();
+            btnUpload.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onClick(View view) {
+                    //파베 저장소의 feed 폴더에 사진 업로드
+                    Uri file = Uri.fromFile(new File(strImage));
+                    imgRf = storageRf.child("feed/"+file.getLastPathSegment());
+                    UploadTask uploadTask = imgRf.putFile(file);
 
-                        //파베 게시글 등록
-                        uploadBoard(strImage);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            //저장소에 업로드가 실패했을 경우
+                            Toast.makeText(NewsWriteActivity.this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //저장소에 업로드가 성공했을 경우
+                            Toast.makeText(NewsWriteActivity.this, "사진 업로드 성공", Toast.LENGTH_SHORT).show();
 
-                        //작성 페이지 > 메인페이지 이동
-                        Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-            }
-        });
+                            //파베 게시글 등록
+                            uploadBoard(strImage);
+
+                            //작성 페이지 > 메인페이지 이동
+                            Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                }
+            });
+        }
+        else{
+            //선택한 사진 불러오기
+            Glide.with(this).load(modifyImg).override(1000).into(iv);
+            EditText et =findViewById(R.id.mainwEt_context);
+            et.setText(modifyContext);
+
+            inputContext = et.getText().toString();
+
+            writeNewUser(modifyName, modifyUid, inputContext, modifyImg, modifyName, modifyDate);
+        }
+
+
     }
 
     //파베 데베에 데이터 작성
@@ -168,7 +188,7 @@ public class NewsWriteActivity extends AppCompatActivity {
                 //Log.i("date :::::: ", "" + getTime);
 
                 //게시글 이름을 사용자닉네임 + 현재 날짜시간
-                writeNewUser( getTime+ userNickname , user.getUid(), inputContext, uri.toString(),userNickname + getTime, getTime);
+                writeNewUser( userNickname+getTime, user.getUid(), inputContext, uri.toString(),userNickname + getTime, getTime);
             }
         });
     }
