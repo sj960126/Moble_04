@@ -8,11 +8,15 @@ import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +25,15 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.DatabaseRegistrar;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.main.*;
 import java.util.ArrayList;
@@ -39,7 +47,8 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     private ArrayList<News> myfeed;
     private Context context; //선택한 activity action 내용
     private boolean like_click = false;
-    private Intent nextReply;
+    private Intent nextReply, modify;
+    private String newFeedMenu;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
     private ArrayList<String> userinfo;
@@ -62,7 +71,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     //매칭
     //이미지 서버에서 이미지 불러오기
     @Override
-    public void onBindViewHolder(@NonNull FeedViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final FeedViewHolder holder, int position) {
 
         //각 게시글의 닉네임, 프로필이미지
         SharedPreferences preferences = context.getSharedPreferences(myfeed.get(position).getUid(), Context.MODE_PRIVATE);
@@ -80,7 +89,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         //로그인한 사용자의 프로필이미지
         SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);
         String loginImg = sharedPreferences.getString("img", "");
-        Log.i("login img", ""+ loginImg);
+       // Log.i("login img", ""+ loginImg);
 
         Glide.with(holder.itemView)
                     .load(myfeed.get(position).getImgUrl())
@@ -101,7 +110,19 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         holder.btnReply.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
         holder.btnReply.setOnClickListener(onClickListener);
 
+        // 메뉴 버튼에 해당 게시글 이름, UID 저장
+        holder.btnMenu.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
+        holder.btnMenu.setTag(R.integer.feed_Uid, myfeed.get(position).getUid());
         holder.btnMenu.setOnClickListener(onClickListener);
+
+        //수정하기 버튼 눌렀을때 전달할값들
+        modify = new Intent(context, NewsWriteActivity.class);
+        modify.putExtra("modifyImg", myfeed.get(position).getImgUrl());
+        modify.putExtra("modifyName", myfeed.get(position).getNewsName());
+        modify.putExtra("modifyContext", myfeed.get(position).getContext());
+        modify.putExtra("modifyDate", myfeed.get(position).getDate());
+        modify.putExtra("modifyUid", myfeed.get(position).getUid());
+
         // 댓글 버튼에 해당 개시글 이름을 tag에 저장
         holder.btnReplyEnter.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
     }
@@ -138,7 +159,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
             this.name = itemView.findViewById(R.id.mainTv_name);
             this.img = itemView.findViewById(R.id.mainImage);
             this.context = itemView.findViewById(R.id.mainTv_context);
-            this.tvCountLike = itemView.findViewById(R.id.mainTv_renum);
+            this.tvCountLike = itemView.findViewById(R.id.mainTv_count);
 
             //댓글 작성 버튼 이벤트
             // holder.btnReplyEnter.setOnClickListener(onClickListener); :: 이방법으로 진행할경우 EditText 가 Null 됨ㅠㅠ
@@ -160,7 +181,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                     //Reply 테이블 파베 연동
                     DatabaseReference dbRefReply = firebaseDatabase.getReference("Reply");
                     Reply inputReply = new Reply(loginUser.getUid()+getTime,loginUser.getUid(),newsReplyEnter, strReply);
-                    dbRefReply.child(loginUser.getUid()+getTime).setValue(inputReply);
+                    dbRefReply.child(newsReplyEnter).child(loginUser.getUid()+getTime).setValue(inputReply);
                 }
             });
         }
@@ -171,9 +192,8 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
        public void onClick(View view) {
            switch (view.getId()){
                case R.id.mainBtn_like:
-                   String newsFeedName = ""+view.getTag(R.integer.key_NewsName);
+                   final String newsFeedName = ""+view.getTag(R.integer.key_NewsName);
                    like_click = !like_click;
-
                    //Like 테이블 파베 연동
                    DatabaseReference dbRefLike = firebaseDatabase.getReference("Like");
                    if(like_click){
@@ -196,7 +216,72 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                    context.startActivity(nextReply);
                    break;
                case R.id.newsBtn_menu:
-                   Toast.makeText(context, "게시글 옵션", Toast.LENGTH_SHORT).show();
+                   //게시글 UID
+                   String newsFeedUid = "" +view.getTag(R.integer.feed_Uid);
+                   //게시글 번호
+                   newFeedMenu = ""+view.getTag(R.integer.key_NewsName);
+                   FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
+                   //로그인한 회원이 작성한 게시글일 경우
+                   if(newsFeedUid.equals(loginUser.getUid())){
+                       //팝업메뉴 객체 생성
+                       PopupMenu popupMenu = new PopupMenu(context, view);
+                       //레이아웃xml에 정의한 메뉴 가져오기
+                       MenuInflater inflater = popupMenu.getMenuInflater();
+                       Menu menu = popupMenu.getMenu();
+                       //메뉴item 연결
+                       inflater.inflate(R.menu.feedmenuitem_my, menu);
+
+                       popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                           @Override
+                           public boolean onMenuItemClick(MenuItem item) {
+                               switch(item.getItemId()){
+                                   case R.id.feedmenu_del:
+                                       //선택한 게시글 삭제
+                                       DatabaseReference feedRemove  = firebaseDatabase.getReference("Feed");
+                                       feedRemove.child(newFeedMenu).removeValue();
+                                       //선택한 게시글 좋아요 삭제
+                                       DatabaseReference likeRemove = firebaseDatabase.getReference("Like");
+                                       likeRemove.child(newFeedMenu).removeValue();
+                                       //선택한 게시글 댓글 삭제
+                                       DatabaseReference replyRemove = firebaseDatabase.getReference("Reply");
+                                       replyRemove.child(newFeedMenu).removeValue();
+                                       Toast.makeText(context, "해당 게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                                       break;
+                                   case R.id.feedmenu_mod:
+                                       context.startActivity(modify);
+                                       break;
+                               }
+                               return false;
+                           }
+                       });
+                        //메뉴 보여주기
+                       popupMenu.show();
+                   }
+                   //다른 사람의 게시글일 경우
+                   else{
+                       //팝업메뉴 객체 생성
+                       PopupMenu popupMenu = new PopupMenu(context, view);
+                       //레이아웃xml에 정의한 메뉴 가져오기
+                       MenuInflater inflater = popupMenu.getMenuInflater();
+                       Menu menu = popupMenu.getMenu();
+                       //메뉴item 연결
+                       inflater.inflate(R.menu.feedmenuitem_other, menu);
+                       popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                           @Override
+                           public boolean onMenuItemClick(MenuItem item) {
+                               switch (item.getItemId()){
+                                   case R.id.feedmenu_report:
+                                       //게시글 번호와 로그인유저
+                                       Toast.makeText(context, ""+ newFeedMenu, Toast.LENGTH_SHORT).show();
+                                       break;
+                               }
+                               return false;
+                           }
+                       });
+
+                       popupMenu.show();
+                   }
+
                    break;
                    //추가부분
                case R.id.mainTv_name:
