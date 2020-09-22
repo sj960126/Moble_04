@@ -3,7 +3,9 @@
     <integer name="newsRequestcode">1010</integer>
     <integer name="profileModifyRequestcode">1020</integer>
     <integer name="key_NewsName">1030</integer>
+    <integer name="feed_Uid">1040</integer>
     <integer name="MyNoticeItem">1060</integer>
     <integer name="userinfo">1070</integer>
-    <integer name="feed_Uid">1080</integer>
+    <integer name="chatuserinfo">1080</integer>
+
 </resources>

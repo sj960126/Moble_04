@@ -1,6 +1,7 @@
 package com.withpet.Chat;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
     private String me;  // 로그인한 사람의 uid를 담는 변수
     private User other; // 채팅 상대의 정보를 담은 객체
     private String previousId;
+    int count = 0;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
@@ -60,38 +62,40 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Chat chat = chattingList.get(position);
         if(chat.getUid().equals(this.me)){
-            holder.tv_nickname.setVisibility(View.GONE);
-            holder.iv_profilephoto.setVisibility(View.GONE);
-            holder.tv_msg.setText(chat.getContent());
-            holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+           setMyChat(holder);   // 나의 채팅 레이아웃 설정
+           holder.tv_msg.setText(chat.getContent());
+
         }
         else{
+            setOtherChat(holder);   // 상대방 채팅 레이아웃 설정
             holder.tv_nickname.setText(other.getNickname());
             holder.tv_msg.setText(chat.getContent());
-            if(previousId != null && previousId.equals(other.getUid())){
-                holder.iv_profilephoto.setVisibility(View.INVISIBLE);
-            }
-            else{
-                holder.iv_profilephoto.setVisibility(View.VISIBLE);
-                Glide.with(holder.rootView).load(other.getImgUrl()).override(800).into(holder.iv_profilephoto);
-            }
+            Glide.with(holder.rootView).load(other.getImgUrl()).override(800).into(holder.iv_profilephoto);
 
-            holder.tv_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-            holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
         }
         previousId = chat.getUid();
     }
     @Override
     public int getItemCount() {  return chattingList != null ? chattingList.size() : 0 ;  }
 
-    public Chat getChat(int position) {
-        return chattingList != null ? chattingList.get(position) : null;
-    }
-
+    //채팅 내용 추가
     public void addChat(Chat chat) {
         chattingList.add(chat);
         notifyItemInserted(chattingList.size()-1); //갱신, position인수는 어디에 넣을지를 작성해야함, 리스트 마지막에 추가가되기 때문에 사이즈에서 -1
     }
 
+    //채팅 내역 레이아웃 설정(내 채팅)
+    public void setMyChat(MyViewHolder holder){
+        holder.tv_nickname.setVisibility(View.GONE);                        // 채팅 레이아웃의 닉네임(Textview 레이아웃) 지움
+        holder.iv_profilephoto.setVisibility(View.GONE);                    // 채팅 레이아웃의 프로필 사진 부분 지움
+        holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);       // 채팅 레이아웃 메시지 부분 오른쪽 정렬
+    }
+    // 채팅 내역 레이아웃 설정(상대방)
+    public void setOtherChat(MyViewHolder holder){
+        holder.tv_nickname.setVisibility(View.VISIBLE);                         // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
+        holder.iv_profilephoto.setVisibility(View.VISIBLE);                     // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
+        holder.tv_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);    // 텍스트 왼쪽정렬
+        holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);         // 텍스트 왼쪽정렬
+    }
 
 }

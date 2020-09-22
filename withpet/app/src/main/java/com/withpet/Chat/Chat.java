@@ -1,5 +1,7 @@
 package com.withpet.Chat;
 
+//종희
+//하나의 채팅 정보를 저장하는 클래스
 public class Chat {
     private String uid;
     private String content;

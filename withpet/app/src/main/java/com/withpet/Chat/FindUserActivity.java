@@ -35,14 +35,15 @@ public class FindUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_user);
-        et_finduserinput = findViewById(R.id.findUserEt_input);
-        finduserlistRecyclerView = findViewById(R.id.findUserRv_List);
-        loginuserid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        et_finduserinput = findViewById(R.id.findUserEt_input);                 // 유저 닉네임 검색 칸
+        finduserlistRecyclerView = findViewById(R.id.findUserRv_List);          // 찾은 유저의 리스트를 보여주는 리스트 뷰
+        loginuserid = FirebaseAuth.getInstance().getCurrentUser().getUid();     // 로그인 유저 정보 가져오기
 
         userlist = new ArrayList<User>();
         finduserlist = new ArrayList<User>();
 
-        layoutManager = new LinearLayoutManager(this);
+        //리사이클러 뷰, 어댑터 설정정
+       layoutManager = new LinearLayoutManager(this);
         finduserlistRecyclerView.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
         finduserlistRecyclerView.setLayoutManager(layoutManager);
         finduserlistwAdapter = new FindUserAdapter(this, finduserlist);
@@ -60,7 +61,7 @@ public class FindUserActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userlist.clear();
                 for(DataSnapshot ds : snapshot.getChildren()){
-                    userlist.add(ds.getValue(User.class));
+                    userlist.add(ds.getValue(User.class));  //유저 정보
                 }
             }
 
@@ -82,7 +83,7 @@ public class FindUserActivity extends AppCompatActivity {
                 if(!findid.equals("")){
                     for(User user : userlist){
                         if(user.getNickname().contains(findid)){
-                            if(!user.getUid().equals(loginuserid))
+                            if(!user.getUid().equals(loginuserid))  // 검색한 닉네임이 로그인한 유저의 닉네임인지 판단
                                 finduserlist.add(user);
                         }
 
