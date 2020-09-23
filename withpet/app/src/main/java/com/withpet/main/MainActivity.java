@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private Walk_boarddetailFrag walkBoarddetail;
     private int board_nb = 0;
     private int reply_nb = 0;
-
+    private double centerLat;
+    private double centerLong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
         int frag = intent.getIntExtra("frag",0);
         board_nb = intent.getIntExtra("board_nb",0);
         reply_nb = intent.getIntExtra("reply_nb",0);
-
+        centerLat = intent.getDoubleExtra("centerLat",0.0);
+        centerLong = intent.getDoubleExtra("centerLong",0.0);
 
         //하단메뉴바 초기화
         bottomNavigationView =findViewById(R.id.bottomNV);
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putInt("board_nb",board_nb);
+        bundle.putDouble("centerLat",centerLat);
+        bundle.putDouble("centerLong",centerLong);
         walkBoarddetail.setArguments(bundle);
         setFrag(frag);
         if(frag == R.integer.mypagefrag){

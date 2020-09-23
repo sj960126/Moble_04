@@ -60,6 +60,8 @@ public class Walk_boarddetailFrag extends Fragment {
     private TextView nameTv;
     private TextView walkreplyTv_add;
     private Button replyaddBtn;
+    private double centerLat;
+    private double centerLong;
     int line_nb;
     int repeat;
     int reply_nb;
@@ -76,9 +78,23 @@ public class Walk_boarddetailFrag extends Fragment {
         replyaddBtn =view.findViewById(R.id.walkreplyBtn_add);
         database = FirebaseDatabase.getInstance();
 
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            bundle = getArguments();
+            board_nb = bundle.getInt("board_nb");
+            title = bundle.getString("board_title");
+            content = bundle.getString("board_content");
+            centerLat = bundle.getDouble("centerLat");
+            centerLong = bundle.getDouble("centerLong");
+        }
+
         tMapView = new TMapView(getContext());
         tMapView.setSKTMapApiKey(APK);
         tmap.addView(tMapView);
+        tMapView.setZoomLevel(13);
+        Log.i("band :" , ""+centerLat);
+        Log.i("check :" , ""+centerLong);
+        tMapView.setCenterPoint(centerLong,centerLat);
 
         recyclerView = view.findViewById(R.id.walkrv_reply);
         recyclerView.setHasFixedSize(true);
@@ -88,13 +104,7 @@ public class Walk_boarddetailFrag extends Fragment {
 
         walkreplyTv_add = view.findViewById(R.id.walkreplyTv_add);
 
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            bundle = getArguments();
-            board_nb = bundle.getInt("board_nb");
-            title = bundle.getString("board_title");
-            content = bundle.getString("board_content");
-        }
+
 
         databaseReference_replyview = database.getReference("walk-reply").child(Integer.toString(board_nb));
         //recyclerview adapter 바로 업데이트
@@ -104,7 +114,6 @@ public class Walk_boarddetailFrag extends Fragment {
 
                 Walk_ReplyUpload walk_replyUpload = datasnapshot.getValue(Walk_ReplyUpload.class);
                 arrayList.add(walk_replyUpload);
-
 
                 adapter.notifyDataSetChanged();
             }
@@ -193,7 +202,6 @@ public class Walk_boarddetailFrag extends Fragment {
             }
         });
 
-
         return view;
     }
 
@@ -212,6 +220,7 @@ public class Walk_boarddetailFrag extends Fragment {
                     tMapPolyLine.setLineColor(Color.BLUE);
                     tMapPolyLine.setLineWidth(2);
                     tMapView.addTMapPolyLine("Line"+line_nb, tMapPolyLine);
+
                     line_nb++;
                 }catch(Exception e){
                     e.printStackTrace();

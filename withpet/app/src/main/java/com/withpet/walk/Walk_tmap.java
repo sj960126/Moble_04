@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skt.Tmap.TMapData;
+import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
@@ -33,10 +34,13 @@ import com.withpet.R;
 
 import java.util.ArrayList;
 
-public class Walk_tmap extends AppCompatActivity  {
+public class Walk_tmap extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
 
     private final String APK ="l7xxfa281c47f54b4b8d866946553f981932";
     private TMapView tMapView;
+    // tMapView.setIconVisibility(true);// 현재위치로 표시될 아잉콘을 표시할 여부 설정
+
+    private TMapGpsManager tMapGpsManager  = null;
     private double currentLatitude;
     private double currentLongitude;
     private Context context =null;
@@ -65,10 +69,16 @@ public class Walk_tmap extends AppCompatActivity  {
         tMapView = new TMapView(this);
         tMapView.setSKTMapApiKey(APK);
         walk_map.addView(tMapView);
-       // tMapView.setIconVisibility(true);// 현재위치로 표시될 아잉콘을 표시할 여부 설정
-        setGps(); //초기 화면 현위치 지정
 
+        tMapGpsManager = new TMapGpsManager(context);
+        tMapGpsManager.setMinTime(1000);
+        tMapGpsManager.setMinDistance(5);
+        tMapGpsManager.setProvider(tMapGpsManager.GPS_PROVIDER);
 
+        tMapGpsManager.OpenGps();
+        tMapView.setTrackingMode(true);
+        tMapView.setSightVisible(true);
+        tMapView.setZoomLevel(14);
         //tmapview 클릭 이벤트
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
             @Override
@@ -149,28 +159,6 @@ public class Walk_tmap extends AppCompatActivity  {
 
 
 
-    private final LocationListener  mLocationListener = new LocationListener() { //현위치
-        @Override
-        public void onLocationChanged(@NonNull Location location) {
-            if(location != null){
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                tMapView.setLocationPoint(latitude,longitude);
-                tMapView.setCenterPoint(latitude,longitude);
-            }
-        }
-    };
-    public void setGps(){ //현위치
-        final LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION},1);
-        }
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,100,1,mLocationListener);
-    }
 
     public void marker(double lattitude , double longitude){ //마커 찍기
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.marker);
@@ -183,5 +171,15 @@ public class Walk_tmap extends AppCompatActivity  {
         markerItem.setIcon(bitmap);
         tMapView.addMarkerItem("marker"+id,markerItem);
         id++;
+    }
+
+    @Override
+    public void onLocationChange(Location location) {
+        tMapView.setLocationPoint(location.getLongitude(),location.getLatitude());
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
