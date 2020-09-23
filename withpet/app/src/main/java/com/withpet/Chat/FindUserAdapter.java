@@ -1,5 +1,6 @@
 package com.withpet.Chat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -36,18 +37,19 @@ public class FindUserAdapter extends RecyclerView.Adapter<FindUserAdapter.FindUs
         return holder;
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull FindUserViewHolder holder, int position) {
+    @Override   // 입력한 닉네임이 들어가는 유저 리스트 출력
+    public void onBindViewHolder(@NonNull final FindUserViewHolder holder, int position) {
         holder.getUserNickname().setText(userlist.get(position).getNickname());
         Glide.with(holder.itemView).load(userlist.get(position).getImgUrl()).override(800).into(holder.getUserProfilePhoto());
         holder.itemView.setTag(R.integer.userinfo, userlist.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {                //검색해서 나온 유저 리스트 목록 클릭 이벤트
                 TransUser choiceuser = new TransUser((User)view.getTag(R.integer.userinfo));
                 Intent intent = new Intent(view.getContext(), ChattingActivity.class);
                 intent.putExtra("Opponent", choiceuser);
-                mContext.startActivity(intent);
+                mContext.startActivity(intent);                     // 채팅방 실행
+                ((Activity)holder.itemView.getContext()).finish();  // 유저검색 창 종료
             }
         });
     }
@@ -60,8 +62,8 @@ public class FindUserAdapter extends RecyclerView.Adapter<FindUserAdapter.FindUs
         private TextView userNickname;
         public FindUserViewHolder(@NonNull View itemView) {
             super(itemView);
-            userProfilePhoto = itemView.findViewById(R.id.finduseritemIv_profile);
-            userNickname = itemView.findViewById(R.id.finduseritemTv_nickname);
+            userProfilePhoto = itemView.findViewById(R.id.finduseritemIv_profile);  // 유저 검색 리스트의 레이아웃 중 이미지뷰를 홀더에 설정
+            userNickname = itemView.findViewById(R.id.finduseritemTv_nickname);     // 유저 검색 리스트의 레이아웃 중 닉네임이 적히는 텍스트 뷰를 홀더에 설정
         }
 
         public CircleImageView getUserProfilePhoto() {

@@ -37,6 +37,7 @@ public class WalkFrag extends Fragment {
     private FloatingActionButton walkFab_write;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference_replyid;
     int board_nb;
 
     @Nullable
@@ -60,6 +61,8 @@ public class WalkFrag extends Fragment {
                 Intent intent = new Intent(getContext(), Walk_boardwriteActivity.class);
                 intent.putExtra("id", board_nb);
                 startActivityForResult(intent, 8);
+
+
 
             }
         });

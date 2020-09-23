@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WithDog</string>
+    <string name="app_name">WithPet</string>
     <string name="home">홈</string>
     <string name="health">건강</string>
     <string name="walk">산책</string>

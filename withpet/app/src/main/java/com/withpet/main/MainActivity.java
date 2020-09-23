@@ -3,6 +3,7 @@ package com.withpet.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     private IotFrag iotFrag;
     private Walk_boarddetailFrag walkBoarddetail;
     private int board_nb = 0;
+    private int reply_nb = 0;
+    private boolean mypagemenuclick = false;    // 마이페이지로 갈 때 메뉴를 통해 간 것인지, 프로필을 통해 간 것인지 판단하는 변수
+    private Bundle mypageBundle;
 
 
     @Override
@@ -41,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int frag = intent.getIntExtra("frag",0);
         board_nb = intent.getIntExtra("board_nb",0);
+        reply_nb = intent.getIntExtra("reply_nb",0);
+
 
         //하단메뉴바 초기화
         bottomNavigationView =findViewById(R.id.bottomNV);
@@ -56,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("board_nb",board_nb);
         walkBoarddetail.setArguments(bundle);
+        mypageBundle = new Bundle();
+        if(frag == 3){
+            mypageBundle.clear();
+            TransUser tuser = (TransUser)intent.getSerializableExtra("userinfo");
+            mypageBundle.putSerializable("userinfo",tuser);
+            mypageBundle.putString("from", "proflie");
+            mypagemenuclick = false;
+        }
         setFrag(frag);
     }
 
@@ -82,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.menu_mypage:
                         Toast.makeText(MainActivity.this, "내정보", Toast.LENGTH_SHORT).show();
+                        mypagemenuclick = true;
                         setFrag(3);
                         break;
                     case R.id.menu_iot:
@@ -110,6 +125,13 @@ public class MainActivity extends AppCompatActivity {
                 fragment = walkFrag;
                 break;
             case 3:
+                //내용추가
+                if(mypagemenuclick){
+                    mypageBundle.clear();
+                    mypageBundle.putString("from", "menu");
+                    Log.i("실행확인", "메뉴클릭됨");
+                }
+                mypageFrag.setArguments(mypageBundle);
                 fragment = mypageFrag;
                 break;
             case 4:

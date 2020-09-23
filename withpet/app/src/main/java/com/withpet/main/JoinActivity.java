@@ -79,6 +79,7 @@ public class JoinActivity extends AppCompatActivity {
 
                 //비밀번호 = 비밀번호 확인
                 if(strPw.equals(strPw2)){
+
                     firebaseAuth.createUserWithEmailAndPassword(strEmail, strPw)
                             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                 @Override

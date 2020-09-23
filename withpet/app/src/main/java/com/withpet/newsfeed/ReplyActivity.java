@@ -5,14 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
-import com.withpet.main.User;
 
 import java.util.ArrayList;
 
@@ -51,7 +51,6 @@ public class ReplyActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.replyRv);
 
         //기본설정
-        civNewsUser.setImageResource(R.drawable.userdefault);
         btnBefore.setBackgroundResource(R.drawable.iconbefore);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -64,7 +63,6 @@ public class ReplyActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("wirteUserId",""+boardName);
 
         FirebaseDatabase NewsFeedDB =  FirebaseDatabase.getInstance();
         DatabaseReference NewsFeedDBR = NewsFeedDB.getReference("Feed");
@@ -76,9 +74,17 @@ public class ReplyActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     for(DataSnapshot user : snapshot.getChildren()){
-                        News news = user.getValue(News.class);
-                        tvNewsId.setText(news.getUid());
-                        tvNewsContext.setText(news.getContext());
+                        Feed feed = user.getValue(Feed.class);
+
+                        //자세히 보기 게시글의 닉네임, 프로필이미지
+                        SharedPreferences preferences = getSharedPreferences(feed.getUid(), Context.MODE_PRIVATE);
+                        String nickName = preferences.getString("nickName", "host");
+                        String feedImg = preferences.getString("img","");
+
+                        //댓글 게시글 자세히 보기 설정
+                        tvNewsId.setText(nickName);
+                        tvNewsContext.setText(feed.getContext());
+                        Glide.with(recyclerView).load(feedImg).circleCrop().into(civNewsUser);
                     }
                 }
             }
@@ -89,8 +95,7 @@ public class ReplyActivity extends AppCompatActivity {
 
         feedReply = new ArrayList<>();
         DatabaseReference Replydbr = NewsFeedDB.getReference("Reply");
-        Query findReply = Replydbr.orderByChild("boardName").equalTo(boardName);
-        findReply.addListenerForSingleValueEvent(new ValueEventListener() {
+        Replydbr.child(boardName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 feedReply.clear();
