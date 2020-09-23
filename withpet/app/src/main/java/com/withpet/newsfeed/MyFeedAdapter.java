@@ -52,6 +52,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
     private ArrayList<String> userinfo;
+    private ArrayList<News> choiceModify;
 
     //생성자
     public MyFeedAdapter(ArrayList<News> myfeed, Context context) {
@@ -114,14 +115,6 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         holder.btnMenu.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
         holder.btnMenu.setTag(R.integer.feed_Uid, myfeed.get(position).getUid());
         holder.btnMenu.setOnClickListener(onClickListener);
-
-        //수정하기 버튼 눌렀을때 전달할값들
-        modify = new Intent(context, NewsWriteActivity.class);
-        modify.putExtra("modifyImg", myfeed.get(position).getImgUrl());
-        modify.putExtra("modifyName", myfeed.get(position).getNewsName());
-        modify.putExtra("modifyContext", myfeed.get(position).getContext());
-        modify.putExtra("modifyDate", myfeed.get(position).getDate());
-        modify.putExtra("modifyUid", myfeed.get(position).getUid());
 
         // 댓글 버튼에 해당 개시글 이름을 tag에 저장
         holder.btnReplyEnter.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
@@ -248,7 +241,27 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                                        Toast.makeText(context, "해당 게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                                        break;
                                    case R.id.feedmenu_mod:
-                                       context.startActivity(modify);
+                                       DatabaseReference feedModify = firebaseDatabase.getReference("Feed");
+                                       choiceModify = new ArrayList<>();
+                                       feedModify.child(newFeedMenu).addListenerForSingleValueEvent(new ValueEventListener() {
+                                           @Override
+                                           public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                               News feed = new News();
+                                               choiceModify.add(0,snapshot.getValue(News.class));
+                                               modify = new Intent(context, NewsWriteActivity.class);
+                                               modify.putExtra("feedName",choiceModify.get(0).getNewsName());
+                                               modify.putExtra("feedContext",choiceModify.get(0).getContext());
+                                               modify.putExtra("feedImg",choiceModify.get(0).getImgUrl());
+                                               modify.putExtra("feedUid",choiceModify.get(0).getUid());
+                                               modify.putExtra("feedDate",choiceModify.get(0).getDate());
+                                               context.startActivity(modify);
+                                           }
+
+                                           @Override
+                                           public void onCancelled(@NonNull DatabaseError error) {
+
+                                           }
+                                       });
                                        break;
                                }
                                return false;

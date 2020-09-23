@@ -43,6 +43,7 @@ public class NewsWriteActivity extends AppCompatActivity {
     private String modifyContext, modifyImg, modifyName, modifyDate, modifyUid;
     private Button btnUpload;
     private ImageView iv;
+    private EditText et;
 
     //필요한 리소스 초기화
     @Override
@@ -62,13 +63,15 @@ public class NewsWriteActivity extends AppCompatActivity {
         storage= FirebaseStorage.getInstance();
         storageRf = storage.getReference();
 
+        //선택한 갤러리 사진 이름 받기
         strImage = getIntent().getStringExtra("imgId");
 
-        modifyName = getIntent().getStringExtra("modifyName");
-        modifyImg = getIntent().getStringExtra("modifyImg");
-        modifyContext = getIntent().getStringExtra("modifyContext");
-        modifyUid = getIntent().getStringExtra("modifyUid");
-        modifyDate = getIntent().getStringExtra("modifyDate");
+        //수정할 게시글 내용 받기
+        modifyImg = getIntent().getStringExtra("feedImg");
+        modifyContext = getIntent().getStringExtra("feedContext");
+        modifyName = getIntent().getStringExtra("feedName");
+        modifyDate = getIntent().getStringExtra("feedDate");
+        modifyUid = getIntent().getStringExtra("feedUid");
 
         //선택한 사진 불러오기
         iv = (ImageView) findViewById(R.id.mainwIv_thumbnail);
@@ -120,12 +123,22 @@ public class NewsWriteActivity extends AppCompatActivity {
         else{
             //선택한 사진 불러오기
             Glide.with(this).load(modifyImg).override(1000).into(iv);
-            EditText et =findViewById(R.id.mainwEt_context);
+            et =findViewById(R.id.mainwEt_context);
             et.setText(modifyContext);
 
-            inputContext = et.getText().toString();
+            btnUpload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    inputContext = et.getText().toString();
+                    writeNewUser(modifyName , modifyUid, inputContext, modifyImg, modifyName, modifyDate );
 
-            writeNewUser(modifyName, modifyUid, inputContext, modifyImg, modifyName, modifyDate);
+                    //작성 페이지 > 메인페이지 이동
+                    Intent intent = new Intent(NewsWriteActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
         }
 
 
