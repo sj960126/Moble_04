@@ -281,8 +281,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                            public boolean onMenuItemClick(MenuItem item) {
                                switch (item.getItemId()){
                                    case R.id.feedmenu_report:
-                                       //게시글 번호와 로그인유저
-                                       Toast.makeText(context, ""+ newFeedMenu, Toast.LENGTH_SHORT).show();
+                                       //게시글 번호 전달 및 페이지 이동
+                                       Intent report = new Intent(context, ReportActivity.class);
+                                       report.putExtra("feedName", newFeedMenu);
+                                       context.startActivity(report);
                                        break;
                                }
                                return false;
