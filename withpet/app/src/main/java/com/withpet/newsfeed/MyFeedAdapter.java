@@ -51,7 +51,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     private String newFeedMenu;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
-    private ArrayList<String> userinfo;
+    private User userinfo;
 
     //생성자
     public MyFeedAdapter(ArrayList<News> myfeed, Context context) {
@@ -79,10 +79,10 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         String feeduserImg = preferences.getString("img","");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //추가 부분
-        userinfo = new ArrayList<String>();
-        userinfo.add(0,myfeed.get(position).getUid());
-        userinfo.add(1,nickName);
-        userinfo.add(2,feeduserImg);
+        userinfo = new User();
+        userinfo.setUid(myfeed.get(position).getUid());
+        userinfo.setNickname(nickName);
+        userinfo.setImgUrl(feeduserImg);
 
 
 
@@ -285,9 +285,10 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                    break;
                    //추가부분
                case R.id.mainTv_name:
+                   TransUser tuser = new TransUser(userinfo);
                    Intent intent = new Intent(context, MainActivity.class);
-                   intent.putExtra("frag", R.integer.mypagefrag);
-                   intent.putExtra("userinfo", userinfo);
+                   intent.putExtra("frag", 3);
+                   intent.putExtra("userinfo", tuser);
                    context.startActivity(intent);
                    ((Activity)context).finish();
                    break;

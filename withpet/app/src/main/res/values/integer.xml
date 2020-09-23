@@ -12,5 +12,8 @@
     <integer name="walkfrag">1092</integer>
     <integer name="iotfrag">1093</integer>
     <integer name="mypagefrag">1094</integer>
+    <integer name="fromfeed">1100</integer>
+    <integer name="frommypag">1101</integer>
+    <integer name="btnResource">1110</integer>
 
 </resources>
