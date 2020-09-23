@@ -45,8 +45,7 @@ public class MypageFrag extends Fragment {
     private RecyclerView list;
     private CircleImageView iv_profilephoto;
     private TextView tv_nickname;
-    private Button btn_profliemodify;
-    private Button btn_setting;
+    private Button btn_profliemodify, btn_setting, btn_delete, btn_logout;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Feed> myfeed;
@@ -84,6 +83,8 @@ public class MypageFrag extends Fragment {
         btn_setting.setOnClickListener(onClickListener);
         btn_profliemodify = rootview.findViewById(R.id.myPageBtn_modify);
         btn_profliemodify.setOnClickListener(onClickListener);
+        btn_logout = (Button) rootview.findViewById(R.id.myPageBtn_logout);
+        btn_logout.setOnClickListener(onClickListener);
 
         // 메뉴에서 마이페이지를 눌렀을 때때
        if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())) {
@@ -215,6 +216,12 @@ public class MypageFrag extends Fragment {
                         Log.i("add 관심", " 관심추가");
                     }
                     break;
+
+                case R.id.myPageBtn_logout:
+                    FirebaseAuth.getInstance().signOut();
+                    ((Activity)rootview.getContext()).finish();
+                    break;
+
             }
         }
     };
