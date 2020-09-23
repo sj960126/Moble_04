@@ -33,6 +33,7 @@
         <activity android:name=".health.diary_addActivity" />
         <activity android:name=".newsfeed.FeedGalleryActivity" />
         <activity android:name=".newsfeed.FeedWriteActivity" />
+        <activity android:name=".newsfeed.ReportActivity"/>
         <activity android:name=".iot.iot_streaming_area" />
         <activity android:name=".mypage.ProfileModifyActivity" />
         <activity android:name=".main.MainActivity" />

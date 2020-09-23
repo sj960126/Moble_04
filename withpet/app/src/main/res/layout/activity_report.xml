@@ -91,12 +91,12 @@
                 android:textSize="20sp" />
 
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/reportSp_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="3dp"
                 android:layout_weight="2"
-                android:paddingLeft="5dp" />
+                android:entries="@array/reportCategory" />
 
         </LinearLayout>
 

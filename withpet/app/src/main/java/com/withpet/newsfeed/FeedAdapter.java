@@ -285,11 +285,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                                        report.putExtra("feedName", newFeedMenu);
                                        context.startActivity(report);
                                        break;
+                                   case R.id.feedmenu_linkCopy:
+
+                                       break;
                                }
                                return false;
                            }
                        });
-
                        popupMenu.show();
                    }
 
