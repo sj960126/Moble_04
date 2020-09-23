@@ -45,7 +45,7 @@ public class MypageFrag extends Fragment {
     private RecyclerView list;
     private CircleImageView iv_profilephoto;
     private TextView tv_nickname;
-    private Button btn_profliemodify, btn_setting, btn_delete, btn_logout;
+    private Button btn_profliemodify, btn_setting;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Feed> myfeed;
@@ -57,6 +57,7 @@ public class MypageFrag extends Fragment {
     private TransUser nowuserinfo;  // 현재 마이페이지의 유저 정보(메인피드의 프로필을 눌러서 들어왔으면 해당 게시글의 유저정보, 마이페이지 메뉴로 들어오면 자기자신)
     private String requestfrom;
     final  int requestcode = 1001;
+    private Intent main;
 
     // 로그인한 사람의 게시글만 보이게 변경(로그인 정보 가져와야함)
     @Nullable
@@ -83,8 +84,6 @@ public class MypageFrag extends Fragment {
         btn_setting.setOnClickListener(onClickListener);
         btn_profliemodify = rootview.findViewById(R.id.myPageBtn_modify);
         btn_profliemodify.setOnClickListener(onClickListener);
-        btn_logout = (Button) rootview.findViewById(R.id.myPageBtn_logout);
-        btn_logout.setOnClickListener(onClickListener);
 
         // 메뉴에서 마이페이지를 눌렀을 때때
        if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())) {
@@ -121,7 +120,6 @@ public class MypageFrag extends Fragment {
 
     }
 
-    //이미지 새로고침 안됨 프로필 수정 후 다시 마이페이지 돌아왔을때 프사 안바뀜
     @Override
     public void onResume() {
         super.onResume();
@@ -133,7 +131,6 @@ public class MypageFrag extends Fragment {
             userdbreference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    Log.i("childstart", "start!!!!");
                     if(snapshot.getKey().equals(firebaseUser.getUid())){
                         loginuser = new TransUser(snapshot.getValue(User.class));
                         nowuserinfo = loginuser;
@@ -144,9 +141,13 @@ public class MypageFrag extends Fragment {
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                    if(snapshot.getKey().equals(firebaseUser.getUid())){
+                        loginuser = new TransUser(snapshot.getValue(User.class));
+                        nowuserinfo = loginuser;
+                        tv_nickname.setText(nowuserinfo.getNickname());
+                        Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);
+                    }
                 }
-
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
@@ -170,7 +171,10 @@ public class MypageFrag extends Fragment {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    myfeed.add(0, snapshot.getValue(Feed.class));
+                    Feed feed = snapshot.getValue(Feed.class);
+                    if(feed.getUid().equals(firebaseUser.getUid())){
+                        myfeed.add(0, feed);
+                    }
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
@@ -182,6 +186,7 @@ public class MypageFrag extends Fragment {
             }
         });
     }
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -195,8 +200,8 @@ public class MypageFrag extends Fragment {
                     }
                     else if((int)v.getTag(R.integer.btnResource) == R.drawable.iconsetting){
                         //로그아웃, 회원탈퇴
-
-
+                        intent = new Intent(v.getContext(), SettingActivity.class);
+                        startActivity(intent);
                     }
                     break;
                 case R.id.myPageBtn_modify:
@@ -210,12 +215,6 @@ public class MypageFrag extends Fragment {
                         Log.i("add 관심", " 관심추가");
                     }
                     break;
-
-                case R.id.myPageBtn_logout:
-                    FirebaseAuth.getInstance().signOut();
-                    ((Activity)rootview.getContext()).finish();
-                    break;
-
             }
         }
     };
