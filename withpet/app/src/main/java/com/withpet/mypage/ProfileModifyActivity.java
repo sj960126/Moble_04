@@ -2,6 +2,7 @@ package com.withpet.mypage;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -52,6 +53,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
     private User loginuser;     // 로그인 한 사용자 정보 담은 객체
     private String shape;
     private String imgId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,6 +181,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
     public void uploadProfile(){
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
         final DatabaseReference dbreference = db.getReference("User");
+        final SharedPreferences sharedPreferences = getSharedPreferences(loginuser.getUid(), MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
         if(imgId != null) {
             final String[] path = imgId.split("/");
             storageRf.child("Profile/" + path[path.length - 1]).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -187,11 +191,20 @@ public class ProfileModifyActivity extends AppCompatActivity {
                 public void onSuccess(Uri uri) {
                     loginuser.setImgUrl(uri.toString());    //파이어베이스 저장소에 저장한 사진의 액세스 토큰 주소
                     dbreference.child(firebaseUser.getUid()).setValue(loginuser);
+
+                    //변경된 프로필 정보 xml 저장(이미지 있음)
+                    editor.putString("nickName", loginuser.getNickname());
+                    editor.putString("img", loginuser.getImgUrl());
+                    editor.commit();
                 }
             });
         }
         else{
             dbreference.child(firebaseUser.getUid()).setValue(loginuser);
+
+            //변경된 프로필 정보 xml 저장(이미지 없음)
+            editor.putString("nickName", loginuser.getNickname());
+            editor.commit();
         }
 
     }
@@ -210,7 +223,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
             //권한 o
             else{
                 //해당 페이지로 이동
-                Intent intent = new Intent(this, NewsGalleryActivity.class);
+                Intent intent = new Intent(this, FeedGalleryActivity.class);
                 intent.putExtra("request", R.integer.profileModifyRequestcode);
                 startActivityForResult(intent, 1020);
             }
@@ -228,7 +241,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
                 //사용자가 허용했을 경우!
                 if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
                     //페이지 이동
-                    Intent intent = new Intent(this, NewsGalleryActivity.class);
+                    Intent intent = new Intent(this, FeedGalleryActivity.class);
                     startActivity(intent);
 
                 }

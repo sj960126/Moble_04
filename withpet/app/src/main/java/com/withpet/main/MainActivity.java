@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private IotFrag iotFrag;
     private Walk_boarddetailFrag walkBoarddetail;
     private int board_nb = 0;
+    private int reply_nb = 0;
     private boolean mypagemenuclick = false;    // 마이페이지로 갈 때 메뉴를 통해 간 것인지, 프로필을 통해 간 것인지 판단하는 변수
     private Bundle mypageBundle;
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int frag = intent.getIntExtra("frag",0);
         board_nb = intent.getIntExtra("board_nb",0);
+        reply_nb = intent.getIntExtra("reply_nb",0);
 
 
         //하단메뉴바 초기화

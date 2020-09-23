@@ -19,7 +19,7 @@ import com.withpet.*;
 
 import java.util.ArrayList;
 
-public class NewsGalleryActivity extends AppCompatActivity {
+public class FeedGalleryActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;

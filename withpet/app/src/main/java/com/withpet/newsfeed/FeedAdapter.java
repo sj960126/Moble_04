@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,9 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.DatabaseRegistrar;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.main.*;
@@ -42,19 +39,21 @@ import java.util.Date;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 //MyFeedAdapter function
-public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHolder> {
+public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder> {
 
-    private ArrayList<News> myfeed;
+    private ArrayList<Feed> myfeed;
     private Context context; //선택한 activity action 내용
     private boolean like_click = false;
     private Intent nextReply, modify;
     private String newFeedMenu;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
+    private ArrayList<String> userinfo;
+    private ArrayList<Feed> choiceModify;
     private User userinfo;
 
     //생성자
-    public MyFeedAdapter(ArrayList<News> myfeed, Context context) {
+    public FeedAdapter(ArrayList<Feed> myfeed, Context context) {
         this.myfeed = myfeed;
         this.context = context;
     }
@@ -114,14 +113,6 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
         holder.btnMenu.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
         holder.btnMenu.setTag(R.integer.feed_Uid, myfeed.get(position).getUid());
         holder.btnMenu.setOnClickListener(onClickListener);
-
-        //수정하기 버튼 눌렀을때 전달할값들
-        modify = new Intent(context, NewsWriteActivity.class);
-        modify.putExtra("modifyImg", myfeed.get(position).getImgUrl());
-        modify.putExtra("modifyName", myfeed.get(position).getNewsName());
-        modify.putExtra("modifyContext", myfeed.get(position).getContext());
-        modify.putExtra("modifyDate", myfeed.get(position).getDate());
-        modify.putExtra("modifyUid", myfeed.get(position).getUid());
 
         // 댓글 버튼에 해당 개시글 이름을 tag에 저장
         holder.btnReplyEnter.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
@@ -248,7 +239,27 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                                        Toast.makeText(context, "해당 게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                                        break;
                                    case R.id.feedmenu_mod:
-                                       context.startActivity(modify);
+                                       DatabaseReference feedModify = firebaseDatabase.getReference("Feed");
+                                       choiceModify = new ArrayList<>();
+                                       feedModify.child(newFeedMenu).addListenerForSingleValueEvent(new ValueEventListener() {
+                                           @Override
+                                           public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                               Feed feed = new Feed();
+                                               choiceModify.add(0,snapshot.getValue(Feed.class));
+                                               modify = new Intent(context, FeedWriteActivity.class);
+                                               modify.putExtra("feedName",choiceModify.get(0).getNewsName());
+                                               modify.putExtra("feedContext",choiceModify.get(0).getContext());
+                                               modify.putExtra("feedImg",choiceModify.get(0).getImgUrl());
+                                               modify.putExtra("feedUid",choiceModify.get(0).getUid());
+                                               modify.putExtra("feedDate",choiceModify.get(0).getDate());
+                                               context.startActivity(modify);
+                                           }
+
+                                           @Override
+                                           public void onCancelled(@NonNull DatabaseError error) {
+
+                                           }
+                                       });
                                        break;
                                }
                                return false;

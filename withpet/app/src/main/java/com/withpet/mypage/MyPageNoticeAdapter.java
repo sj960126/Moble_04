@@ -20,12 +20,12 @@ import java.util.ArrayList;
 //종희
 public class MyPageNoticeAdapter extends RecyclerView.Adapter<MyPageNoticeAdapter.MyPageNoticeViewHolder> {
 
-    private ArrayList<News> myfeed;
+    private ArrayList<Feed> myfeed;
     private TransUser user;
     private Context context; //선택한 activity action 내용
 
     //생성자
-    public MyPageNoticeAdapter(ArrayList<News> myfeed, Context context, TransUser tuser) {
+    public MyPageNoticeAdapter(ArrayList<Feed> myfeed, Context context, TransUser tuser) {
         this.myfeed = myfeed;
         this.context = context;
         user = tuser;
@@ -76,8 +76,8 @@ public class MyPageNoticeAdapter extends RecyclerView.Adapter<MyPageNoticeAdapte
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.mypageNoticeIv_item:
-                    News news = (News)view.getTag(R.integer.MyNoticeItem);
-                    Toast.makeText(context, "nick : "+news.getUid() + ", context : " + news.getContext()+ ", date : "+news.getDate(), Toast.LENGTH_SHORT).show();
+                    Feed feed = (Feed)view.getTag(R.integer.MyNoticeItem);
+                    Toast.makeText(context, "nick : "+ feed.getUid() + ", context : " + feed.getContext()+ ", date : "+ feed.getDate(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

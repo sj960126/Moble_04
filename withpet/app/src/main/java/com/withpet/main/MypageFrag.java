@@ -27,7 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import com.withpet.iot.*;
 import com.withpet.mypage.*;
 import com.withpet.newsfeed.*;
 import com.withpet.Chat.*;
@@ -50,7 +49,7 @@ public class MypageFrag extends Fragment {
     private Button btn_setting;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<News> myfeed;
+    private ArrayList<Feed> myfeed;
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
     private FirebaseUser firebaseUser;
@@ -170,9 +169,7 @@ public class MypageFrag extends Fragment {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    //반복문으로 데이터 리스트를 추출
-                    News news = snapshot.getValue(News.class); //만들어뒀던 news 객체에 데이터를 담음
-                    myfeed.add(news); //담은 데이터들을 배열리스터에 넣고 리사이클뷰로 보낼 준비
+                    myfeed.add(0, snapshot.getValue(Feed.class));
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
