@@ -5,7 +5,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import com.withpet.Chat.ChatListActivity;
 import com.withpet.newsfeed.*;
@@ -41,7 +39,7 @@ public class HomeFrag extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<News> myfeed;
+    private ArrayList<Feed> myfeed;
 
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
@@ -91,7 +89,7 @@ public class HomeFrag extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 //배열리스트에 역순으로 게시글을 저장
-                myfeed.add(0,snapshot.getValue(News.class));
+                myfeed.add(0,snapshot.getValue(Feed.class));
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
 
@@ -116,7 +114,7 @@ public class HomeFrag extends Fragment {
             }
         });
 
-        adapter = new MyFeedAdapter(myfeed, getContext());
+        adapter = new FeedAdapter(myfeed, getContext());
         recyclerView.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
 
         //리사이클러뷰 새로고침 이벤트
@@ -167,7 +165,7 @@ public class HomeFrag extends Fragment {
             //권한 o
             else{
                 //해당 페이지로 이동
-                Intent intent = new Intent(getContext(), NewsGalleryActivity.class);
+                Intent intent = new Intent(getContext(), FeedGalleryActivity.class);
                 intent.putExtra("request", R.integer.newsRequestcode);
                 startActivity(intent);
             }
@@ -185,7 +183,7 @@ public class HomeFrag extends Fragment {
                 //사용자가 허용했을 경우!
                 if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
                     //페이지 이동
-                    Intent intent = new Intent(getContext(), NewsGalleryActivity.class);
+                    Intent intent = new Intent(getContext(), FeedGalleryActivity.class);
                     startActivity(intent);
                 }
                 //사용자가 거부했을 경우!

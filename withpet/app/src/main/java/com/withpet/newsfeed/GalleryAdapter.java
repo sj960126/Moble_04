@@ -76,7 +76,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 //mDataset.get(holder.getAdapterPosition()) : 상수
                 Glide.with(activity).load(mDataset.get(holder.getAdapterPosition())).override(800).into(iv_choice);
                 //다음페이지에 선택한 값을 전달하기 위해 intent 작성
-                intentw = new Intent(activity, NewsWriteActivity.class);
+                intentw = new Intent(activity, FeedWriteActivity.class);
                 intentw.putExtra("imgId",mDataset.get(holder.getAdapterPosition()));
                 clickposition = holder.getAdapterPosition();
             }

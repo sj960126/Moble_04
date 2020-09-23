@@ -31,8 +31,8 @@
         <activity android:name=".health.HealthHospitalActivity" />
         <activity android:name=".health.diaryActivity" />
         <activity android:name=".health.diary_addActivity" />
-        <activity android:name=".newsfeed.NewsGalleryActivity" />
-        <activity android:name=".newsfeed.NewsWriteActivity" />
+        <activity android:name=".newsfeed.FeedGalleryActivity" />
+        <activity android:name=".newsfeed.FeedWriteActivity" />
         <activity android:name=".iot.iot_streaming_area" />
         <activity android:name=".mypage.ProfileModifyActivity" />
         <activity android:name=".main.MainActivity" />
