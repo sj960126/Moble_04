@@ -30,14 +30,11 @@ public class MainActivity extends AppCompatActivity {
     private Walk_boarddetailFrag walkBoarddetail;
     private int board_nb = 0;
     private int reply_nb = 0;
-<<<<<<< HEAD
     private double centerLat;
     private double centerLong;
-=======
     private boolean mypagemenuclick = false;    // 마이페이지로 갈 때 메뉴를 통해 간 것인지, 프로필을 통해 간 것인지 판단하는 변수
     private Bundle mypageBundle;
 
->>>>>>> b4bb89b7269d5237f151b03ff0209706d6548bc8
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
