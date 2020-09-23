@@ -220,7 +220,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                        Menu menu = popupMenu.getMenu();
                        //메뉴item 연결
                        inflater.inflate(R.menu.feedmenuitem_my, menu);
-
                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                            @Override
                            public boolean onMenuItemClick(MenuItem item) {
