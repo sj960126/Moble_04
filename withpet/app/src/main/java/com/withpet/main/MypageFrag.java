@@ -1,5 +1,6 @@
 package com.withpet.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import com.withpet.mypage.*;
 import com.withpet.newsfeed.*;
+import com.withpet.Chat.*;
+import com.withpet.health.*;
+import com.withpet.walk.*;
 import com.withpet.*;
 
 import java.util.ArrayList;
@@ -41,24 +45,61 @@ public class MypageFrag extends Fragment {
     private RecyclerView list;
     private CircleImageView iv_profilephoto;
     private TextView tv_nickname;
+    private Button btn_profliemodify, btn_setting, btn_delete, btn_logout;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Feed> myfeed;
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
     private FirebaseUser firebaseUser;
-    private TransUser loginuser;
+    private TransUser loginuser;        // 로그인한 유저의 정보(자기 자신)
+    private TransUser choiceuser;       // 메인피드의 프로필을 눌러서 들어온 유저의 정보
+    private TransUser nowuserinfo;  // 현재 마이페이지의 유저 정보(메인피드의 프로필을 눌러서 들어왔으면 해당 게시글의 유저정보, 마이페이지 메뉴로 들어오면 자기자신)
+    private String requestfrom;
     final  int requestcode = 1001;
+
     // 로그인한 사람의 게시글만 보이게 변경(로그인 정보 가져와야함)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.activity_mypage,container,false);
+
+        // 메인피드에서 프로필을 클릭해 마이페이지로 온경우
+        Bundle bundle = this.getArguments();
+        requestfrom = bundle.getString("from");
+
+        if(requestfrom.equals("proflie"))  {
+            choiceuser = (TransUser) bundle.getSerializable("userinfo");
+            nowuserinfo = choiceuser;
+        }
+
+        db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
         iv_profilephoto = rootview.findViewById(R.id.myPageIv_profile);
         tv_nickname = rootview.findViewById(R.id.myPageTv_username);
 
-        Button btn_setting = (Button) rootview.findViewById(R.id.mypageBtn_setting);
-        btn_setting.setBackgroundResource(R.drawable.iconsetting);
+        btn_setting = (Button) rootview.findViewById(R.id.mypageBtn_setting);
+        btn_setting.setOnClickListener(onClickListener);
+        btn_profliemodify = rootview.findViewById(R.id.myPageBtn_modify);
+        btn_profliemodify.setOnClickListener(onClickListener);
+        btn_logout = (Button) rootview.findViewById(R.id.myPageBtn_logout);
+        btn_logout.setOnClickListener(onClickListener);
+
+        // 메뉴에서 마이페이지를 눌렀을 때때
+       if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())) {
+            btn_setting.setBackgroundResource(R.drawable.iconsetting);
+            btn_setting.setTag(R.integer.btnResource, R.drawable.iconsetting);
+            btn_profliemodify.setText("프로필 수정");
+        }
+       // 메인에서 프로필을 눌러 마이페이지에 왔을 때
+        else{
+            btn_setting.setBackgroundResource(R.drawable.iconchatt);
+            btn_setting.setTag(R.integer.btnResource, R.drawable.iconchatt);
+            btn_profliemodify.setText("관심 추가");
+            tv_nickname.setText(nowuserinfo.getNickname());
+            Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);
+        }
 
         list = rootview.findViewById(R.id.myPageListview_mynotice);
         list.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
@@ -68,20 +109,11 @@ public class MypageFrag extends Fragment {
         list.setLayoutManager(layoutManager);
         myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
 
-        db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        adapter = new MyPageNoticeAdapter(myfeed, getContext(), loginuser);
+        adapter = new MyPageNoticeAdapter(myfeed, getContext(), nowuserinfo);
         list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
-        // 파이어베이스에서 가져온 닉네임, 사진정보 프로필 수정 액태비티로 전달
-        rootview.findViewById(R.id.myPageBtn_modify).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent modify = new Intent(getActivity(), ProfileModifyActivity.class);
-                modify.putExtra("loginuser", loginuser);
-                startActivityForResult(modify, requestcode);
-            }
-        });
+
+
+
         return rootview;
     }
     @Override
@@ -94,38 +126,43 @@ public class MypageFrag extends Fragment {
     public void onResume() {
         super.onResume();
         Log.i("resume start", "resume start");
+
         //파이어베이스에서 로그인유저 nickname 정보 가져오기
-        final DatabaseReference userdbreference = db.getReference("User");
-        userdbreference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                if(snapshot.getKey().equals(firebaseUser.getUid())){
-                    loginuser = new TransUser(snapshot.getValue(User.class));
-                    tv_nickname.setText(loginuser.getNickname());
-                    Glide.with(rootview).load(loginuser.getImgUrl()).override(800).into(iv_profilephoto);
+        if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())){
+            final DatabaseReference userdbreference = db.getReference("User");
+            userdbreference.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    Log.i("childstart", "start!!!!");
+                    if(snapshot.getKey().equals(firebaseUser.getUid())){
+                        loginuser = new TransUser(snapshot.getValue(User.class));
+                        nowuserinfo = loginuser;
+                        tv_nickname.setText(nowuserinfo.getNickname());
+                        Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);
+                    }
                 }
-            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-            }
+                }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
-            }
+                }
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-            }
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        }
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
         dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -145,7 +182,42 @@ public class MypageFrag extends Fragment {
             }
         });
     }
-    public TransUser getLoginuser(){
-        return loginuser;
-    }
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent;
+            switch (v.getId()){
+                case R.id.mypageBtn_setting:
+                    if((int)v.getTag(R.integer.btnResource) == R.drawable.iconchatt){
+                        intent = new Intent(v.getContext(),ChattingActivity.class);
+                        intent.putExtra("Opponent", nowuserinfo);
+                        startActivity(intent);
+                    }
+                    else if((int)v.getTag(R.integer.btnResource) == R.drawable.iconsetting){
+                        //로그아웃, 회원탈퇴
+
+
+                    }
+                    break;
+                case R.id.myPageBtn_modify:
+                    // 파이어베이스에서 가져온 닉네임, 사진정보 프로필 수정 액태비티로 전달(프로필 수정 버튼 이벤트)
+                    if(((Button)v).getText().toString().equals("프로필 수정")) {
+                        intent = new Intent(v.getContext(), ProfileModifyActivity.class);
+                        intent.putExtra("loginuser", nowuserinfo);
+                        startActivityForResult(intent, requestcode);
+                    }
+                    else if(((Button)v).getText().toString().equals("관심 추가")){
+                        Log.i("add 관심", " 관심추가");
+                    }
+                    break;
+
+                case R.id.myPageBtn_logout:
+                    FirebaseAuth.getInstance().signOut();
+                    ((Activity)rootview.getContext()).finish();
+                    break;
+
+            }
+        }
+    };
+
 }

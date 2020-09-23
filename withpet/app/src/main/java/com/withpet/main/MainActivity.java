@@ -30,8 +30,14 @@ public class MainActivity extends AppCompatActivity {
     private Walk_boarddetailFrag walkBoarddetail;
     private int board_nb = 0;
     private int reply_nb = 0;
+<<<<<<< HEAD
     private double centerLat;
     private double centerLong;
+=======
+    private boolean mypagemenuclick = false;    // 마이페이지로 갈 때 메뉴를 통해 간 것인지, 프로필을 통해 간 것인지 판단하는 변수
+    private Bundle mypageBundle;
+
+>>>>>>> b4bb89b7269d5237f151b03ff0209706d6548bc8
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +70,15 @@ public class MainActivity extends AppCompatActivity {
         bundle.putDouble("centerLat",centerLat);
         bundle.putDouble("centerLong",centerLong);
         walkBoarddetail.setArguments(bundle);
-        setFrag(frag);
-        if(frag == R.integer.mypagefrag){
-
+        mypageBundle = new Bundle();
+        if(frag == 3){
+            mypageBundle.clear();
+            TransUser tuser = (TransUser)intent.getSerializableExtra("userinfo");
+            mypageBundle.putSerializable("userinfo",tuser);
+            mypageBundle.putString("from", "proflie");
+            mypagemenuclick = false;
         }
+        setFrag(frag);
     }
 
     @Override
@@ -93,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.menu_mypage:
                         Toast.makeText(MainActivity.this, "내정보", Toast.LENGTH_SHORT).show();
+                        mypagemenuclick = true;
                         setFrag(3);
                         break;
                     case R.id.menu_iot:
@@ -121,6 +133,15 @@ public class MainActivity extends AppCompatActivity {
                 fragment = walkFrag;
                 break;
             case 3:
+                //내용추가
+                if(mypagemenuclick){
+                    mypageBundle.clear();
+                    mypageBundle.putString("from", "menu");
+                    //mypageBundle.putSe
+                    Log.i("실행확인", "메뉴클릭됨");
+                }
+                mypageFrag.setArguments(mypageBundle);
+                ft.detach(mypageFrag).attach(mypageFrag);
                 fragment = mypageFrag;
                 break;
             case 4:

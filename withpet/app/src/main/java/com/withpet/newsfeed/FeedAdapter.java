@@ -48,8 +48,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     private String newFeedMenu;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
-    private ArrayList<String> userinfo;
     private ArrayList<Feed> choiceModify;
+    private User userinfo;
 
     //생성자
     public FeedAdapter(ArrayList<Feed> myfeed, Context context) {
@@ -77,10 +77,11 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         String feeduserImg = preferences.getString("img","");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //추가 부분
-        userinfo = new ArrayList<String>();
-        userinfo.add(0,myfeed.get(position).getUid());
-        userinfo.add(1,nickName);
-        userinfo.add(2,feeduserImg);
+        userinfo = new User();
+        userinfo.setUid(myfeed.get(position).getUid());
+        userinfo.setNickname(nickName);
+        userinfo.setImgUrl(feeduserImg);
+
 
 
 
@@ -220,7 +221,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                        Menu menu = popupMenu.getMenu();
                        //메뉴item 연결
                        inflater.inflate(R.menu.feedmenuitem_my, menu);
-
                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                            @Override
                            public boolean onMenuItemClick(MenuItem item) {
@@ -281,23 +281,28 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                            public boolean onMenuItemClick(MenuItem item) {
                                switch (item.getItemId()){
                                    case R.id.feedmenu_report:
-                                       //게시글 번호와 로그인유저
-                                       Toast.makeText(context, ""+ newFeedMenu, Toast.LENGTH_SHORT).show();
+                                       //게시글 번호 전달 및 페이지 이동
+                                       Intent report = new Intent(context, ReportActivity.class);
+                                       report.putExtra("feedName", newFeedMenu);
+                                       context.startActivity(report);
+                                       break;
+                                   case R.id.feedmenu_linkCopy:
+
                                        break;
                                }
                                return false;
                            }
                        });
-
                        popupMenu.show();
                    }
 
                    break;
                    //추가부분
                case R.id.mainTv_name:
+                   TransUser tuser = new TransUser((User)view.getTag(R.integer.userinfo));
                    Intent intent = new Intent(context, MainActivity.class);
-                   intent.putExtra("frag", R.integer.mypagefrag);
-                   intent.putExtra("userinfo", userinfo);
+                   intent.putExtra("frag", 3);
+                   intent.putExtra("userinfo", tuser);
                    context.startActivity(intent);
                    ((Activity)context).finish();
                    break;
