@@ -223,7 +223,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
             //권한 o
             else{
                 //해당 페이지로 이동
-                Intent intent = new Intent(this, NewsGalleryActivity.class);
+                Intent intent = new Intent(this, FeedGalleryActivity.class);
                 intent.putExtra("request", R.integer.profileModifyRequestcode);
                 startActivityForResult(intent, 1020);
             }
@@ -241,7 +241,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
                 //사용자가 허용했을 경우!
                 if(grantResults[i]==PackageManager.PERMISSION_GRANTED){
                     //페이지 이동
-                    Intent intent = new Intent(this, NewsGalleryActivity.class);
+                    Intent intent = new Intent(this, FeedGalleryActivity.class);
                     startActivity(intent);
 
                 }

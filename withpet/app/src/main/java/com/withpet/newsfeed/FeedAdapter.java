@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,9 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.DatabaseRegistrar;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.main.*;
@@ -42,9 +39,9 @@ import java.util.Date;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 //MyFeedAdapter function
-public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHolder> {
+public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder> {
 
-    private ArrayList<News> myfeed;
+    private ArrayList<Feed> myfeed;
     private Context context; //선택한 activity action 내용
     private boolean like_click = false;
     private Intent nextReply, modify;
@@ -52,10 +49,10 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
     private ArrayList<String> userinfo;
-    private ArrayList<News> choiceModify;
+    private ArrayList<Feed> choiceModify;
 
     //생성자
-    public MyFeedAdapter(ArrayList<News> myfeed, Context context) {
+    public FeedAdapter(ArrayList<Feed> myfeed, Context context) {
         this.myfeed = myfeed;
         this.context = context;
     }
@@ -246,9 +243,9 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.FeedViewHo
                                        feedModify.child(newFeedMenu).addListenerForSingleValueEvent(new ValueEventListener() {
                                            @Override
                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                               News feed = new News();
-                                               choiceModify.add(0,snapshot.getValue(News.class));
-                                               modify = new Intent(context, NewsWriteActivity.class);
+                                               Feed feed = new Feed();
+                                               choiceModify.add(0,snapshot.getValue(Feed.class));
+                                               modify = new Intent(context, FeedWriteActivity.class);
                                                modify.putExtra("feedName",choiceModify.get(0).getNewsName());
                                                modify.putExtra("feedContext",choiceModify.get(0).getContext());
                                                modify.putExtra("feedImg",choiceModify.get(0).getImgUrl());

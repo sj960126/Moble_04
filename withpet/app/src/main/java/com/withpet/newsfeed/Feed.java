@@ -1,14 +1,14 @@
 package com.withpet.newsfeed;
 
-public class News {
+public class Feed {
     String uid;
     String imgUrl;
     String context;
     String date;
     String newsName;
 
-    News(){}
-    News(String uid, String imgUrl, String context, String newsName, String date){
+    Feed(){}
+    Feed(String uid, String imgUrl, String context, String newsName, String date){
         this.uid = uid;
         this.imgUrl = imgUrl;
         this.context = context;
