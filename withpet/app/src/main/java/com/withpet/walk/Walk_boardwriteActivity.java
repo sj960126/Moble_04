@@ -50,6 +50,8 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private LinearLayout writetmap;
     private Button check_btn;
+    private double centerlat;
+    private double centerlong;
     int uploadId;
     String uploadId_str;
     Context context;
@@ -77,8 +79,8 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
         writetmap = findViewById(R.id.walkwrite_tmap);
         tMapView = new TMapView(this);
         tMapView.setSKTMapApiKey(APK);
+        tMapView.setZoomLevel(13);
         writetmap.addView(tMapView);
-
         databaseReference = FirebaseDatabase.getInstance().getReference("walk-board");
 
         Intent tmap_intent = getIntent();
@@ -91,7 +93,9 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
         spot[3][0] = tmap_intent.getDoubleExtra("lat3",0);
         spot[3][1] = tmap_intent.getDoubleExtra("long3",0);
         last_uploadId = tmap_intent.getIntExtra("upload",99);
-
+        if(spot[0][0] != 0) {
+            tMapView.setCenterPoint(Point_Long(spot[0][1], spot[1][1], spot[2][1], spot[3][1]), Point_Lat(spot[0][0], spot[1][0], spot[2][0], spot[3][0]));
+        }
 
 
         if(spot[3][0] == 0.0)repeat=2;
@@ -157,6 +161,31 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
                 }
             }
         }.start();
+    }
+
+    private double Point_Lat(double a ,double b,double c, double d){
+        double latcenter = a + b+ c + d;
+
+        if(d == 0.0 && c != 0.0){
+            centerlat = latcenter/3;
+        }else if(b == 0.0){
+            centerlat = latcenter/2;
+        }else{
+            centerlat = latcenter/4;
+        }
+         return centerlat;
+    }
+    private double Point_Long(double a, double b, double c, double d){
+        double longcenter = a + b+ c + d;
+
+        if(d == 0.0 && c != 0.0){
+            centerlong = longcenter/3;
+        }else if(b == 0.0){
+            centerlong = longcenter/2;
+        }else{
+            centerlong = longcenter/4;
+        }
+        return centerlong;
     }
 
 

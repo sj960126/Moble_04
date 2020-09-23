@@ -49,14 +49,14 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
         this.meid = meid;
 
     }
-    // Create new views (invoked by the layout manager)
+    // 뷰홀더 생성(리스트뷰의 아이템 한줄에 해당)
     @Override
     public ChatListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.chatlist_item, parent, false);
         ChatListAdapter.MyViewHolder holder = new ChatListAdapter.MyViewHolder(v);
         return holder;
     }
+    // 리스트 뷰 아이템의 내용 설정
     @Override
     public void onBindViewHolder(ChatListAdapter.MyViewHolder holder, int position) {
         ChattingRoom chattingroominfo = chattingroomList.get(position);
@@ -64,8 +64,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
             // 모든 user 정보와 로그인한 사람의 대화방 상대 유저정보를 비교해 같은 사람이 있으면 대화방정보(프로필 사진, 닉네임) 리스트를 작성
             if(chattingroominfo.getChatroomname().contains(userdata.getUid()) && !userdata.getUid().equals(meid)){
                 final User user = userdata;
-                holder.tv_title.setText(user.getNickname());
-                Glide.with(holder.rootView).load(user.getImgUrl()).override(800).into(holder.iv_profilephoto);
+                holder.tv_title.setText(user.getNickname());    // 대화상대 닉네임 출력
+                holder.tv_msg.setText(chattingroominfo.getChattingList().get(chattingroominfo.getChattingList().size()-1).getContent());    // 대화상대와의 마지막 채팅 내용 출력
+                Glide.with(holder.rootView).load(user.getImgUrl()).override(800).into(holder.iv_profilephoto);  // 대화상대 프로필 사진 출력
                 holder.rootView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {   // 해당 대화방 클릭 시 채팅방으로 이동

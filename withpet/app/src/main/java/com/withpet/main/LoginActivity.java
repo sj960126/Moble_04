@@ -40,8 +40,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-
         firebaseAuth = FirebaseAuth.getInstance();
 
         etEmail = (EditText) findViewById(R.id.loginEt_id);
@@ -64,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
                 //회원정보 xml파일 추가
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     allUser.add(0, dataSnapshot.getValue(User.class));
-                    //Log.i("ang", allUser.get(0).getName());
 
                     SharedPreferences sharedPreferences = getSharedPreferences(allUser.get(0).getUid(), MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -74,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("img", allUser.get(0).getImgUrl());
                     editor.commit();
                 }
-               // Log.i("ang", allUser.get(0).getName());
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -82,6 +78,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser LoginUser = firebaseAuth.getCurrentUser();
+        loginCheck(LoginUser);
     }
 
     public void btnClick(View view){
@@ -95,9 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Intent main = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(main);
-                            finish();
+                            Login();
                         }
                         else{
                             Toast.makeText(LoginActivity.this, "일치하는 회원이 없습니다.", Toast.LENGTH_SHORT).show();
@@ -110,6 +111,20 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 break;
+        }
+    }
+
+    public void Login(){
+        Intent main = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(main);
+        finish();
+    }
+
+    //로그인 정보확인인
+  private void loginCheck(FirebaseUser user) {
+        //로그인 유저가 있다면
+        if (user != null) {
+            Login();
         }
     }
 }

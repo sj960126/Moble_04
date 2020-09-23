@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private Walk_boarddetailFrag walkBoarddetail;
     private int board_nb = 0;
     private int reply_nb = 0;
+    private double centerLat;
+    private double centerLong;
     private boolean mypagemenuclick = false;    // 마이페이지로 갈 때 메뉴를 통해 간 것인지, 프로필을 통해 간 것인지 판단하는 변수
     private Bundle mypageBundle;
 
@@ -46,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
         int frag = intent.getIntExtra("frag",0);
         board_nb = intent.getIntExtra("board_nb",0);
         reply_nb = intent.getIntExtra("reply_nb",0);
-
+        centerLat = intent.getDoubleExtra("centerLat",0.0);
+        centerLong = intent.getDoubleExtra("centerLong",0.0);
 
         //하단메뉴바 초기화
         bottomNavigationView =findViewById(R.id.bottomNV);
@@ -61,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putInt("board_nb",board_nb);
+        bundle.putDouble("centerLat",centerLat);
+        bundle.putDouble("centerLong",centerLong);
         walkBoarddetail.setArguments(bundle);
         mypageBundle = new Bundle();
         if(frag == 3){
@@ -83,24 +88,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.menu_home:
-                        Toast.makeText(MainActivity.this, "홈", Toast.LENGTH_SHORT).show();
                         setFrag(0);
                         break;
                     case R.id.menu_health:
-                        Toast.makeText(MainActivity.this, "건강", Toast.LENGTH_SHORT).show();
                         setFrag(1);
                         break;
                     case R.id.menu_walk:
-                        Toast.makeText(MainActivity.this, "산책", Toast.LENGTH_SHORT).show();
                         setFrag(2);
                         break;
                     case R.id.menu_mypage:
-                        Toast.makeText(MainActivity.this, "내정보", Toast.LENGTH_SHORT).show();
                         mypagemenuclick = true;
                         setFrag(3);
                         break;
                     case R.id.menu_iot:
-                        Toast.makeText(MainActivity.this, "IOT", Toast.LENGTH_SHORT).show();
                         setFrag(4);
                         break;
                 }
@@ -129,9 +129,11 @@ public class MainActivity extends AppCompatActivity {
                 if(mypagemenuclick){
                     mypageBundle.clear();
                     mypageBundle.putString("from", "menu");
+                    //mypageBundle.putSe
                     Log.i("실행확인", "메뉴클릭됨");
                 }
                 mypageFrag.setArguments(mypageBundle);
+                ft.detach(mypageFrag).attach(mypageFrag);
                 fragment = mypageFrag;
                 break;
             case 4:

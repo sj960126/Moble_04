@@ -37,6 +37,7 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
     private String walkboard_content;
     int reply_nb = 0;
     int board_nb = 0;
+    double centerPoint;
     public Walk_Adapter(ArrayList<Walk_boardUpload> arrayList,Context context,Activity activity){
         this.arrayList =arrayList;
         this.context = context;
@@ -83,7 +84,7 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int pos = getAdapterPosition();
+                    final int pos = getAdapterPosition();
 
                     database = FirebaseDatabase.getInstance();
                     databaseReference = database.getReference("walk-reply").child(Integer.toString(arrayList.get(pos).getWalkboard_nb()));
@@ -93,6 +94,8 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
                             for(DataSnapshot ds:snapshot.getChildren()){
                                 Walk_ReplyUpload tmp = ds.getValue(Walk_ReplyUpload.class);
                                 reply_nb = tmp.getReply_nb()+1;
+
+
 
                                 //댓글 번호 내부 저장소에 저장
                                 SharedPreferences sharedPreferences = activity.getSharedPreferences("sFile",Context.MODE_PRIVATE);
@@ -110,10 +113,14 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
                     });
 
                     board_nb = arrayList.get(pos).getWalkboard_nb();
+
                     Log.i("nb", ""+board_nb);
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("frag",5); // 작성한 글 frag로 가기위해 intent값 전달
                     intent.putExtra("board_nb",board_nb);
+                    intent.putExtra("centerLat", Point_Lat(pos));
+                    intent.putExtra("centerLong", Point_Long(pos));
+                    Log.i("유럽가봤니?",""+Point_Lat(pos));
                     context.startActivity(intent);
 
 
@@ -123,5 +130,34 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
                 }
             });
         }
+
+        //게시판 tmap 위도 경도 중간값 전달
+        private double Point_Lat(int pos){
+            double Lat = arrayList.get(pos).getLat0()+arrayList.get(pos).getLat1()+arrayList.get(pos).getLat2()+ arrayList.get(pos).getLat3();
+
+            if(arrayList.get(pos).getLong3() == 0.0 && arrayList.get(pos).getLong2() != 0.0 ){
+                centerPoint = (Lat)/3;
+            }else if (arrayList.get(pos).getLong2() == 0.0){
+                centerPoint = (Lat)/2;
+            }else{
+                centerPoint = (Lat)/4;
+            }
+
+            return centerPoint;
+        }
+        private double Point_Long(int pos){
+        double Long = arrayList.get(pos).getLong0() + arrayList.get(pos).getLong1() + arrayList.get(pos).getLong2()+ arrayList.get(pos).getLong3();
+
+        if(arrayList.get(pos).getLong3() == 0 && arrayList.get(pos).getLong2() != 0.0 ){
+            centerPoint = (Long)/3;
+        }else if (arrayList.get(pos).getLong2() == 0){
+            centerPoint = (Long)/2;
+        }else{
+            centerPoint = (Long)/4;
+        }
+
+        return centerPoint;
+    }
+
     }
 }

@@ -47,11 +47,6 @@ public class MyPageNoticeAdapter extends RecyclerView.Adapter<MyPageNoticeAdapte
     public void onBindViewHolder(@NonNull MyPageNoticeAdapter.MyPageNoticeViewHolder holder, int position) {
         CardView cardView = holder.layout.findViewById(R.id.myPageCv);
         ImageView iv_noticeitem = holder.layout.findViewById(R.id.mypageNoticeIv_item);
-        /*
-        if(myfeed.get(position).getId().equals(user.getNickname())){
-            Glide.with(context).load(myfeed.get(position).getImgUrl()).override(800).into(iv_noticeitem);
-            iv_noticeitem.setTag(R.integer.MyNoticeItem, myfeed.get(position));
-        }*/
         Glide.with(context).load(myfeed.get(position).getImgUrl()).override(800).into(iv_noticeitem);
         iv_noticeitem.setTag(R.integer.MyNoticeItem, myfeed.get(position));
         iv_noticeitem.setOnClickListener(onClickListener);

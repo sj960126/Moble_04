@@ -76,13 +76,12 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         String nickName = preferences.getString("nickName", "host");
         String feeduserImg = preferences.getString("img","");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
         //추가 부분
         userinfo = new User();
         userinfo.setUid(myfeed.get(position).getUid());
         userinfo.setNickname(nickName);
         userinfo.setImgUrl(feeduserImg);
-
-
 
         //로그인한 사용자의 프로필이미지
         SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);
@@ -220,7 +219,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                        Menu menu = popupMenu.getMenu();
                        //메뉴item 연결
                        inflater.inflate(R.menu.feedmenuitem_my, menu);
-
                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                            @Override
                            public boolean onMenuItemClick(MenuItem item) {
@@ -281,21 +279,25 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                            public boolean onMenuItemClick(MenuItem item) {
                                switch (item.getItemId()){
                                    case R.id.feedmenu_report:
-                                       //게시글 번호와 로그인유저
-                                       Toast.makeText(context, ""+ newFeedMenu, Toast.LENGTH_SHORT).show();
+                                       //게시글 번호 전달 및 페이지 이동
+                                       Intent report = new Intent(context, ReportActivity.class);
+                                       report.putExtra("feedName", newFeedMenu);
+                                       context.startActivity(report);
+                                       break;
+                                   case R.id.feedmenu_linkCopy:
+
                                        break;
                                }
                                return false;
                            }
                        });
-
                        popupMenu.show();
                    }
 
                    break;
                    //추가부분
                case R.id.mainTv_name:
-                   TransUser tuser = new TransUser(userinfo);
+                   TransUser tuser = new TransUser((User)view.getTag(R.integer.userinfo));
                    Intent intent = new Intent(context, MainActivity.class);
                    intent.putExtra("frag", 3);
                    intent.putExtra("userinfo", tuser);
