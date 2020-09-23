@@ -48,7 +48,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     private String newFeedMenu;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
-    private ArrayList<String> userinfo;
     private ArrayList<Feed> choiceModify;
     private User userinfo;
 
