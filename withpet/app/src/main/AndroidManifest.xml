@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- //health_지도 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- //health_지도 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -14,9 +18,10 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Chat.FindUserActivity"></activity>
+        <activity android:name=".iot.iot_recorder"></activity>
+        <activity android:name=".Chat.FindUserActivity" />
         <activity android:name=".Chat.ChattingActivity" />
         <activity android:name=".Chat.ChatListActivity" />
         <activity android:name=".newsfeed.ReplyActivity" />
@@ -39,9 +44,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBLaYTPSCp-sYkDgXEYo0gTtrgaig82iX0" />
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
