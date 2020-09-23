@@ -5,4 +5,12 @@
         <item>개</item>
         <item>고양이</item>
     </string-array>
+
+    <string-array name="reportCategory">
+        <item>신고항목을 선택하세요</item>
+        <item>부적절한 내용</item>
+        <item>동물학대</item>
+        <item>스팸</item>
+        <item>기타</item>
+    </string-array>
 </resources>

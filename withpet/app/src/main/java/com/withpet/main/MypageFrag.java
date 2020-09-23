@@ -193,6 +193,8 @@ public class MypageFrag extends Fragment {
                         startActivity(intent);
                     }
                     else if((int)v.getTag(R.integer.btnResource) == R.drawable.iconsetting){
+                        //로그아웃, 회원탈퇴
+
 
                     }
                     break;
