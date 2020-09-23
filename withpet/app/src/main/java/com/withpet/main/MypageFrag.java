@@ -120,7 +120,6 @@ public class MypageFrag extends Fragment {
 
     }
 
-    //이미지 새로고침 안됨 프로필 수정 후 다시 마이페이지 돌아왔을때 프사 안바뀜
     @Override
     public void onResume() {
         super.onResume();
@@ -132,7 +131,6 @@ public class MypageFrag extends Fragment {
             userdbreference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    Log.i("childstart", "start!!!!");
                     if(snapshot.getKey().equals(firebaseUser.getUid())){
                         loginuser = new TransUser(snapshot.getValue(User.class));
                         nowuserinfo = loginuser;
@@ -143,9 +141,13 @@ public class MypageFrag extends Fragment {
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                    if(snapshot.getKey().equals(firebaseUser.getUid())){
+                        loginuser = new TransUser(snapshot.getValue(User.class));
+                        nowuserinfo = loginuser;
+                        tv_nickname.setText(nowuserinfo.getNickname());
+                        Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);
+                    }
                 }
-
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
@@ -169,7 +171,10 @@ public class MypageFrag extends Fragment {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    myfeed.add(0, snapshot.getValue(Feed.class));
+                    Feed feed = snapshot.getValue(Feed.class);
+                    if(feed.getUid().equals(firebaseUser.getUid())){
+                        myfeed.add(0, feed);
+                    }
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
@@ -181,6 +186,7 @@ public class MypageFrag extends Fragment {
             }
         });
     }
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

@@ -49,14 +49,14 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
         this.meid = meid;
 
     }
-    // Create new views (invoked by the layout manager)
+    // 뷰홀더 생성(리스트뷰의 아이템 한줄에 해당)
     @Override
     public ChatListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.chatlist_item, parent, false);
         ChatListAdapter.MyViewHolder holder = new ChatListAdapter.MyViewHolder(v);
         return holder;
     }
+    // 리스트 뷰 아이템의 내용 설정
     @Override
     public void onBindViewHolder(ChatListAdapter.MyViewHolder holder, int position) {
         ChattingRoom chattingroominfo = chattingroomList.get(position);
