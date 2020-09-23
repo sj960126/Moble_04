@@ -1,6 +1,8 @@
 package com.withpet.newsfeed;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Build;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +34,8 @@ import com.withpet.main.*;
 import java.io.File;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class FeedWriteActivity extends AppCompatActivity {
 
     private FirebaseDatabase db;
@@ -41,7 +46,7 @@ public class FeedWriteActivity extends AppCompatActivity {
     private String inputContext, strImage,userNickname;
     private String modifyContext, modifyImg, modifyName, modifyDate, modifyUid;
     private Button btnUpload;
-    private ImageView iv;
+    private ImageView ivPhoto;
     private EditText et;
 
     //필요한 리소스 초기화
@@ -55,6 +60,7 @@ public class FeedWriteActivity extends AppCompatActivity {
 
         btnUpload = (Button) findViewById(R.id.mainwBtn_finish);
         btnUpload.setBackgroundResource(R.drawable.iconcheck);
+        ivPhoto = (ImageView) findViewById(R.id.mainwIv_thumbnail);
 
         //파베 연결 및 연동
         db = FirebaseDatabase.getInstance();
@@ -72,8 +78,6 @@ public class FeedWriteActivity extends AppCompatActivity {
         modifyDate = getIntent().getStringExtra("feedDate");
         modifyUid = getIntent().getStringExtra("feedUid");
 
-        //선택한 사진 불러오기
-        iv = (ImageView) findViewById(R.id.mainwIv_thumbnail);
     }
 
     // 사용자와의 상호작용 (터치이벤트 및 등등)
@@ -83,7 +87,7 @@ public class FeedWriteActivity extends AppCompatActivity {
         //게시글 작성
         if(modifyContext == null && modifyImg == null && modifyName == null){
             //선택한 사진 불러오기
-            Glide.with(this).load(strImage).override(1000).into(iv);
+            Glide.with(this).load(strImage).override(1000).into(ivPhoto);
             //버튼이벤트
             btnUpload.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -117,7 +121,7 @@ public class FeedWriteActivity extends AppCompatActivity {
         //게시글 수정
         else{
             //선택한 사진 불러오기
-            Glide.with(this).load(modifyImg).override(1000).into(iv);
+            Glide.with(this).load(modifyImg).override(1000).into(ivPhoto);
             et =findViewById(R.id.mainwEt_context);
             et.setText(modifyContext);
             //버튼이벤트

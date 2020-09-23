@@ -83,24 +83,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.menu_home:
-                        Toast.makeText(MainActivity.this, "홈", Toast.LENGTH_SHORT).show();
                         setFrag(0);
                         break;
                     case R.id.menu_health:
-                        Toast.makeText(MainActivity.this, "건강", Toast.LENGTH_SHORT).show();
                         setFrag(1);
                         break;
                     case R.id.menu_walk:
-                        Toast.makeText(MainActivity.this, "산책", Toast.LENGTH_SHORT).show();
                         setFrag(2);
                         break;
                     case R.id.menu_mypage:
-                        Toast.makeText(MainActivity.this, "내정보", Toast.LENGTH_SHORT).show();
                         mypagemenuclick = true;
                         setFrag(3);
                         break;
                     case R.id.menu_iot:
-                        Toast.makeText(MainActivity.this, "IOT", Toast.LENGTH_SHORT).show();
                         setFrag(4);
                         break;
                 }

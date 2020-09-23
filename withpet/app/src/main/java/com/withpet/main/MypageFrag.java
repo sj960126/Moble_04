@@ -45,7 +45,7 @@ public class MypageFrag extends Fragment {
     private RecyclerView list;
     private CircleImageView iv_profilephoto;
     private TextView tv_nickname;
-    private Button btn_profliemodify, btn_setting, btn_delete, btn_logout;
+    private Button btn_profliemodify, btn_setting;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Feed> myfeed;
@@ -57,6 +57,7 @@ public class MypageFrag extends Fragment {
     private TransUser nowuserinfo;  // 현재 마이페이지의 유저 정보(메인피드의 프로필을 눌러서 들어왔으면 해당 게시글의 유저정보, 마이페이지 메뉴로 들어오면 자기자신)
     private String requestfrom;
     final  int requestcode = 1001;
+    private Intent main;
 
     // 로그인한 사람의 게시글만 보이게 변경(로그인 정보 가져와야함)
     @Nullable
@@ -83,8 +84,6 @@ public class MypageFrag extends Fragment {
         btn_setting.setOnClickListener(onClickListener);
         btn_profliemodify = rootview.findViewById(R.id.myPageBtn_modify);
         btn_profliemodify.setOnClickListener(onClickListener);
-        btn_logout = (Button) rootview.findViewById(R.id.myPageBtn_logout);
-        btn_logout.setOnClickListener(onClickListener);
 
         // 메뉴에서 마이페이지를 눌렀을 때때
        if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())) {
@@ -195,8 +194,8 @@ public class MypageFrag extends Fragment {
                     }
                     else if((int)v.getTag(R.integer.btnResource) == R.drawable.iconsetting){
                         //로그아웃, 회원탈퇴
-
-
+                        intent = new Intent(v.getContext(), SettingActivity.class);
+                        startActivity(intent);
                     }
                     break;
                 case R.id.myPageBtn_modify:
@@ -210,12 +209,6 @@ public class MypageFrag extends Fragment {
                         Log.i("add 관심", " 관심추가");
                     }
                     break;
-
-                case R.id.myPageBtn_logout:
-                    FirebaseAuth.getInstance().signOut();
-                    ((Activity)rootview.getContext()).finish();
-                    break;
-
             }
         }
     };
