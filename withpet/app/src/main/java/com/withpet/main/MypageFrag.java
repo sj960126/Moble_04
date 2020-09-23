@@ -86,7 +86,7 @@ public class MypageFrag extends Fragment {
         btn_profliemodify.setOnClickListener(onClickListener);
 
         // 메뉴에서 마이페이지를 눌렀을 때때
-       if(requestfrom.equals("menu")) {
+       if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())) {
             btn_setting.setBackgroundResource(R.drawable.iconsetting);
             btn_setting.setTag(R.integer.btnResource, R.drawable.iconsetting);
             btn_profliemodify.setText("프로필 수정");
@@ -127,7 +127,7 @@ public class MypageFrag extends Fragment {
         Log.i("resume start", "resume start");
 
         //파이어베이스에서 로그인유저 nickname 정보 가져오기
-        if(requestfrom.equals("menu")){
+        if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())){
             final DatabaseReference userdbreference = db.getReference("User");
             userdbreference.addChildEventListener(new ChildEventListener() {
                 @Override

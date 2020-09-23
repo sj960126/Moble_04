@@ -84,6 +84,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
 
 
+
         //로그인한 사용자의 프로필이미지
         SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);
         String loginImg = sharedPreferences.getString("img", "");
@@ -295,7 +296,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                    break;
                    //추가부분
                case R.id.mainTv_name:
-                   TransUser tuser = new TransUser(userinfo);
+                   TransUser tuser = new TransUser((User)view.getTag(R.integer.userinfo));
                    Intent intent = new Intent(context, MainActivity.class);
                    intent.putExtra("frag", 3);
                    intent.putExtra("userinfo", tuser);

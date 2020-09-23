@@ -64,7 +64,8 @@ public class ChattingActivity extends AppCompatActivity {
         super.onResume();
         db = FirebaseDatabase.getInstance();
         dbreference = db.getReference("Chat");
-
+        chattingList.clear();
+        chattingAdapter.notifyDataSetChanged();
         //사용시 차일드 알아서 하나 넘어감, chat의 차일드가 들어가짐
         dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
