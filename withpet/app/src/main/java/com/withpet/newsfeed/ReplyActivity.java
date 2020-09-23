@@ -9,10 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
-import com.withpet.main.User;
 
 import java.util.ArrayList;
 
@@ -77,16 +74,16 @@ public class ReplyActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     for(DataSnapshot user : snapshot.getChildren()){
-                        News news = user.getValue(News.class);
+                        Feed feed = user.getValue(Feed.class);
 
                         //자세히 보기 게시글의 닉네임, 프로필이미지
-                        SharedPreferences preferences = getSharedPreferences(news.getUid(), Context.MODE_PRIVATE);
+                        SharedPreferences preferences = getSharedPreferences(feed.getUid(), Context.MODE_PRIVATE);
                         String nickName = preferences.getString("nickName", "host");
                         String feedImg = preferences.getString("img","");
 
                         //댓글 게시글 자세히 보기 설정
                         tvNewsId.setText(nickName);
-                        tvNewsContext.setText(news.getContext());
+                        tvNewsContext.setText(feed.getContext());
                         Glide.with(recyclerView).load(feedImg).circleCrop().into(civNewsUser);
                     }
                 }
@@ -98,8 +95,7 @@ public class ReplyActivity extends AppCompatActivity {
 
         feedReply = new ArrayList<>();
         DatabaseReference Replydbr = NewsFeedDB.getReference("Reply");
-        Query findReply = Replydbr.orderByChild("boardName").equalTo(boardName);
-        findReply.addListenerForSingleValueEvent(new ValueEventListener() {
+        Replydbr.child(boardName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 feedReply.clear();

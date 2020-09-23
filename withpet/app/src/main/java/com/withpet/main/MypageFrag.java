@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -28,11 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import com.withpet.iot.*;
 import com.withpet.mypage.*;
 import com.withpet.newsfeed.*;
-import com.withpet.health.*;
-import com.withpet.walk.*;
 import com.withpet.*;
 
 import java.util.ArrayList;
@@ -48,7 +43,7 @@ public class MypageFrag extends Fragment {
     private TextView tv_nickname;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<News> myfeed;
+    private ArrayList<Feed> myfeed;
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
     private FirebaseUser firebaseUser;
@@ -67,14 +62,14 @@ public class MypageFrag extends Fragment {
 
         list = rootview.findViewById(R.id.myPageListview_mynotice);
         list.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
-        final int col = 3;
-        layoutManager = new GridLayoutManager(rootview.getContext(), col);
+
+        final int col = 3;  // 그리드 뷰 컬럼 수
+        layoutManager = new GridLayoutManager(rootview.getContext(), col);  // 그리드 뷰 레이아웃으로 설정
         list.setLayoutManager(layoutManager);
         myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
 
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        
 
         adapter = new MyPageNoticeAdapter(myfeed, getContext(), loginuser);
         list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
@@ -138,9 +133,7 @@ public class MypageFrag extends Fragment {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    //반복문으로 데이터 리스트를 추출
-                    News news = snapshot.getValue(News.class); //만들어뒀던 news 객체에 데이터를 담음
-                    myfeed.add(news); //담은 데이터들을 배열리스터에 넣고 리사이클뷰로 보낼 준비
+                    myfeed.add(0, snapshot.getValue(Feed.class));
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }

@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         int frag = intent.getIntExtra("frag",0);
         board_nb = intent.getIntExtra("board_nb",0);
         reply_nb = intent.getIntExtra("reply_nb",0);
+
+
         //하단메뉴바 초기화
         bottomNavigationView =findViewById(R.id.bottomNV);
 
@@ -59,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         bundle.putInt("board_nb",board_nb);
         walkBoarddetail.setArguments(bundle);
         setFrag(frag);
+        if(frag == R.integer.mypagefrag){
+
+        }
     }
 
     @Override

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/feedmenu_linkCopy"
+        android:title="링크복사" />
+    <item
+        android:id="@+id/feedmenu_report"
+        android:title="신고하기" />
+</menu>

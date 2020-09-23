@@ -5,19 +5,23 @@
     android:id="@+id/streaming_area"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".iot_streaming_area">
+    android:background="#3C3F41"
+    tools:context=".iot.iot_streaming_area">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="400dp"
-            android:layout_height="300dp"
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="355dp"
             android:layout_gravity="center"
-            android:layout_marginTop="50dp" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="5dp"
+            android:background="#434343" />
 
         <TextView
             android:id="@+id/textView5"
