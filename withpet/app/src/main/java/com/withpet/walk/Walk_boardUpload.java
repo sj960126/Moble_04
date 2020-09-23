@@ -5,6 +5,7 @@ public class Walk_boardUpload {
     private String walkboard_title;
     private String walkboard_content;
     private int walkboard_nb;
+    private String uid;
     private double lat0;
     private double long0;
     private double lat1;
@@ -15,7 +16,7 @@ public class Walk_boardUpload {
     private double long3;
 
 
-    public Walk_boardUpload(String walkboard_title, String walkboard_content, int walkboard_nb, double lat0, double long0,double lat1, double long1,double lat2, double long2,double lat3, double long3){
+    public Walk_boardUpload(String walkboard_title, String walkboard_content, int walkboard_nb, double lat0, double long0,double lat1, double long1,double lat2, double long2,double lat3, double long3, String uid){
         this.walkboard_title = walkboard_title;
         this.walkboard_content = walkboard_content;
         this.walkboard_nb = walkboard_nb;
@@ -27,8 +28,17 @@ public class Walk_boardUpload {
         this.long2 = long2;
         this.lat3 = lat3;
         this.long3 = long3;
-
+        this.uid = uid;
     }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     public double getLat0() {
         return lat0;
     }

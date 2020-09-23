@@ -3,6 +3,7 @@ package com.withpet.walk;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +35,8 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
     private FirebaseDatabase database;
     private String walkboard_title;
     private String walkboard_content;
+    int reply_nb = 0;
+    int board_nb = 0;
     public Walk_Adapter(ArrayList<Walk_boardUpload> arrayList,Context context,Activity activity){
         this.arrayList =arrayList;
         this.context = context;
@@ -45,15 +48,18 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
     public CustomViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_walk_custom, parent, false);
         CustomViewholder holder = new CustomViewholder(view);
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull CustomViewholder holder, int position) {
 
-        Log.i("adapter:", arrayList.get(position).getWalkboard_title());
-        Log.i("adapter:", arrayList.get(position).getWalkboard_content());
 
+    //    Toast.makeText(this.context, ""+arrayList.get(position).getWalkboard_title(), Toast.LENGTH_SHORT).show();
+      /*  database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference("walk-board").child(Integer.toString(arrayList.get(position).getWalkboard_nb()));
+*/
         holder.tv_title.setText(arrayList.get(position).getWalkboard_title());
         holder.tv_contents.setText(arrayList.get(position).getWalkboard_content());
 
@@ -79,13 +85,35 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
 
-                 //   String board_nb = Integer.toString(arrayList.get(pos).getWalkboard_nb());
+                    database = FirebaseDatabase.getInstance();
+                    databaseReference = database.getReference("walk-reply").child(Integer.toString(arrayList.get(pos).getWalkboard_nb()));
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot ds:snapshot.getChildren()){
+                                Walk_ReplyUpload tmp = ds.getValue(Walk_ReplyUpload.class);
+                                reply_nb = tmp.getReply_nb()+1;
 
+                                //댓글 번호 내부 저장소에 저장
+                                SharedPreferences sharedPreferences = activity.getSharedPreferences("sFile",Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt("reply_nb",reply_nb);
+                                editor.putInt("board_nb", arrayList.get(getAdapterPosition()).getWalkboard_nb()); //이거부터 해라 게시글 번호 내부 저장소에 저장
+                                editor.commit();
+                            }
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                    board_nb = arrayList.get(pos).getWalkboard_nb();
+                    Log.i("nb", ""+board_nb);
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("frag",5); // 작성한 글 frag로 가기위해 intent값 전달
-                    intent.putExtra("board_nb",arrayList.get(pos).getWalkboard_nb());
-               //     Log.i("adapter_nb",""+arrayList.get(pos).getWalkboard_nb());
+                    intent.putExtra("board_nb",board_nb);
                     context.startActivity(intent);
 
 

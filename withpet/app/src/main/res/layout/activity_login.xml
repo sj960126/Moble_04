@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="아이디"
+            android:text="dydwns1801@naver.com"
             android:inputType="textPersonName"
             />
 
@@ -50,6 +51,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="비밀번호"
+            android:text="k350a77"
             android:inputType="textPassword"
              />
 

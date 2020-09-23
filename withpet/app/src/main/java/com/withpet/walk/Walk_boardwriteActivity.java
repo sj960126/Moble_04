@@ -4,6 +4,7 @@ package com.withpet.walk;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -75,6 +78,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
         tMapView = new TMapView(this);
         tMapView.setSKTMapApiKey(APK);
         writetmap.addView(tMapView);
+
         databaseReference = FirebaseDatabase.getInstance().getReference("walk-board");
 
         Intent tmap_intent = getIntent();
@@ -87,6 +91,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
         spot[3][0] = tmap_intent.getDoubleExtra("lat3",0);
         spot[3][1] = tmap_intent.getDoubleExtra("long3",0);
         last_uploadId = tmap_intent.getIntExtra("upload",99);
+
 
 
         if(spot[3][0] == 0.0)repeat=2;
@@ -115,16 +120,6 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
                 startActivity(intent_tmap);
             }
         });
-
-        check_btn = findViewById(R.id.check_btn);
-        check_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "가져오니"+last_uploadId, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
     }
 
 
@@ -133,7 +128,8 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
         if(spot[0][0] == 0){
             Toast.makeText(context, "경로 설정 하세요!!", Toast.LENGTH_SHORT).show();
         }else {
-            Walk_boardUpload upload = new Walk_boardUpload(walkTv_title.getText().toString().trim(), walkTv_content.getText().toString().trim(), last_uploadId, spot[0][0], spot[0][1], spot[1][0], spot[1][1], spot[2][0], spot[2][1], spot[3][0], spot[3][1]);
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            Walk_boardUpload upload = new Walk_boardUpload(walkTv_title.getText().toString().trim(), walkTv_content.getText().toString().trim(), last_uploadId, spot[0][0], spot[0][1], spot[1][0], spot[1][1], spot[2][0], spot[2][1], spot[3][0], spot[3][1],firebaseUser.getUid());
             databaseReference.child(Integer.toString(last_uploadId)).setValue(upload);
         }
        /* Intent go_walk = new Intent(this,MainActivity.class);

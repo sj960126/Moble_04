@@ -3,6 +3,7 @@ package com.withpet.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private IotFrag iotFrag;
     private Walk_boarddetailFrag walkBoarddetail;
     private int board_nb = 0;
+    private int reply_nb = 0;
 
 
     @Override
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int frag = intent.getIntExtra("frag",0);
         board_nb = intent.getIntExtra("board_nb",0);
+        reply_nb = intent.getIntExtra("reply_nb",0);
 
 
         //하단메뉴바 초기화

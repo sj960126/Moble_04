@@ -69,7 +69,7 @@ public class Walk_tmap extends AppCompatActivity  {
         setGps(); //초기 화면 현위치 지정
 
 
-
+        //tmapview 클릭 이벤트
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
             @Override
             public void onLongPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint) {
@@ -89,6 +89,7 @@ public class Walk_tmap extends AppCompatActivity  {
 
         });
 
+        //tmapview 초기화
         walkclear_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +104,7 @@ public class Walk_tmap extends AppCompatActivity  {
             }
         });
 
+        //tmap view에 저장된 위도 경도 게시글 작성 클래스에 데이터 전달
         walksave_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,7 +137,7 @@ public class Walk_tmap extends AppCompatActivity  {
 
                             TMapPolyLine tMapPolyLine = new TMapData().findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH, start_point, end_point);
                             tMapPolyLine.setLineColor(Color.BLUE);
-                            tMapPolyLine.setLineWidth(3);
+                            tMapPolyLine.setLineWidth(2);
                             tMapView.addTMapPolyLine("Line"+a, tMapPolyLine);
 
                 }catch(Exception e){
