@@ -24,13 +24,11 @@ import java.util.ArrayList;
 public class FindUserActivity extends AppCompatActivity {
     private RecyclerView finduserlistRecyclerView;
     private RecyclerView.Adapter finduserlistwAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private EditText et_finduserinput;
     private ArrayList<User> userlist;
     private ArrayList<User> finduserlist;
     private String loginuserid;
 
-    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +41,7 @@ public class FindUserActivity extends AppCompatActivity {
         finduserlist = new ArrayList<User>();
 
         //리사이클러 뷰, 어댑터 설정정
-       layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         finduserlistRecyclerView.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
         finduserlistRecyclerView.setLayoutManager(layoutManager);
         finduserlistwAdapter = new FindUserAdapter(this, finduserlist);
@@ -70,6 +68,7 @@ public class FindUserActivity extends AppCompatActivity {
 
             }
         });
+        // edit textview의 내용 변경 이벤트
         et_finduserinput.addTextChangedListener(new TextWatcher() {
             @Override   // 입력 전 호출
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -89,7 +88,7 @@ public class FindUserActivity extends AppCompatActivity {
 
                     }
                 }
-                finduserlistwAdapter.notifyDataSetChanged();
+                finduserlistwAdapter.notifyDataSetChanged();        // 어댑터 갱신
             }
 
             @Override   // 입력 끝났을 때 호출

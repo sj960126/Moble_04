@@ -16,10 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.walk.*;
 import com.withpet.*;
@@ -81,22 +83,35 @@ public class WalkFrag extends Fragment {
 
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("walk-board");
+        //최신순 정렬
+        Query orderwalk = databaseReference.orderByChild("walkboard_nb");
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        orderwalk.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                walkfeed.clear();
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Walk_boardUpload walk_boardUpload = snapshot.getValue(Walk_boardUpload.class);
+                //배열리스트에 역순으로 게시글 저장
+                walkfeed.add(0,walk_boardUpload);
 
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Walk_boardUpload walk_boardUpload = snapshot.getValue(Walk_boardUpload.class);
-                    walkfeed.add(walk_boardUpload);
-                }
+                //마지막 게시물 번호에 +1(게시글 번호 곂치지 않게 하기위해서)
+                board_nb = walk_boardUpload.getWalkboard_nb()+1;
+
                 adapter.notifyDataSetChanged();
 
-                for(DataSnapshot ds:dataSnapshot.getChildren()){
-                    Walk_boardUpload tmp = ds.getValue(Walk_boardUpload.class);
-                    board_nb = tmp.getWalkboard_nb()+1;
-                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
             }
 
@@ -105,6 +120,7 @@ public class WalkFrag extends Fragment {
 
             }
         });
+
 
         adapter = new Walk_Adapter(walkfeed, getContext(), getActivity());
         recyclerView.setAdapter(adapter);

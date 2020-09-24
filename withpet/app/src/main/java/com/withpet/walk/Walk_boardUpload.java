@@ -14,9 +14,9 @@ public class Walk_boardUpload {
     private double long2;
     private double lat3;
     private double long3;
+    private String userImg;
 
-
-    public Walk_boardUpload(String walkboard_title, String walkboard_content, int walkboard_nb, double lat0, double long0,double lat1, double long1,double lat2, double long2,double lat3, double long3, String uid){
+    public Walk_boardUpload(String walkboard_title, String walkboard_content, int walkboard_nb, double lat0, double long0,double lat1, double long1,double lat2, double long2,double lat3, double long3, String uid,String userImg){
         this.walkboard_title = walkboard_title;
         this.walkboard_content = walkboard_content;
         this.walkboard_nb = walkboard_nb;
@@ -29,6 +29,15 @@ public class Walk_boardUpload {
         this.lat3 = lat3;
         this.long3 = long3;
         this.uid = uid;
+        this.userImg = userImg;
+    }
+
+    public String getUserImg() {
+        return userImg;
+    }
+
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
     }
 
     public String getUid() {

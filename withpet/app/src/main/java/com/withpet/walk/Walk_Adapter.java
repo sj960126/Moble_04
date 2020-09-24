@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -63,7 +66,9 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
 */
         holder.tv_title.setText(arrayList.get(position).getWalkboard_title());
         holder.tv_contents.setText(arrayList.get(position).getWalkboard_content());
-
+        Glide.with(holder.itemView)
+                .load(arrayList.get(position).getUserImg())
+                .into(holder.iv_img);
     }
 
     @Override
@@ -75,12 +80,13 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
       //  ImageView iv_profile;
         TextView tv_title;
         TextView tv_contents;
-
+        ImageView iv_img;
         public CustomViewholder(@NonNull final View itemView) {
             super(itemView);
             this.tv_title = itemView.findViewById(R.id.walk_title);
             this.tv_contents = itemView.findViewById(R.id.walk_content);
-
+            this.iv_img = itemView.findViewById(R.id.walkIv_user);
+            //댓글 저장
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -118,9 +124,8 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("frag",5); // 작성한 글 frag로 가기위해 intent값 전달
                     intent.putExtra("board_nb",board_nb);
-                    intent.putExtra("centerLat", Point_Lat(pos));
-                    intent.putExtra("centerLong", Point_Long(pos));
-                    Log.i("유럽가봤니?",""+Point_Lat(pos));
+                    intent.putExtra("centerLat", Point_Lat(pos)); //위도 경도 전달
+                    intent.putExtra("centerLong", Point_Long(pos));//위도 경도 전달
                     context.startActivity(intent);
 
 
@@ -131,7 +136,7 @@ public class Walk_Adapter extends RecyclerView.Adapter<Walk_Adapter.CustomViewho
             });
         }
 
-        //게시판 tmap 위도 경도 중간값 전달
+        //게시판 tmap 위도 경도 중간값 계산 메소드
         private double Point_Lat(int pos){
             double Lat = arrayList.get(pos).getLat0()+arrayList.get(pos).getLat1()+arrayList.get(pos).getLat2()+ arrayList.get(pos).getLat3();
 

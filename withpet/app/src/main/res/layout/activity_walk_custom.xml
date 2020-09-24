@@ -14,7 +14,7 @@
         android:weightSum="3">
 
         <ImageView
-            android:id="@+id/myPageIv_profile"
+            android:id="@+id/walkIv_user"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
