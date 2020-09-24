@@ -51,8 +51,8 @@ public class MypageFrag extends Fragment {
     private ArrayList<Feed> myfeed;
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
-    private FirebaseUser firebaseUser;
-    private TransUser loginuser;        // 로그인한 유저의 정보(자기 자신)
+    private FirebaseUser firebaseUser;  // 로그인 유저의 uid정보를 가지고 있는 변수
+    private TransUser loginuser;        // 로그인한 유저의 정보(자기 자신) : 프로필 사진정보, 닉네임, uid, 이름 등
     private TransUser choiceuser;       // 메인피드의 프로필을 눌러서 들어온 유저의 정보
     private TransUser nowuserinfo;  // 현재 마이페이지의 유저 정보(메인피드의 프로필을 눌러서 들어왔으면 해당 게시글의 유저정보, 마이페이지 메뉴로 들어오면 자기자신)
     private String requestfrom;
@@ -213,6 +213,8 @@ public class MypageFrag extends Fragment {
                         startActivityForResult(intent, requestcode);
                     }
                     else if(((Button)v).getText().toString().equals("관심 추가")){
+                        DatabaseReference followreference = db.getReference("Follow");
+                        followreference.child(firebaseUser.getUid()).child(nowuserinfo.getUid()).setValue(nowuserinfo.getUid());
                         Log.i("add 관심", " 관심추가");
                     }
                     break;
