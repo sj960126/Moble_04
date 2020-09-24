@@ -37,24 +37,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 //Mypage page 종희
 public class MypageFrag extends Fragment {
-
-    private View rootview;
+    private View rootview;              // 프래그먼트가 실행시킬 레이아웃
     private RecyclerView list;
     private CircleImageView iv_profilephoto;
     private TextView tv_nickname;
     private Button btn_profliemodify, btn_setting;
     private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Feed> myfeed;
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
-    private FirebaseUser firebaseUser;
-    private TransUser loginuser;        // 로그인한 유저의 정보(자기 자신)
+    private FirebaseUser firebaseUser;  // 로그인 유저의 uid정보를 가지고 있는 변수
+    private TransUser loginuser;        // 로그인한 유저의 정보(자기 자신) : 프로필 사진정보, 닉네임, uid, 이름 등
     private TransUser choiceuser;       // 메인피드의 프로필을 눌러서 들어온 유저의 정보
     private TransUser nowuserinfo;  // 현재 마이페이지의 유저 정보(메인피드의 프로필을 눌러서 들어왔으면 해당 게시글의 유저정보, 마이페이지 메뉴로 들어오면 자기자신)
     private String requestfrom;
     final  int requestcode = 1001;
-    private Intent main;
 
     // 로그인한 사람의 게시글만 보이게 변경(로그인 정보 가져와야함)
     @Nullable
@@ -101,7 +98,7 @@ public class MypageFrag extends Fragment {
         list.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
 
         final int col = 3;  // 그리드 뷰 컬럼 수
-        layoutManager = new GridLayoutManager(rootview.getContext(), col);  // 그리드 뷰 레이아웃으로 설정
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(rootview.getContext(), col);  // 그리드 뷰 레이아웃으로 설정
         list.setLayoutManager(layoutManager);
         myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
 
@@ -129,17 +126,17 @@ public class MypageFrag extends Fragment {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     if(snapshot.getKey().equals(firebaseUser.getUid())){
-                        loginuser = new TransUser(snapshot.getValue(User.class));
-                        nowuserinfo = loginuser;
-                        tv_nickname.setText(nowuserinfo.getNickname());
+                        loginuser = new TransUser(snapshot.getValue(User.class));       // 로그인한 유저의 정보(프로필 사진정보, 닉네임 등) 가져오기
+                        nowuserinfo = loginuser;                                        // 마이페이지에 출력할 유저 정보를 로그인한 유저의 정보로 저장
+                        tv_nickname.setText(nowuserinfo.getNickname());                 // 마이페이지에 출력 유저로
                         Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);
                     }
                 }
 
-                @Override
+                @Override   // 변경이 있을 때 호출
                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     if(snapshot.getKey().equals(firebaseUser.getUid())){
-                        loginuser = new TransUser(snapshot.getValue(User.class));
+                        loginuser = new TransUser(snapshot.getValue(User.class));       // onChildAdded 내용과 동일
                         nowuserinfo = loginuser;
                         tv_nickname.setText(nowuserinfo.getNickname());
                         Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);
@@ -161,6 +158,7 @@ public class MypageFrag extends Fragment {
                 }
             });
         }
+        // 게시글 정보 가져오기
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
         dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -180,6 +178,40 @@ public class MypageFrag extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 //데베 데이터를 가져오던 중 에러 발생 시
                 Toast.makeText(getActivity(), "에러라라고오오옹", Toast.LENGTH_SHORT).show();
+            }
+        });
+        // 팔로우 정보 가져오기
+        dbreference = db.getReference("Follow");//연동한 DB의 테이블 연결
+        dbreference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                if(snapshot.getKey().equals(firebaseUser.getUid())){
+                    for(DataSnapshot followUserData :snapshot.getChildren()){
+                        if(followUserData.getKey().equals(nowuserinfo.getUid())){
+                            btn_profliemodify.setText("관심 삭제");     // 관심 추가가 된 사람일 경우 버튼을 관심 삭제로 변경
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -203,13 +235,19 @@ public class MypageFrag extends Fragment {
                     break;
                 case R.id.myPageBtn_modify:
                     // 파이어베이스에서 가져온 닉네임, 사진정보 프로필 수정 액태비티로 전달(프로필 수정 버튼 이벤트)
+                    DatabaseReference followreference = db.getReference("Follow");
                     if(((Button)v).getText().toString().equals("프로필 수정")) {
                         intent = new Intent(v.getContext(), ProfileModifyActivity.class);
                         intent.putExtra("loginuser", nowuserinfo);
                         startActivityForResult(intent, requestcode);
                     }
                     else if(((Button)v).getText().toString().equals("관심 추가")){
-                        Log.i("add 관심", " 관심추가");
+                        followreference.child(firebaseUser.getUid()).child(nowuserinfo.getUid()).child("followid").setValue(nowuserinfo.getUid());      // 해당 유저의 uid를 데이터베이스에 추가
+                        ((Button)v).setText("관심 삭제");
+                    }
+                    else if(((Button)v).getText().toString().equals("관심 삭제")){
+                        followreference.child(firebaseUser.getUid()).child(nowuserinfo.getUid()).removeValue(); // 해당 유저를 관심 삭제 하기위해 데이터 베이스에서 값 삭제
+                        ((Button)v).setText("관심 추가");
                     }
                     break;
             }

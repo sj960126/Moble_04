@@ -36,7 +36,6 @@ public class ChattingActivity extends AppCompatActivity {
     private String chatroomname;
     private RecyclerView chattingRecyclerView;
     public  RecyclerView.Adapter chattingAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     // 개선사항 :  채팅 ui 수정
     @Override
@@ -53,7 +52,7 @@ public class ChattingActivity extends AppCompatActivity {
         // 리사이클러 뷰, 어댑터 설정
         chattingRecyclerView = findViewById(R.id.chattingRv_chat);
         chattingRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         chattingRecyclerView.setLayoutManager(mLayoutManager);
         chattingAdapter = new ChattingAdapter(this, chattingList, meid, opponent.TransformUser());
         chattingRecyclerView.setAdapter(chattingAdapter);
@@ -116,8 +115,6 @@ public class ChattingActivity extends AppCompatActivity {
 
             }
         });
-
-        Toast.makeText(this, "nickname"+opponent.getNickname()+", uid : "+opponent.getUid(), Toast.LENGTH_SHORT).show();
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {

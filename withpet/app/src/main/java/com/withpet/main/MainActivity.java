@@ -129,8 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 if(mypagemenuclick){
                     mypageBundle.clear();
                     mypageBundle.putString("from", "menu");
-                    //mypageBundle.putSe
-                    Log.i("실행확인", "메뉴클릭됨");
                 }
                 mypageFrag.setArguments(mypageBundle);
                 ft.detach(mypageFrag).attach(mypageFrag);
