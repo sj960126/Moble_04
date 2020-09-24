@@ -30,7 +30,6 @@ public class ChatListActivity extends AppCompatActivity {
     private ArrayList<User> userlist;
     private RecyclerView chatListRecyclerView;
     public  RecyclerView.Adapter chatListAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     final int requestcode = 1001;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class ChatListActivity extends AppCompatActivity {
         // 리사이클러 뷰, 어탭터 설정
         chatListRecyclerView = findViewById(R.id.chatListRv_List);
         chatListRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         chatListRecyclerView.setLayoutManager(mLayoutManager);
         chatListAdapter = new ChatListAdapter(this, chatroomlist, userlist, loginUser.getUid());
         chatListRecyclerView.setAdapter(chatListAdapter);
