@@ -76,14 +76,12 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         String nickName = preferences.getString("nickName", "host");
         String feeduserImg = preferences.getString("img","");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
         //추가 부분
         userinfo = new User();
         userinfo.setUid(myfeed.get(position).getUid());
         userinfo.setNickname(nickName);
         userinfo.setImgUrl(feeduserImg);
-
-
-
 
         //로그인한 사용자의 프로필이미지
         SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -191,6 +192,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
                 public void onSuccess(Uri uri) {
                     loginuser.setImgUrl(uri.toString());    //파이어베이스 저장소에 저장한 사진의 액세스 토큰 주소
                     dbreference.child(firebaseUser.getUid()).setValue(loginuser);
+                    Tcp_Client tc = new Tcp_Client(firebaseUser.getUid());
+                    tc.execute(this);
 
                     //변경된 프로필 정보 xml 저장(이미지 있음)
                     editor.putString("nickName", loginuser.getNickname());
@@ -206,7 +209,6 @@ public class ProfileModifyActivity extends AppCompatActivity {
             editor.putString("nickName", loginuser.getNickname());
             editor.commit();
         }
-
     }
 
     //권한설정 _ 안드로이드스튜디오개발가이드 + 구글링
