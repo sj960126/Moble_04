@@ -133,7 +133,9 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
             Toast.makeText(context, "경로 설정 하세요!!", Toast.LENGTH_SHORT).show();
         }else {
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            Walk_boardUpload upload = new Walk_boardUpload(walkTv_title.getText().toString().trim(), walkTv_content.getText().toString().trim(), last_uploadId, spot[0][0], spot[0][1], spot[1][0], spot[1][1], spot[2][0], spot[2][1], spot[3][0], spot[3][1],firebaseUser.getUid());
+            SharedPreferences sharedPreferences = getSharedPreferences(firebaseUser.getUid(), MODE_PRIVATE);
+            String userImg = sharedPreferences.getString("img","img");
+            Walk_boardUpload upload = new Walk_boardUpload(walkTv_title.getText().toString().trim(), walkTv_content.getText().toString().trim(), last_uploadId, spot[0][0], spot[0][1], spot[1][0], spot[1][1], spot[2][0], spot[2][1], spot[3][0], spot[3][1],firebaseUser.getUid(),userImg);
             databaseReference.child(Integer.toString(last_uploadId)).setValue(upload);
         }
        /* Intent go_walk = new Intent(this,MainActivity.class);
