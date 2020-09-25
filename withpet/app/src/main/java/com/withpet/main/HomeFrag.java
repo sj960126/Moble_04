@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import com.withpet.Chat.ChatListActivity;
+import com.withpet.Search.Search_FeedActivity;
 import com.withpet.newsfeed.*;
 import com.withpet.*;
 
@@ -45,7 +46,7 @@ public class HomeFrag extends Fragment {
     private DatabaseReference dbreference;
 
     private SwipeRefreshLayout refreshLayout;
-    private Button btnWrite, btnChatt;
+    private Button btnWrite, btnChatt ,btnSearch;
     private String[] permission_list = {Manifest.permission.READ_EXTERNAL_STORAGE};
 
     //액티비티 onCreate와 동일
@@ -54,6 +55,7 @@ public class HomeFrag extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.activity_news,container,false);
 
+        btnSearch =(Button) rootview.findViewById(R.id.mainBtn_search);
         btnWrite = (Button) rootview.findViewById(R.id.walkBtn_write);
         btnChatt = (Button) rootview.findViewById(R.id.mainBtn_chatt);
         refreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.refresh);
@@ -62,6 +64,7 @@ public class HomeFrag extends Fragment {
         //버튼 기본 이미지 설정
         btnWrite.setBackgroundResource(R.drawable.iconadd);
         btnChatt.setBackgroundResource(R.drawable.iconchatt);
+        btnSearch.setBackgroundResource(R.drawable.iconsearch);
 
         layoutManager = new LinearLayoutManager(getActivity());
 
@@ -144,7 +147,15 @@ public class HomeFrag extends Fragment {
                 startActivity(intent);
             }
         });
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent search_intent = new Intent(getActivity(), Search_FeedActivity.class);
+                startActivity(search_intent);
+            }
+        });
     }
+
 
     //프레그먼트 새로고침
     public void Refresh(){

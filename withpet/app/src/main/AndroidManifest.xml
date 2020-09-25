@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".main.SettingActivity"></activity>
+        <activity android:name=".Search.Search_FeedActivity"></activity>
+        <activity android:name=".main.SettingActivity" />
         <activity android:name=".iot.iot_recorder" />
         <activity android:name=".Chat.FindUserActivity" />
         <activity android:name=".Chat.ChattingActivity" />
