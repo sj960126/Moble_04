@@ -86,7 +86,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         //로그인한 사용자의 프로필이미지
         SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);
         String loginImg = sharedPreferences.getString("img", "");
-       // Log.i("login img", ""+ loginImg);
+        // Log.i("login img", ""+ loginImg);
 
         Glide.with(holder.itemView)
                 .load(myfeed.get(position).getImgUrl())
