@@ -7,8 +7,8 @@ public class Feed {
     String date;
     String newsName;
 
-    Feed(){}
-    Feed(String uid, String imgUrl, String context, String newsName, String date){
+    public Feed(){}
+    public Feed(String uid, String imgUrl, String context, String newsName, String date){
         this.uid = uid;
         this.imgUrl = imgUrl;
         this.context = context;
