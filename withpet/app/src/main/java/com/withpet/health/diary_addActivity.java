@@ -78,12 +78,13 @@ public class diary_addActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     String day = getIntent().getStringExtra("day");
-                    if (kind==null||eat==null||time==null||brand==null||day==null){
+                    if (kind==null||eat.getText()==null||time==null||brand.getText()==null){
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle("입력 정보 부족").setMessage("입력 정보를 다시 하번 확인해 주세요.");
+                        builder.setTitle("입력 정보 부족").setMessage("입력 정보를 다시 확인해 주세요.");
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
-                    }else{
+                    }
+                    else{
                         diary Diary = new diary(kind, eat.getText().toString(), time, brand.getText().toString());
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference databaseReference = database.getReference("Diary").child("song").child(day);

@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.withpet.R;
 
 import java.util.ArrayList;
@@ -40,6 +42,10 @@ public class Walk_ReplyAdapter extends RecyclerView.Adapter<Walk_ReplyAdapter.Cu
         String nickName = preferences.getString("nickName", "host");
         holder.name_Tv.setText(nickName);
         holder.reply_Tv.setText(arrayList.get(position).getReply());
+
+        Glide.with(holder.itemView)
+                .load(arrayList.get(position).getImg())
+                .into(holder.user_Iv);
     }
 
     @Override
@@ -50,10 +56,12 @@ public class Walk_ReplyAdapter extends RecyclerView.Adapter<Walk_ReplyAdapter.Cu
     public class CustomViewholder extends RecyclerView.ViewHolder {
         TextView name_Tv;
         TextView reply_Tv;
+        ImageView user_Iv;
         public CustomViewholder(@NonNull View itemView) {
             super(itemView);
             this.name_Tv = itemView.findViewById(R.id.tv_replyname);
             this.reply_Tv = itemView.findViewById(R.id.tv_reply);
+            this.user_Iv = itemView.findViewById(R.id.walkImg_user);
         }
     }
 }

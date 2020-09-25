@@ -1,6 +1,5 @@
 package com.withpet.main;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,8 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.withpet.mypage.*;
 import com.withpet.newsfeed.*;
 import com.withpet.Chat.*;
-import com.withpet.health.*;
-import com.withpet.walk.*;
 import com.withpet.*;
 
 import java.util.ArrayList;
@@ -74,7 +71,7 @@ public class MypageFrag extends Fragment {
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        iv_profilephoto = rootview.findViewById(R.id.myPageIv_profile);
+        iv_profilephoto = rootview.findViewById(R.id.walkIv_user);
         tv_nickname = rootview.findViewById(R.id.myPageTv_username);
 
         btn_setting = (Button) rootview.findViewById(R.id.mypageBtn_setting);

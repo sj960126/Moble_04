@@ -89,8 +89,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         // Log.i("login img", ""+ loginImg);
 
         Glide.with(holder.itemView)
-                    .load(myfeed.get(position).getImgUrl())
-                    .into(holder.img);
+                .load(myfeed.get(position).getImgUrl())
+                .into(holder.img);
 
         Glide.with(holder.itemView).load(loginImg).circleCrop().into(holder.loginUserImg);
         holder.name.setText(nickName);
@@ -135,7 +135,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             super(itemView);
             btnLike = (Button) itemView.findViewById(R.id.mainBtn_like);
             btnReply = (Button) itemView.findViewById(R.id.mainBtn_reply);
-            btnMenu =(Button) itemView.findViewById(R.id.newsBtn_menu);
+            btnMenu =(Button) itemView.findViewById(R.id.walkbtn_menu);
             btnReplyEnter = (Button) itemView.findViewById(R.id.newsBtn_reply);
             loginUserImg = (CircleImageView) itemView.findViewById(R.id.newsIv_reply);
             etReply =(EditText) itemView.findViewById(R.id.newsEt_reply);
@@ -204,7 +204,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                    nextReply.putExtra("boardName", newsFeedReply);
                    context.startActivity(nextReply);
                    break;
-               case R.id.newsBtn_menu:
+               case R.id.walkbtn_menu:
                    //게시글 UID
                    String newsFeedUid = "" +view.getTag(R.integer.feed_Uid);
                    //게시글 번호
@@ -223,7 +223,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                            @Override
                            public boolean onMenuItemClick(MenuItem item) {
                                switch(item.getItemId()){
-                                   case R.id.feedmenu_del:
+                                   case R.id.walkmenu_del:
                                        //선택한 게시글 삭제
                                        DatabaseReference feedRemove  = firebaseDatabase.getReference("Feed");
                                        feedRemove.child(newFeedMenu).removeValue();
@@ -235,7 +235,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                                        replyRemove.child(newFeedMenu).removeValue();
                                        Toast.makeText(context, "해당 게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                                        break;
-                                   case R.id.feedmenu_mod:
+                                   case R.id.walkmenu_mod:
                                        DatabaseReference feedModify = firebaseDatabase.getReference("Feed");
                                        choiceModify = new ArrayList<>();
                                        feedModify.child(newFeedMenu).addListenerForSingleValueEvent(new ValueEventListener() {

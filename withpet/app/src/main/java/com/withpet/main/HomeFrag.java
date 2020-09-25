@@ -110,6 +110,7 @@ public class HomeFrag extends Fragment {
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
 
         //최근 순서
+
         Query latelyFeed = dbreference.orderByChild("date");
         //실시간으로 앱데이터를 업데이트 함수
         latelyFeed.addChildEventListener(new ChildEventListener() {
