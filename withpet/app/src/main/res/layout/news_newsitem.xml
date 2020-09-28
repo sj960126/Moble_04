@@ -30,8 +30,8 @@
 
             <Button
                 android:id="@+id/walkbtn_menu"
-                android:layout_width="2dp"
-                android:layout_height="15dp"
+                android:layout_width="20dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center|center_vertical"
                 android:layout_weight="1"
                 android:backgroundTint="@color/text"

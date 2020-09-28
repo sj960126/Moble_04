@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
@@ -46,11 +48,21 @@ public class Walk_tmap extends AppCompatActivity implements TMapGpsManager.onLoc
     private Context context =null;
     private Button walkclear_Btn;
     private Button walksave_Btn;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
     String Address = " ";
     TMapData tmapdata;
     TMapMarkerItem tItem = new TMapMarkerItem();
     TMapPoint start_point;// = new TMapPoint(36.809685, 127.147962);
     TMapPoint end_point;
+    private int check;
+    private String mod_title;
+    private String mod_content;
+    private int mod_nb;
+    private String mod_userImg;
+    private String mod_uid;
+    private double center_lat;
+    private double center_long;
     int a = -1;
     int id = 0;
     int array_nb = -1;
@@ -63,8 +75,15 @@ public class Walk_tmap extends AppCompatActivity implements TMapGpsManager.onLoc
         walkclear_Btn = findViewById(R.id.clearBtn);
         walksave_Btn = findViewById(R.id.mapsavebtn);
         context= this;
+
         Intent uploadid = getIntent();
         final int uploadId = uploadid.getIntExtra("uploadId",99);
+        check = uploadid.getIntExtra("check",101);
+        mod_title = uploadid.getStringExtra("walkboard_title");
+        mod_content = uploadid.getStringExtra("walkboard_content");
+        mod_nb = uploadid.getIntExtra("walkboard_nb",0);
+        mod_uid = uploadid.getStringExtra("uid");
+        mod_userImg = uploadid.getStringExtra("userimg");
 
         tMapView = new TMapView(this);
         tMapView.setSKTMapApiKey(APK);
@@ -118,22 +137,65 @@ public class Walk_tmap extends AppCompatActivity implements TMapGpsManager.onLoc
         walksave_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(spot[0][0] == 0){
+                    Toast.makeText(context, "경로를 지정하세요", Toast.LENGTH_SHORT).show();
+                }else{
+                    if(check == 99) {
+                        Intent intent = new Intent(Walk_tmap.this, Walk_boardwriteActivity.class);
+                        intent.putExtra("lat0", spot[0][0]);
+                        intent.putExtra("long0", spot[0][1]);
+                        intent.putExtra("lat1", spot[1][0]);
+                        intent.putExtra("long1", spot[1][1]);
+                        intent.putExtra("lat2", spot[2][0]);
+                        intent.putExtra("long2", spot[2][1]);
+                        intent.putExtra("lat3", spot[3][0]);
+                        intent.putExtra("long3", spot[3][1]);
+                        intent.putExtra("upload", uploadId);
+                        startActivity(intent);
+                    }else if(check == 100){
 
-                Intent intent = new Intent(Walk_tmap.this,Walk_boardwriteActivity.class);
-                intent.putExtra("lat0",spot[0][0]);
-                intent.putExtra("long0",spot[0][1]);
-                intent.putExtra("lat1",spot[1][0]);
-                intent.putExtra("long1",spot[1][1]);
-                intent.putExtra("lat2", spot[2][0]);
-                intent.putExtra("long2", spot[2][1]);
-                intent.putExtra("lat3", spot[3][0]);
-                intent.putExtra("long3", spot[3][1]);
-                intent.putExtra("upload",uploadId);
-                startActivity(intent);
+
+                        Point_Long();
+                        databaseReference = firebaseDatabase.getInstance().getReference("walk-board").child(Integer.toString(uploadId));
+                        Walk_boardUpload upload = new Walk_boardUpload(mod_title,mod_content,mod_nb,spot[0][0],spot[0][1],spot[1][0],spot[1][1],spot[2][0],spot[2][1],spot[3][0],spot[3][1],mod_uid,mod_userImg);
+                        databaseReference.setValue(upload);
+                        Intent intent = new Intent(Walk_tmap.this,Walk_boardmod.class);
+                        intent.putExtra("board_nb",mod_nb);
+                        intent.putExtra("centerLat",Point_Lat());
+                        intent.putExtra("centerLong",Point_Long());
+                        startActivity(intent);
+                    }
+
+                }
             }
         });
 
     }
+
+    private double Point_Lat(){
+        double Lat = spot[0][0]+spot[1][0]+spot[2][0]+spot[3][0];
+        if(spot[3][0] == 0 && spot[2][0] ==0){
+            center_lat = Lat/2;
+        }else if (spot[3][0] == 0 && spot[2][0] != 0){
+            center_lat = Lat/3;
+        }else {
+            center_lat = Lat/4;
+        }
+        return center_lat;
+    }
+
+    private double Point_Long(){
+        double Long = spot[0][1]+spot[1][1]+spot[2][1]+spot[3][1];
+        if(spot[3][1] == 0 && spot[2][1] ==0){
+            center_long = Long/2;
+        }else if (spot[3][1] == 0 && spot[2][1] != 0){
+            center_long = Long/3;
+        }else {
+            center_long = Long/4;
+        }
+        return center_long;
+    }
+
     // 보행자 경로 그어주기
     public void path(){
         new Thread(){
