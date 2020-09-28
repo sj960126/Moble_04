@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,7 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import com.google.firebase.database.ValueEventListener;
 import com.withpet.Chat.ChatListActivity;
+import com.withpet.Search.Search_FeedActivity;
 import com.withpet.newsfeed.*;
 import com.withpet.*;
 
@@ -40,12 +45,12 @@ public class HomeFrag extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Feed> myfeed;
-
+    private ArrayList<String> followUserlist;
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
 
     private SwipeRefreshLayout refreshLayout;
-    private Button btnWrite, btnChatt;
+    private Button btnWrite, btnChatt ,btnSearch;
     private String[] permission_list = {Manifest.permission.READ_EXTERNAL_STORAGE};
 
     //액티비티 onCreate와 동일
@@ -54,6 +59,7 @@ public class HomeFrag extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.activity_news,container,false);
 
+        btnSearch =(Button) rootview.findViewById(R.id.mainBtn_search);
         btnWrite = (Button) rootview.findViewById(R.id.walkBtn_write);
         btnChatt = (Button) rootview.findViewById(R.id.mainBtn_chatt);
         refreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.refresh);
@@ -62,6 +68,7 @@ public class HomeFrag extends Fragment {
         //버튼 기본 이미지 설정
         btnWrite.setBackgroundResource(R.drawable.iconadd);
         btnChatt.setBackgroundResource(R.drawable.iconchatt);
+        btnSearch.setBackgroundResource(R.drawable.iconsearch);
 
         layoutManager = new LinearLayoutManager(getActivity());
 
@@ -77,8 +84,32 @@ public class HomeFrag extends Fragment {
     public void onResume() {
         super.onResume();
 
-        myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
+        myfeed = new ArrayList<Feed>(); //유저 객체를 담을 (어댑터쪽으로)
+        followUserlist = new ArrayList<>();
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
+        //내용추가
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        dbreference = db.getReference("Follow");
+        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                followUserlist.clear();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    if(dataSnapshot.getKey().equals(firebaseUser.getUid())){    // 로그인한 유저가 등록한 관심 유저 정보 가져오기
+                        for(DataSnapshot followUserdata : dataSnapshot.getChildren()){
+                                followUserlist.add(followUserdata.getKey());
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        myfeed.clear();
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
 
         //최근 순서
@@ -90,8 +121,23 @@ public class HomeFrag extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 //파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 //배열리스트에 역순으로 게시글을 저장
-                myfeed.add(0,snapshot.getValue(Feed.class));
-                adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
+                Feed feed = snapshot.getValue(Feed.class);
+                if(feed.getUid().equals(firebaseUser.getUid())){
+                    //myfeed.add(0,snapshot.getValue(Feed.class));
+                    myfeed.add(0,feed);
+                    adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
+                }
+                else{
+                    for(String followUserid : followUserlist){
+                        if(feed.getUid().equals(followUserid)){
+                            myfeed.add(0,feed);
+                            adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
+                        }
+
+                    }
+                }
+                /*myfeed.add(0,snapshot.getValue(Feed.class));
+                adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침*/
             }
 
             @Override
@@ -144,7 +190,15 @@ public class HomeFrag extends Fragment {
                 startActivity(intent);
             }
         });
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent search_intent = new Intent(getActivity(), Search_FeedActivity.class);
+                startActivity(search_intent);
+            }
+        });
     }
+
 
     //프레그먼트 새로고침
     public void Refresh(){

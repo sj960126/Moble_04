@@ -34,23 +34,22 @@ public class diary_Adapter extends RecyclerView.Adapter<diary_Adapter.CustomView
     }
 
     @NonNull
-    @Override //실제 리스트뷰가 어뎁터에 연결될때 최초로만들어냄
+    @Override //실제 리스트뷰가 어뎁터에 연결될때 최초로만들어냄 리사이클 뷰의 행을 표시한다
     public CustomViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.diary_view, parent, false);
         diary_Adapter.CustomViewholder holder = new diary_Adapter.CustomViewholder(view);
         return holder;
     }
 
-    @Override//실제 매칭
+    @Override//실제 매칭 이미지 뷰와 텍스트 뷰를 설정한다
     public void onBindViewHolder(@NonNull CustomViewholder holder, int position) {
-
         holder.time.setText(arrayList.get(position).getTime());
         holder.kind.setText(arrayList.get(position).getKind());
         holder.eat.setText(arrayList.get(position).getEat());
         holder.brand.setText(arrayList.get(position).getBrand());
     }
 
-    @Override
+    @Override //리사이클 뷰의 행 갯수를 리턴한다
     public int getItemCount() {
         return (arrayList != null ? arrayList.size() : 0); //arraylist사이즈가 널이면 0이다
     }
@@ -76,13 +75,14 @@ public class diary_Adapter extends RecyclerView.Adapter<diary_Adapter.CustomView
                     int pos = getAdapterPosition();
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("입력 정보 부족").setMessage("입력 정보를 다시 하번 확인해 주세요.");
+                    builder.setTitle("입력 정보 부족").setMessage("입력 정보를 다시  확인해 주세요.");
                     builder.setPositiveButton("아니요", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                         }
                     });
+
                     builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

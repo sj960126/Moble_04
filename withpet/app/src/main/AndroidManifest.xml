@@ -22,6 +22,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".walk.Walk_boardmod"></activity>
+        <activity android:name=".Search.Search_FeedActivity"></activity>
         <activity android:name=".main.SettingActivity" />
         <activity android:name=".iot.iot_recorder" />
         <activity android:name=".Chat.FindUserActivity" />
@@ -48,10 +49,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBLaYTPSCp-sYkDgXEYo0gTtrgaig82iX0" />
+            android:value="AIzaSyBLaYTPSCp-sYkDgXEYo0gTtrgaig82iX0" />        
     </application>
 
 </manifest>
