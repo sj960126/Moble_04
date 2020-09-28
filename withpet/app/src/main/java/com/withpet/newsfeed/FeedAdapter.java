@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,16 +21,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.main.*;
@@ -49,6 +53,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
     private ArrayList<Feed> choiceModify;
+    private ArrayList<Reply> ang;
     private User userinfo;
 
     //생성자
@@ -114,6 +119,39 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
         // 댓글 버튼에 해당 개시글 이름을 tag에 저장
         holder.btnReplyEnter.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
+
+        // 최근에 업로드된 댓글 하나만 보여주게 함.
+        DatabaseReference databaseReference = firebaseDatabase.getReference("Reply");
+        Query oneReply = databaseReference.child(myfeed.get(position).getNewsName()).limitToLast(1);
+        oneReply.addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //피드마다 다른 댓글창
+                ang = new ArrayList<>();
+                ang.add(snapshot.getValue(Reply.class));
+                //댓글 닉네임
+                SharedPreferences sharedPreferences = context.getSharedPreferences(ang.get(0).getUid(), Context.MODE_PRIVATE);
+                String replyNick = sharedPreferences.getString("nickName", "host");
+                //불러온 내용 위젯매칭
+                holder.replyName.setText(replyNick);
+                holder.replyContext.setText(ang.get(0).getContext());
+                //댓글 초기화
+                ang.clear();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) { }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error){}
+        });
     }
 
     @Override
@@ -124,7 +162,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     //viewHolder = listItem
     public class FeedViewHolder extends RecyclerView.ViewHolder {
         //listitem
-        TextView name, tvCountLike,context;
+        TextView name, context, replyName, replyContext;
         ImageView img;
         CircleImageView loginUserImg;
         Button btnLike;
@@ -139,6 +177,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             btnReplyEnter = (Button) itemView.findViewById(R.id.newsBtn_reply);
             loginUserImg = (CircleImageView) itemView.findViewById(R.id.newsIv_reply);
             etReply =(EditText) itemView.findViewById(R.id.newsEt_reply);
+            replyName =(TextView) itemView.findViewById(R.id.mainTv_replyid);
+            replyContext = (TextView) itemView.findViewById(R.id.mainTv_replyContext);
 
             //button 디폴트 이미지 설정
             btnLike.setBackgroundResource(R.drawable.iconlike);
@@ -148,7 +188,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             this.name = itemView.findViewById(R.id.mainTv_name);
             this.img = itemView.findViewById(R.id.mainImage);
             this.context = itemView.findViewById(R.id.mainTv_context);
-            this.tvCountLike = itemView.findViewById(R.id.mainTv_count);
 
             //댓글 작성 버튼 이벤트
             // holder.btnReplyEnter.setOnClickListener(onClickListener); :: 이방법으로 진행할경우 EditText 가 Null 됨ㅠㅠ
