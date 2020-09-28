@@ -78,7 +78,7 @@ public class diary_addActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     String day = getIntent().getStringExtra("day");
-                    if (kind==null||eat.getText()==null||time==null||brand.getText()==null){
+                    if (kind==null||eat.getText().equals(" ")||time==null||brand.getText().equals(" ")){
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("입력 정보 부족").setMessage("입력 정보를 다시 확인해 주세요.");
                         AlertDialog alertDialog = builder.create();

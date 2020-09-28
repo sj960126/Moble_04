@@ -32,6 +32,16 @@ public class Walk_boardUpload {
         this.userImg = userImg;
     }
 
+    public Walk_boardUpload(double lat0, double long0,double lat1, double long1,double lat2, double long2,double lat3, double long3){
+        this.lat0 = lat0;
+        this.long0 = long0;
+        this.lat1 = lat1;
+        this.long1 = long1;
+        this.lat2 = lat2;
+        this.long2 = long2;
+        this.long3 =long3;
+    }
+
     public String getUserImg() {
         return userImg;
     }
