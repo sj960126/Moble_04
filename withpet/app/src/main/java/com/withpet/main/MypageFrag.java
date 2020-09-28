@@ -167,7 +167,7 @@ public class MypageFrag extends Fragment {
                 myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     Feed feed = snapshot.getValue(Feed.class);
-                    if(feed.getUid().equals(firebaseUser.getUid())){
+                    if(feed.getUid().equals(nowuserinfo.getUid())){
                         myfeed.add(0, feed);
                     }
                 }
