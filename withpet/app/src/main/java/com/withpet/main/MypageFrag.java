@@ -182,6 +182,21 @@ public class MypageFrag extends Fragment {
                 }
             });
         }
+        // 게시글 정보 가져오기
+        dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
+        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //파이어베이스 데이터베이스의 데이터를 받아오는 곳
+                myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Feed feed = snapshot.getValue(Feed.class);
+                    if(feed.getUid().equals(nowuserinfo.getUid())){
+                        myfeed.add(0, feed);
+                    }
+                }
+                adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
+            }
 
 
         // 팔로우 정보 가져오기

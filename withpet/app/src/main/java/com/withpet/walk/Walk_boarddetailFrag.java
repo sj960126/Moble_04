@@ -107,8 +107,6 @@ public class Walk_boarddetailFrag extends Fragment {
         tMapView.setSKTMapApiKey(APK);
         tmap.addView(tMapView);
         tMapView.setZoomLevel(13);
-        Log.i("band :" , ""+centerLat);
-        Log.i("check :" , ""+centerLong);
         tMapView.setCenterPoint(centerLong,centerLat);
 
         recyclerView = view.findViewById(R.id.walkrv_reply);
@@ -244,6 +242,19 @@ public class Walk_boarddetailFrag extends Fragment {
                                 FirebaseUser user0 = FirebaseAuth.getInstance().getCurrentUser();
                                 if(user0.getUid().equals(current_user)){
                                     Toast.makeText(getContext(), "수정", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(view.getContext(), Walk_boardmod.class);
+
+                                    Log.i("check1", ""+centerLat);
+                                    Log.i("check2", ""+centerLong);
+
+                                    intent.putExtra("board_nb",board_nb);
+                                    intent.putExtra("centerLat",centerLat);
+                                    intent.putExtra("centerLong",centerLong);
+
+
+                                    startActivity(intent);
+
+
 
                                 }else {
                                     Toast.makeText(getContext(), "권한이 없습니다", Toast.LENGTH_SHORT).show();
@@ -259,10 +270,18 @@ public class Walk_boarddetailFrag extends Fragment {
 
                                     Intent intent = new Intent(view.getContext(), MainActivity.class);
                                     intent.putExtra("frag", 2);
+
+
+
+
+                                    intent.putExtra("centerLat",centerLat);
+                                    intent.putExtra("centerLong",centerLong);
+
                                     startActivity(intent);
 
                                     Toast.makeText(getContext(), "삭제", Toast.LENGTH_SHORT).show();
                                 }else{
+
                                     Toast.makeText(getContext(), "권한이 없습니다.", Toast.LENGTH_SHORT).show();
                                 }
                                 break;
