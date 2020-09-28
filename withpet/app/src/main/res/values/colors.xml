@@ -7,7 +7,7 @@
     <color name="c4">#CDA2AD</color>
     <color name="c5">#E8C7CC</color>
     <color name="c6">#EED8D8</color>
-
+    <color name="diary_bg">#ededed</color>
     <color name="colorPrimaryDark">#D6B6BA</color>
     <color name ="text">#4F4F4F</color>
 </resources>

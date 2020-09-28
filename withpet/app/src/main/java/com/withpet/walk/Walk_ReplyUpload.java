@@ -6,6 +6,7 @@ public class Walk_ReplyUpload {
     private String walk_uid;
     private int reply_nb;
     private String uid;
+    private String img;
     Walk_ReplyUpload(){
 
     }
@@ -18,11 +19,12 @@ public class Walk_ReplyUpload {
         this.reply = reply;
         this.walk_uid = walk_uid;
     }
-    Walk_ReplyUpload(int board_nb, String reply, String walk_uid, int reply_nb){
+    Walk_ReplyUpload(int board_nb, String reply, String walk_uid, int reply_nb, String img){
         this.board_nb = board_nb;
         this.reply = reply;
         this.walk_uid = walk_uid;
         this.reply_nb = reply_nb;
+        this.img = img;
 
     }
 
@@ -42,6 +44,7 @@ public class Walk_ReplyUpload {
     public void setReply_nb(int reply_nb) {
         this.reply_nb = reply_nb;
     }
+
     public String getReply() {
         return reply;
     }
@@ -58,5 +61,19 @@ public class Walk_ReplyUpload {
         this.board_nb = board_nb;
     }
 
+    public String getUid() {
+        return uid;
+    }
 
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 }

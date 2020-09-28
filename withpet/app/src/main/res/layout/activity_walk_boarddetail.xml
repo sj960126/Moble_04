@@ -44,7 +44,7 @@
 
             <TextView
                 android:id="@+id/textView28"
-                android:layout_width="130dp"
+                android:layout_width="42dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="작성자"
@@ -52,11 +52,20 @@
 
             <TextView
                 android:id="@+id/walk_nickname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="211dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text=""
                 android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/walkbtn_menu"
+                android:layout_width="11dp"
+                android:layout_height="27dp"
+                android:layout_gravity="center|center_vertical"
+                android:layout_weight="1"
+                android:backgroundTint="@color/text"
+                android:gravity="fill" />
         </LinearLayout>
 
         <LinearLayout

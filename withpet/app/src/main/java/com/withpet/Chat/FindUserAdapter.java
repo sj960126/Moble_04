@@ -45,7 +45,7 @@ public class FindUserAdapter extends RecyclerView.Adapter<FindUserAdapter.FindUs
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {                //검색해서 나온 유저 리스트 목록 클릭 이벤트
-                TransUser choiceuser = new TransUser((User)view.getTag(R.integer.userinfo));
+                TransUser choiceuser = new TransUser((User)view.getTag(R.integer.userinfo));    // 클릭한 유저 정보를 intent로 옮길 수 있는 클래스 형태의 객체로 생성
                 Intent intent = new Intent(view.getContext(), ChattingActivity.class);
                 intent.putExtra("Opponent", choiceuser);
                 mContext.startActivity(intent);                     // 채팅방 실행

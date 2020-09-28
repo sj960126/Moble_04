@@ -31,7 +31,7 @@
             android:id="@+id/chatListBtn_Find"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:text="돋" />
+            android:background="@drawable/iconsearch" />
 
     </LinearLayout>
 

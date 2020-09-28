@@ -1,15 +1,22 @@
 package com.withpet.walk;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -32,6 +40,7 @@ import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 import com.withpet.*;
+import com.withpet.main.MainActivity;
 
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
@@ -49,6 +58,7 @@ public class Walk_boarddetailFrag extends Fragment {
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference_reply;
     private DatabaseReference databaseReference_replyview;
+
     private FirebaseDatabase database;
     private TextView title_tv;
     private TextView content_tv;
@@ -60,23 +70,28 @@ public class Walk_boarddetailFrag extends Fragment {
     private TextView nameTv;
     private TextView walkreplyTv_add;
     private Button replyaddBtn;
+    private Button menubtn;
     private double centerLat;
     private double centerLong;
     int line_nb;
     int repeat;
     int reply_nb;
+    private String current_user;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Walk_ReplyUpload> arrayList;
     private TextView nicknameTv;
+    private ImageView userimg;
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_walk_boarddetail,container,false);
         tmap = view.findViewById(R.id.detail_tmap);
         replyTv = view.findViewById(R.id.walkreplyTv_add);
         replyaddBtn =view.findViewById(R.id.walkreplyBtn_add);
         database = FirebaseDatabase.getInstance();
+        menubtn = view.findViewById(R.id.walkbtn_menu);
+        menubtn.setBackgroundResource(R.drawable.iconmenu);
 
         Bundle bundle = this.getArguments();
         if(bundle != null){
@@ -103,7 +118,6 @@ public class Walk_boarddetailFrag extends Fragment {
         arrayList = new ArrayList<>();
 
         walkreplyTv_add = view.findViewById(R.id.walkreplyTv_add);
-
 
 
         databaseReference_replyview = database.getReference("walk-reply").child(Integer.toString(board_nb));
@@ -141,6 +155,7 @@ public class Walk_boarddetailFrag extends Fragment {
         recyclerView.setAdapter(adapter);
 
 
+
         //댓글 작성 버튼 firebase 업로드
         replyaddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +163,10 @@ public class Walk_boarddetailFrag extends Fragment {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 databaseReference_reply = database.getReference("walk-reply").child(Integer.toString(board_nb)).child(Integer.toString(reply_nb));
 
-                Walk_ReplyUpload walk_replyUpload = new Walk_ReplyUpload(board_nb,replyTv.getText().toString().trim(),user.getUid(),reply_nb);
+                SharedPreferences preferences = getContext().getSharedPreferences(user.getUid(), Context.MODE_PRIVATE);
+                String img = preferences.getString("img", "img");
+                Walk_ReplyUpload walk_replyUpload = new Walk_ReplyUpload(board_nb,replyTv.getText().toString().trim(),user.getUid(),reply_nb,img);
+
                 databaseReference_reply.setValue(walk_replyUpload);
                 reply_nb++;
                 walkreplyTv_add.setText("");
@@ -166,6 +184,8 @@ public class Walk_boarddetailFrag extends Fragment {
 
                     title = tmp.getWalkboard_title();
                     content = tmp.getWalkboard_content();
+                    current_user = tmp.getUid();
+
 
                     spot[0][0] = tmp.getLat0();
                     spot[0][1] = tmp.getLong0();
@@ -179,6 +199,7 @@ public class Walk_boarddetailFrag extends Fragment {
                     title_tv = (TextView) view.findViewById(R.id.walkTv_title);
                     content_tv = (TextView) view.findViewById(R.id.walkTv_content);
                     nicknameTv = view.findViewById(R.id.walk_nickname);
+                    userimg = view.findViewById(R.id.walkImg_user);
 
                     //SharedPreferences 내부저장소
                     SharedPreferences preferences = getContext().getSharedPreferences(tmp.getUid(), Context.MODE_PRIVATE);
@@ -202,8 +223,61 @@ public class Walk_boarddetailFrag extends Fragment {
             }
         });
 
+        //수정 삭제 메뉴 버튼
+        menubtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+                //팝업 메뉴 객체 생성
+                PopupMenu popupMenu = new PopupMenu(getContext() , v);
+                //레이아웃xml에 정의한 메뉴 가져오기
+                MenuInflater menuInflater = popupMenu.getMenuInflater();
+                Menu menu = popupMenu.getMenu();
+
+                menuInflater.inflate(R.menu.walkdetailmenu,menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+
+                            case R.id.walkmenu_mod: //수정 버튼
+                                FirebaseUser user0 = FirebaseAuth.getInstance().getCurrentUser();
+                                if(user0.getUid().equals(current_user)){
+                                    Toast.makeText(getContext(), "수정", Toast.LENGTH_SHORT).show();
+
+                                }else {
+                                    Toast.makeText(getContext(), "권한이 없습니다", Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+                            case R.id.walkmenu_del: // 삭제 버튼
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                if(user.getUid().equals(current_user)) {
+
+                                    databaseReference.removeValue();
+                                    database.getReference("walk-reply").child(Integer.toString(board_nb)).removeValue();
+
+                                    Intent intent = new Intent(view.getContext(), MainActivity.class);
+                                    intent.putExtra("frag", 2);
+                                    startActivity(intent);
+
+                                    Toast.makeText(getContext(), "삭제", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(getContext(), "권한이 없습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+                        }
+
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+
         return view;
     }
+
 
     //Tmap 좌표 받아와 경로 찍기
     public void path(final double a, final double b, final double c, final double d){
