@@ -1,6 +1,9 @@
 package com.withpet.main;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,6 +57,7 @@ public class MypageFrag extends Fragment {
     final  int requestcode = 1001;
 
     // 로그인한 사람의 게시글만 보이게 변경(로그인 정보 가져와야함)
+    @SuppressLint("ResourceAsColor")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -92,6 +96,8 @@ public class MypageFrag extends Fragment {
             btn_profliemodify.setText("관심 추가");
             tv_nickname.setText(nowuserinfo.getNickname());
             Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);
+
+
         }
 
         list = rootview.findViewById(R.id.myPageListview_mynotice);
@@ -120,7 +126,7 @@ public class MypageFrag extends Fragment {
         Log.i("resume start", "resume start");
 
         //파이어베이스에서 로그인유저 nickname 정보 가져오기
-        if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())){
+        if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())) {
             final DatabaseReference userdbreference = db.getReference("User");
             userdbreference.addChildEventListener(new ChildEventListener() {
                 @Override
@@ -182,25 +188,9 @@ public class MypageFrag extends Fragment {
                 }
             });
         }
-        // 게시글 정보 가져오기
-        dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
-        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //파이어베이스 데이터베이스의 데이터를 받아오는 곳
-                myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Feed feed = snapshot.getValue(Feed.class);
-                    if(feed.getUid().equals(nowuserinfo.getUid())){
-                        myfeed.add(0, feed);
-                    }
-                }
-                adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
-            }
-
 
         // 팔로우 정보 가져오기
-        dbreference = db.getReference("Follow");//연동한 DB의 테이블 연결
+        dbreference = db.getReference("Follow"); //연동한 DB의 테이블 연결
         dbreference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -236,6 +226,7 @@ public class MypageFrag extends Fragment {
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
+        @SuppressLint("ResourceAsColor")
         @Override
         public void onClick(View v) {
             Intent intent;
@@ -263,10 +254,12 @@ public class MypageFrag extends Fragment {
                     else if(((Button)v).getText().toString().equals("관심 추가")){
                         followreference.child(firebaseUser.getUid()).child(nowuserinfo.getUid()).child("followid").setValue(nowuserinfo.getUid());      // 해당 유저의 uid를 데이터베이스에 추가
                         ((Button)v).setText("관심 삭제");
+                        //btn_profliemodify.setBackgroundTintList(ColorStateList.valueOf(R.color.diary_bg));
                     }
                     else if(((Button)v).getText().toString().equals("관심 삭제")){
                         followreference.child(firebaseUser.getUid()).child(nowuserinfo.getUid()).removeValue(); // 해당 유저를 관심 삭제 하기위해 데이터 베이스에서 값 삭제
                         ((Button)v).setText("관심 추가");
+                        //btn_profliemodify.setB(ColorStateList.valueOf(R.color.c1));
                     }
                     break;
             }

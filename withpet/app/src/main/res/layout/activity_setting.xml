@@ -31,6 +31,7 @@
             android:textSize="26sp" />
 
     </LinearLayout>
+
     <Button
         android:id="@+id/settingBtn_logout"
         android:layout_width="match_parent"
@@ -41,5 +42,9 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="회원탈퇴" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

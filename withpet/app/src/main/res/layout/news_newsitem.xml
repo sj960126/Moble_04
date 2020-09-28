@@ -91,7 +91,6 @@
                 android:id="@+id/mainTv_replyid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="댓글아이디"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -101,7 +100,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="2"
-                android:text="댓글 내용"
                 android:textSize="12sp" />
         </LinearLayout>
 
