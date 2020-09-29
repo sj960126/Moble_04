@@ -80,15 +80,16 @@ public class WalkFrag extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        walkfeed.clear();
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("walk-board");
         //최신순 정렬
         Query orderwalk = databaseReference.orderByChild("walkboard_nb");
-
         orderwalk.addChildEventListener(new ChildEventListener() {
             @Override
+
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
                 Walk_boardUpload walk_boardUpload = snapshot.getValue(Walk_boardUpload.class);
                 //배열리스트에 역순으로 게시글 저장
                 walkfeed.add(0,walk_boardUpload);
