@@ -33,11 +33,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return holder;
     }
 
-    @Override
+    @Override //각뷰에 데이터 연결
     public void onBindViewHolder(@NonNull SearchViewholder holder, int position) {
-        Log.i("사이즈"," "+arrayList.size());
         ArrayList<String> arr = arrayList.get(position);
-        for(int i=0;i<holder.img_arr.size();i++){
+        for(int i=0;i<arr.size();i++){
             Glide.with(holder.itemView).load(arr.get(i)).into(holder.img_arr.get(i));
         }
 
@@ -50,7 +49,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
 
     public class SearchViewholder extends RecyclerView.ViewHolder{
-
+        //findviewbyid를 하는 메소드
         ArrayList<ImageView> img_arr = new ArrayList<ImageView>();
         public SearchViewholder(@NonNull View itemView) {
             super(itemView);
