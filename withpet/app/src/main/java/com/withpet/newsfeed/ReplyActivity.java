@@ -95,7 +95,9 @@ public class ReplyActivity extends AppCompatActivity {
 
         feedReply = new ArrayList<>();
         DatabaseReference Replydbr = NewsFeedDB.getReference("Reply");
-        Replydbr.child(boardName).addListenerForSingleValueEvent(new ValueEventListener() {
+        Query latelyReply = Replydbr.child(boardName).orderByChild("date");
+
+        latelyReply.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 feedReply.clear();
