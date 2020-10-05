@@ -59,7 +59,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/walkbtn_menu"
+                android:id="@+id/mainBtn_menu"
                 android:layout_width="10dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center|center_vertical"

@@ -17,6 +17,7 @@
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:fontFamily="@font/gmarketsans_m"
             android:gravity="fill"
             android:text="WithPet"
             android:textSize="30sp" />
@@ -34,7 +35,9 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal"
         android:weightSum="3">
 
@@ -73,7 +76,8 @@
                 android:layout_height="wrap_content"
                 android:text="100"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -81,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:text="게시물"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,7 +101,8 @@
                 android:layout_height="wrap_content"
                 android:text="100"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -105,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:text="관심"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -120,6 +125,10 @@
             android:id="@+id/myPageBtn_modify"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:backgroundTint="@color/diary_bg"
+            android:stateListAnimator="@null"
             android:text="프로필 수정" />
     </LinearLayout>
 
