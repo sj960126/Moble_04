@@ -101,7 +101,7 @@ public class diaryActivity extends AppCompatActivity {
     @Override
     protected void onResume() { // 액티비티 단위, 액티비티가 다시 켜질 때(인텐트로 넘어간 후 다시 돌아올때, intent startactivity)
         super.onResume();
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()){  //  ds : 날짜 (2020-09-15)

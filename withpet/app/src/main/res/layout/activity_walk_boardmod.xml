@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".walk.Walk_boardwriteActivity">
-
+    tools:context=".walk.Walk_boardmod">
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="402dp"
@@ -28,7 +27,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:text="게시글 작성"
+            android:text="게시글 수정"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -62,7 +61,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/walkBtn_tmap"
+                android:id="@+id/walkBtn_tmapmodify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -70,7 +69,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/walkwrite_tmap"
+            android:id="@+id/walkLayout_tmap"
             android:layout_width="match_parent"
             android:layout_height="205dp"
             android:orientation="horizontal"></LinearLayout>
@@ -89,7 +88,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/walk_title"
+                android:id="@+id/walkEt_titlemodify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -107,7 +106,7 @@
             tools:text="내용" />
 
         <EditText
-            android:id="@+id/walk_content"
+            android:id="@+id/walkEt_contentmodify"
             android:layout_width="match_parent"
             android:layout_height="197dp"
             android:ems="10"
@@ -117,14 +116,14 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/addbtn"
+        android:id="@+id/walkBtn_modify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="291dp"
         android:layout_marginTop="98dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="54dp"
-        android:text="작성"
+        android:text="수정"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

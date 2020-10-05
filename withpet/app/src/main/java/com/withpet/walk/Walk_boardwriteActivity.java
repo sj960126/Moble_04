@@ -49,6 +49,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
     private TextView walkTv_content;
     private DatabaseReference databaseReference;
     private LinearLayout writetmap;
+
     private Button check_btn;
     private double centerlat;
     private double centerlong;
@@ -70,7 +71,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walk_boardwrite);
         context = this;
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         uploadId = intent.getIntExtra("id",0);
         walkBtn_tmap = findViewById(R.id.walkBtn_tmap);
         walkBtn_add = findViewById(R.id.addbtn);
@@ -121,6 +122,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent_tmap = new Intent(Walk_boardwriteActivity.this,Walk_tmap.class);
                 intent_tmap.putExtra("uploadId",uploadId);
+                intent_tmap.putExtra("write",99);
                 startActivity(intent_tmap);
             }
         });

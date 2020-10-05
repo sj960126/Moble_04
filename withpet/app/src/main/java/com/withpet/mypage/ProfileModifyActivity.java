@@ -71,6 +71,10 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
         findViewById(R.id.modifyBtn_Ok).setOnClickListener(onclickListener);
         findViewById(R.id.modifyBtn_cancel).setOnClickListener(onclickListener);
+
+        findViewById(R.id.modifyBtn_Ok).setBackgroundResource(R.drawable.iconcheck);
+        findViewById(R.id.modifyBtn_cancel).setBackgroundResource(R.drawable.iconbefore);
+
         findViewById(R.id.modifyBtn_help).setOnClickListener(onclickListener);
         iv_profilephoto.setOnClickListener(onclickListener);
 

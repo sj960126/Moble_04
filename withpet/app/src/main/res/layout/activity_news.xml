@@ -25,7 +25,16 @@
             android:id="@+id/walkBtn_write"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginLeft="10sp"
             android:backgroundTint="@color/text" />
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/mainBtn_search"
+            android:layout_marginLeft="10sp"
+            android:backgroundTint="@color/text"/>
+
 
         <Button
             android:id="@+id/mainBtn_chatt"

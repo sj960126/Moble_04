@@ -5,15 +5,17 @@ public class Reply {
     String uid;
     String replyName;
     String boardName;
+    String date;
 
     Reply(){
     }
 
-    Reply(String replyName, String uid, String boardName, String context) {
+    Reply(String replyName, String uid, String boardName, String context, String date) {
         this.replyName = replyName;
         this.boardName = boardName;
         this.context = context;
         this.uid = uid;
+        this.date = date;
     }
 
     public String getContext() {
@@ -48,4 +50,11 @@ public class Reply {
         this.boardName = boardName;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 }

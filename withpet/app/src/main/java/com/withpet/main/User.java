@@ -8,6 +8,16 @@ public class User {
     private String shape;
     private String imgUrl;
     private int meal;
+    private int petcode;
+
+    public int getPetcode() {
+        return petcode;
+    }
+
+    public void setPetcode(int petcode) {
+        this.petcode = petcode;
+    }
+
 
     public User(){    }
 

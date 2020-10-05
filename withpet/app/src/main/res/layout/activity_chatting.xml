@@ -27,8 +27,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/chattingBtn_send"

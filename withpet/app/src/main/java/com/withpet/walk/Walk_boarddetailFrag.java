@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -42,13 +41,7 @@ import com.skt.Tmap.TMapView;
 import com.withpet.*;
 import com.withpet.main.MainActivity;
 
-import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 public class Walk_boarddetailFrag extends Fragment {
     private View view;
@@ -90,7 +83,7 @@ public class Walk_boarddetailFrag extends Fragment {
         replyTv = view.findViewById(R.id.walkreplyTv_add);
         replyaddBtn =view.findViewById(R.id.walkreplyBtn_add);
         database = FirebaseDatabase.getInstance();
-        menubtn = view.findViewById(R.id.walkbtn_menu);
+        menubtn = view.findViewById(R.id.mainBtn_menu);
         menubtn.setBackgroundResource(R.drawable.iconmenu);
 
         Bundle bundle = this.getArguments();
@@ -107,8 +100,6 @@ public class Walk_boarddetailFrag extends Fragment {
         tMapView.setSKTMapApiKey(APK);
         tmap.addView(tMapView);
         tMapView.setZoomLevel(13);
-        Log.i("band :" , ""+centerLat);
-        Log.i("check :" , ""+centerLong);
         tMapView.setCenterPoint(centerLong,centerLat);
 
         recyclerView = view.findViewById(R.id.walkrv_reply);
@@ -244,6 +235,19 @@ public class Walk_boarddetailFrag extends Fragment {
                                 FirebaseUser user0 = FirebaseAuth.getInstance().getCurrentUser();
                                 if(user0.getUid().equals(current_user)){
                                     Toast.makeText(getContext(), "수정", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(view.getContext(), Walk_boardmod.class);
+
+                                    Log.i("check1", ""+centerLat);
+                                    Log.i("check2", ""+centerLong);
+
+                                    intent.putExtra("board_nb",board_nb);
+                                    intent.putExtra("centerLat",centerLat);
+                                    intent.putExtra("centerLong",centerLong);
+
+
+                                    startActivity(intent);
+
+
 
                                 }else {
                                     Toast.makeText(getContext(), "권한이 없습니다", Toast.LENGTH_SHORT).show();
@@ -259,10 +263,18 @@ public class Walk_boarddetailFrag extends Fragment {
 
                                     Intent intent = new Intent(view.getContext(), MainActivity.class);
                                     intent.putExtra("frag", 2);
+
+
+
+
+                                    intent.putExtra("centerLat",centerLat);
+                                    intent.putExtra("centerLong",centerLong);
+
                                     startActivity(intent);
 
                                     Toast.makeText(getContext(), "삭제", Toast.LENGTH_SHORT).show();
                                 }else{
+
                                     Toast.makeText(getContext(), "권한이 없습니다.", Toast.LENGTH_SHORT).show();
                                 }
                                 break;

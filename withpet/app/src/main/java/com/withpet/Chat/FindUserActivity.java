@@ -46,6 +46,8 @@ public class FindUserActivity extends AppCompatActivity {
         finduserlistRecyclerView.setLayoutManager(layoutManager);
         finduserlistwAdapter = new FindUserAdapter(this, finduserlist);
         finduserlistRecyclerView.setAdapter(finduserlistwAdapter);
+
+
     }
 
     @Override
