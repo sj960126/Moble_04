@@ -44,6 +44,8 @@ public class MypageFrag extends Fragment {
     private RecyclerView list;
     private CircleImageView iv_profilephoto;
     private TextView tv_nickname;
+    private TextView tv_noticenum;
+    private TextView tv_interestnum;
     private Button btn_profliemodify, btn_setting;
     private RecyclerView.Adapter adapter;
     private ArrayList<Feed> myfeed;
@@ -76,6 +78,8 @@ public class MypageFrag extends Fragment {
 
         iv_profilephoto = rootview.findViewById(R.id.walkIv_user);
         tv_nickname = rootview.findViewById(R.id.myPageTv_username);
+        tv_noticenum = rootview.findViewById(R.id.myPageTv_noticenum);
+        tv_interestnum = rootview.findViewById(R.id.myPageTv_interestnum);
 
         btn_setting = (Button) rootview.findViewById(R.id.mypageBtn_setting);
         btn_setting.setOnClickListener(onClickListener);
@@ -150,6 +154,7 @@ public class MypageFrag extends Fragment {
                                     }
                                 }
                                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
+                                tv_noticenum.setText(""+myfeed.size());
                             }
 
                             @Override

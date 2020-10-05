@@ -72,7 +72,6 @@ public class ChattingActivity extends AppCompatActivity {
         dbreference = db.getReference("Chat");
         chattingList.clear();
         chattingAdapter.notifyDataSetChanged();
-        //사용시 차일드 알아서 하나 넘어감, chat의 차일드가 들어가짐
         dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -85,38 +84,7 @@ public class ChattingActivity extends AppCompatActivity {
                 chatroomname = (chatroomname != null)? chatroomname : meid + "_" + opponent.getUid();
                 applicationinfo.setEnterChattingRoom(chatroomname);
                 dbreference = db.getReference("Chat/"+chatroomname);    // 왜 해당 메시지가 있는 경로를 설정해줘야만 알아서 갱신이 되는가..?
-                dbreference.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        // onChildAdded의 Datasnapshot은 DatabaseReference로 설정한 경로의 child로 시작함
-                        // 즉, DatabaseReference로 chat을 설정했으면 Datasnapshot은 chat의 child(대화방정보 : uid_uid)가 됨
-                        // 따라서 Datasnapshot의 .getChildren을 사용하면 push로 넣은 대화의 정보가 나오게 된다.
-                        // 다른 리스너의 경우 chat으로 DatabaseReference로 Chat을 설정한 경우 .getChildren을 해야 대화방 정보가 나옴
-                        // previousChildName : 현재 child 이전의 child이름
-                        Chat chat = snapshot.getValue(Chat.class);
-                        ((ChattingAdapter)chattingAdapter).addChat(chat);   // 어댑터에 파이어베이스에서 가져온 내용 추가
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        Log.i("체인지 :", " 체인지문 실행");
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                dbreference.addValueEventListener(valueEventListener);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -130,6 +98,7 @@ public class ChattingActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         applicationinfo.setEnterChattingRoom(null);
+        dbreference.removeEventListener(valueEventListener);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -144,6 +113,24 @@ public class ChattingActivity extends AppCompatActivity {
                     et_sendmeaasge.setText("");
                     break;
             }
+        }
+    };
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            ((NotifyApplication)getApplication()).refreshChattingChildCount(snapshot.getKey(), snapshot.getChildrenCount());
+            Log.i("차일드 수 확인", ""+ snapshot.getChildrenCount());
+            chattingList.clear();
+            chattingAdapter.notifyDataSetChanged();
+            for(DataSnapshot chatdata : snapshot.getChildren()) {
+                Chat chat = chatdata.getValue(Chat.class);
+                ((ChattingAdapter)chattingAdapter).addChat(chat);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
         }
     };
 

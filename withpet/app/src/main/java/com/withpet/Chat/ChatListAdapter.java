@@ -31,6 +31,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
         // each data item is just a string in this case
         public TextView tv_title;
         public TextView tv_msg;
+        public TextView tv_newchatnum;
         private CircleImageView iv_profilephoto;
         public View rootView;
         public MyViewHolder(@NonNull View v) {
@@ -38,6 +39,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
             tv_title = v.findViewById(R.id.chatListTv_title);
             tv_msg = v.findViewById(R.id.chatListTv_Content);
             iv_profilephoto = v.findViewById(R.id.chatListIv_profile);
+            tv_newchatnum = v.findViewById(R.id.chatListTv_NewChatNum);
             rootView = v;
         }
 
@@ -76,6 +78,24 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                         v.getContext().startActivity(chattingintent);
                     }
                 });
+                // Application 불러옴
+                // mContext.getApplicationContext() : 액티비티에서 getApplication()과 같은 결과
+                ChattingRoom getctr = ((NotifyApplication)mContext.getApplicationContext()).getChattingroom(chattingroominfo.getChatroomname());
+                // 현재 채팅방이름으로 된 정보가 어플리케이션에 있으면 실행
+                if(getctr != null){
+                    // chattingroominfo.getChildcount() : 실시간 채팅방의 채팅내역 개수
+                    // getctr.getChildcount() : 어플리케이션에 저장되어 있는 채팅방의 채팅내역 개수(맨 처음 로딩했을 때의 채티방 채팅 내역 개수)
+                    long newchatnum = chattingroominfo.getChildcount() - getctr.getChildcount();
+                    Log.i("어플리케이션 카운트", ""+getctr.getChildcount());
+                    Log.i("스냅샷 카운트", ""+chattingroominfo.getChildcount());
+                    if(newchatnum != 0){
+                        holder.tv_newchatnum.setText(""+newchatnum);
+                    }
+                    else{
+                        holder.tv_newchatnum.setText("");
+                    }
+                }
+                // 브레이크 사용 이유 : 1개의 채팅방 상대 유저는 무조건 1명, 전체 유저 정보 중 1개만 매칭되기 때문에 모든 for문을 다 확인할 필요가 없음
                 break;
             }
         }
