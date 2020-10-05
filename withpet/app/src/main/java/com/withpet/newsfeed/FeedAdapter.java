@@ -57,6 +57,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
     private ArrayList<Feed> choiceModify;
     private ArrayList<Reply> ang;
+    private ArrayList<String> likeArray;
     private User userinfo;
 
     //생성자
@@ -108,10 +109,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         holder.name.setTag(R.integer.userinfo, userinfo);
         holder.context.setText(myfeed.get(position).getContext());
 
-        // 좋아요 버튼에 해당 개시글 이름을 tag에 저장
-        holder.btnLike.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
-        holder.btnLike.setOnClickListener(onClickListener);
-
         // 댓글 버튼에 해당 개시글 이름을 tag에 저장
         holder.btnReply.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
         holder.btnReply.setOnClickListener(onClickListener);
@@ -157,22 +154,24 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             public void onCancelled(@NonNull DatabaseError error){}
         });
 
+        // 좋아요 버튼에 해당 개시글 이름을 tag에 저장
+        holder.btnLike.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
+        holder.btnLike.setOnClickListener(onClickListener);
+
         //좋아요 수
         DatabaseReference likeData = firebaseDatabase.getReference("Like");
         Query likeQuery = likeData.child(myfeed.get(position).getNewsName());
-        final ArrayList<String> likeArray = new ArrayList<>();
         likeQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                likeArray.add(0, snapshot.getKey());
-                Log.i("dt",""+ likeArray.get(0));
-                holder.tvLikecount.setText(likeArray.size()+"명이 게시글을 좋아합니다.");
+                likeArray =new ArrayList<>();
+                likeArray.add(snapshot.getKey());
+                Log.i("size",""+likeArray.size());
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                //댓글 초기화
-                likeArray.clear();
+                holder.tvLikecount.setText(likeArray.size()+"명이 게시글을 좋아합니다.");
             }
 
             @Override
@@ -182,7 +181,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             @Override
@@ -190,6 +188,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
             }
         });
+
     }
 
     @Override

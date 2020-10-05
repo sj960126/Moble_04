@@ -112,9 +112,7 @@ public class HomeFrag extends Fragment {
         });
         myfeed.clear();
         dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
-
         //최근 순서
-
         Query latelyFeed = dbreference.orderByChild("date");
         //실시간으로 앱데이터를 업데이트 함수
         latelyFeed.addChildEventListener(new ChildEventListener() {
@@ -124,7 +122,6 @@ public class HomeFrag extends Fragment {
                 //배열리스트에 역순으로 게시글을 저장
                 Feed feed = snapshot.getValue(Feed.class);
                 if(feed.getUid().equals(firebaseUser.getUid())){
-                    //myfeed.add(0,snapshot.getValue(Feed.class));
                     myfeed.add(0,feed);
                     adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
                 }
@@ -134,7 +131,6 @@ public class HomeFrag extends Fragment {
                             myfeed.add(0,feed);
                             adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
                         }
-
                     }
                 }
                 /*myfeed.add(0,snapshot.getValue(Feed.class));

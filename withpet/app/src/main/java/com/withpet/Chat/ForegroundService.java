@@ -96,6 +96,7 @@ public class ForegroundService extends Service {
                                             String enterchattingroom  = (applicationinfo.getEnterChattingRoom() != null ) ? applicationinfo.getEnterChattingRoom() : "";
                                             if(!chat.getUid().equals(firebaseUser.getUid()) && !(snapshot.getKey().equals(enterchattingroom))){
                                                 NotificationStart(chat.getUid(), chat.getContent(), chattingRoom.getNotificationid());
+
                                             }
                                         }
                                     }
@@ -133,8 +134,10 @@ public class ForegroundService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-    // 채널생성
+    // 채널생성 ( 채팅 채널 )
+    // 채널은 목적에 맞게 그룹핑 해준다는 느낌으로 만들어서 사용하면 됨
     private void createNotificationChannel() {
+        // 오레오버전 이상일 때 알림 채널이 필요함, 따라서 오레오버전 이상인지 체크
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.chanel_name);
             String description = getString(R.string.channel_description);         // 알림 길게 눌렀을 때 설명 설정
