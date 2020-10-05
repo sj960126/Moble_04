@@ -21,7 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
-import com.withpet.Chat.FindUserAdapter;
 import com.withpet.main.User;
 import com.withpet.newsfeed.Feed;
 import java.util.ArrayList;

@@ -7,14 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.withpet.*;
 import com.withpet.R;
-import com.withpet.main.MypageFrag;
+import com.withpet.main.MainActivity;
 import com.withpet.main.TransUser;
 import com.withpet.main.User;
 import java.util.ArrayList;
@@ -46,8 +43,9 @@ public class Search_findAdapter extends RecyclerView.Adapter<Search_findAdapter.
             @Override
             public void onClick(View view) {
                 TransUser selectuser = new TransUser((User)view.getTag(R.integer.userinfo));
-                Intent intent = new Intent(view.getContext(), MypageFrag.class);
-                intent.putExtra("profile",selectuser);
+                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                intent.putExtra("userinfo",selectuser);
+                intent.putExtra("frag",3);
                 mContext.startActivity(intent);
                 ((Activity)holder.itemView.getContext()).finish();  // 유저검색 창 종료
             }

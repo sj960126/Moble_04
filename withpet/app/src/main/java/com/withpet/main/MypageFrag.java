@@ -62,7 +62,6 @@ public class MypageFrag extends Fragment {
         // 메인피드에서 프로필을 클릭해 마이페이지로 온경우
         Bundle bundle = this.getArguments();
         requestfrom = bundle.getString("from");
-
         if(requestfrom.equals("proflie"))  {
             choiceuser = (TransUser) bundle.getSerializable("userinfo");
             nowuserinfo = choiceuser;

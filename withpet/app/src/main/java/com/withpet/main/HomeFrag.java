@@ -190,6 +190,7 @@ public class HomeFrag extends Fragment {
                 startActivity(intent);
             }
         });
+        //검색 버튼 클리 이벤트 : 검색 페이지로 이동
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

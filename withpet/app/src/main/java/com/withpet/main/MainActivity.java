@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean mypagemenuclick = false;    // 마이페이지로 갈 때 메뉴를 통해 간 것인지, 프로필을 통해 간 것인지 판단하는 변수
     private Bundle mypageBundle;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
