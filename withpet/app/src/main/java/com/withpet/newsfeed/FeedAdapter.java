@@ -83,6 +83,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         SharedPreferences preferences = context.getSharedPreferences(myfeed.get(position).getUid(), Context.MODE_PRIVATE);
         String nickName = preferences.getString("nickName", "host");
         String feeduserImg = preferences.getString("img","");
+        Glide.with(holder.itemView).load(feeduserImg).circleCrop().into(holder.feedUserImg);
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //추가 부분
@@ -199,7 +200,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         //listitem
         TextView name, context, replyName, replyContext, tvLikecount;
         ImageView img;
-        CircleImageView loginUserImg;
+        CircleImageView loginUserImg, feedUserImg;
         Button btnLike;
         Button btnReply, btnMenu, btnReplyEnter;
         EditText etReply;
@@ -215,6 +216,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             replyName =(TextView) itemView.findViewById(R.id.mainTv_replyid);
             replyContext = (TextView) itemView.findViewById(R.id.mainTv_replyContext);
             tvLikecount =(TextView) itemView.findViewById(R.id.mainTv_like);
+            feedUserImg = (CircleImageView) itemView.findViewById(R.id.newsIv_feedImg);
 
             //button 디폴트 이미지 설정
             btnLike.setBackgroundResource(R.drawable.iconlike);
