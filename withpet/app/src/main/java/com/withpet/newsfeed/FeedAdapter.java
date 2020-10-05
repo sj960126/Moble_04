@@ -126,7 +126,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
         // 최근에 업로드된 댓글 하나만 보여주게 함.
         DatabaseReference databaseReference = firebaseDatabase.getReference("Reply");
-        Query oneReply = databaseReference.child(myfeed.get(position).getNewsName()).limitToLast(1);
+        Query oneReply = databaseReference.child(myfeed.get(position).getNewsName()).orderByChild("date").limitToLast(1);
         oneReply.addChildEventListener(new ChildEventListener() {
 
             @Override
@@ -171,6 +171,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //댓글 초기화
+                likeArray.clear();
             }
 
             @Override
