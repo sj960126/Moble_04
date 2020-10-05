@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -173,7 +172,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             super(itemView);
             btnLike = (Button) itemView.findViewById(R.id.mainBtn_like);
             btnReply = (Button) itemView.findViewById(R.id.mainBtn_reply);
-            btnMenu =(Button) itemView.findViewById(R.id.walkbtn_menu);
+            btnMenu =(Button) itemView.findViewById(R.id.mainBtn_menu);
             btnReplyEnter = (Button) itemView.findViewById(R.id.newsBtn_reply);
             loginUserImg = (CircleImageView) itemView.findViewById(R.id.newsIv_reply);
             etReply =(EditText) itemView.findViewById(R.id.newsEt_reply);
@@ -208,8 +207,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
                     //Reply 테이블 파베 연동
                     DatabaseReference dbRefReply = firebaseDatabase.getReference("Reply");
-                    Reply inputReply = new Reply(loginUser.getUid()+getTime,loginUser.getUid(),newsReplyEnter, strReply);
+                    Reply inputReply = new Reply(loginUser.getUid()+getTime,loginUser.getUid(),newsReplyEnter, strReply,getTime);
                     dbRefReply.child(newsReplyEnter).child(loginUser.getUid()+getTime).setValue(inputReply);
+
+                    etReply.setText("");
                 }
             });
         }
@@ -243,12 +244,12 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                    nextReply.putExtra("boardName", newsFeedReply);
                    context.startActivity(nextReply);
                    break;
-               case R.id.walkbtn_menu:
+               case R.id.mainBtn_menu:
                    //게시글 UID
                    String newsFeedUid = "" +view.getTag(R.integer.feed_Uid);
                    //게시글 번호
                    newFeedMenu = ""+view.getTag(R.integer.key_NewsName);
-                   FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
+                   final FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
                    //로그인한 회원이 작성한 게시글일 경우
                    if(newsFeedUid.equals(loginUser.getUid())){
                        //팝업메뉴 객체 생성
@@ -323,9 +324,20 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                                        report.putExtra("feedName", newFeedMenu);
                                        context.startActivity(report);
                                        break;
-                                   case R.id.feedmenu_linkCopy:
-
-                                       break;
+                                   case R.id.feedmenu_shared:
+                                       Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                                       //공유할 내용
+                                       intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                       SharedPreferences preferences = context.getSharedPreferences(loginUser.getUid(), Context.MODE_PRIVATE);
+                                       String nickName = preferences.getString("nickName", "host");
+                                       String name = preferences.getString("name", "host");
+                                       String message =""+ name +"(@"+nickName +")님이 공유한 게시물을 WithPet에서 확인해보세요.";
+                                       String link ="https://withpet.page.link/u9DC/";
+                                       intent.putExtra(Intent.EXTRA_SUBJECT, message);
+                                       intent.putExtra(Intent.EXTRA_TEXT, link);
+                                       intent.setType("text/plain");
+                                       Intent chooser = Intent.createChooser(intent, "친구에게 공유하기");
+                                       context.startActivity(chooser);
                                }
                                return false;
                            }
