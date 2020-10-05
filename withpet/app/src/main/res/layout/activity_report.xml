@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/gmarketsans_m"
             android:gravity="fill"
-            android:text="신고"
+            android:text="고객센터"
             android:textSize="26sp" />
 
     </LinearLayout>
@@ -56,7 +56,6 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/gmarketsans_m"
                 android:text="제목"
                 android:textSize="20sp" />
 
@@ -86,8 +85,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/gmarketsans_m"
-                android:text="신고사항"
+                android:text="필수 항목"
                 android:textSize="20sp" />
 
             <Spinner
@@ -104,9 +102,8 @@
             android:id="@+id/textView28"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:fontFamily="@font/gmarketsans_m"
             android:gravity="center_horizontal|center_vertical"
-            android:text="신고내용"
+            android:text="내용"
             android:textSize="20sp" />
 
         <EditText
@@ -134,8 +131,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/text"
-            android:fontFamily="@font/gmarketsans_m"
-            android:text="신 고 접 수"
+            android:text="접수"
             android:textColor="#ffffff"
             android:textSize="18sp" />
     </LinearLayout>

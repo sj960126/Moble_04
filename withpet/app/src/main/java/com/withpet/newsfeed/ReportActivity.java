@@ -37,6 +37,9 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
+        //화면전환시 아래에서 위로 올라오는 애니메이션 제거
+        overridePendingTransition(0, 0);
+
         btnBefore = findViewById(R.id.reportBtn_before);
         btnOk = findViewById(R.id.reportBtn_ok);
         etTitle =findViewById(R.id.reportEt_title);
@@ -45,12 +48,20 @@ public class ReportActivity extends AppCompatActivity {
 
         btnBefore.setBackgroundResource(R.drawable.iconbefore);
 
-        // Spinner(콤보박스)에 사용할 아이템 리스트 adapter 생성(R.array.shape : 아이템리스트, R.layout.support~ : 안드로이드 제공 콤보박스 아이템 기본 레이아웃)
-        adapter = ArrayAdapter.createFromResource(this, R.array.reportCategory, R.layout.support_simple_spinner_dropdown_item);
-        spCategory.setAdapter(adapter);
-
         Intent intent = getIntent();
         strFeedName = intent.getStringExtra("feedName");
+
+        if(strFeedName != null){
+            // Spinner(콤보박스)에 사용할 아이템 리스트 adapter 생성(R.array.shape : 아이템리스트, R.layout.support~ : 안드로이드 제공 콤보박스 아이템 기본 레이아웃)
+            adapter = ArrayAdapter.createFromResource(this, R.array.reportCategory, R.layout.support_simple_spinner_dropdown_item);
+            spCategory.setAdapter(adapter);
+        }
+        else{
+            // Spinner(콤보박스)에 사용할 아이템 리스트 adapter 생성(R.array.shape : 아이템리스트, R.layout.support~ : 안드로이드 제공 콤보박스 아이템 기본 레이아웃)
+            adapter = ArrayAdapter.createFromResource(this, R.array.serviceCenter, R.layout.support_simple_spinner_dropdown_item);
+            spCategory.setAdapter(adapter);
+        }
+
     }
 
     @Override
@@ -90,13 +101,25 @@ public class ReportActivity extends AppCompatActivity {
                 SimpleDateFormat mFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
                 String getTime = mFormat.format(mDate);
 
-                //Report 테이블 파베 연동
-                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                DatabaseReference dbRefReply = firebaseDatabase.getReference("Report");
-                Report inputReport = new Report(user.getUid(), category, strFeedName, title, context, getTime);
-                dbRefReply.child(user.getUid()+getTime).setValue(inputReport);
-                finish();
+                if(strFeedName != null){
+                    //Report 테이블 파베 연동
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    DatabaseReference dbRefReply = firebaseDatabase.getReference("Report");
+                    Report inputReport = new Report(user.getUid(), category, strFeedName, title, context, getTime);
+                    dbRefReply.child(user.getUid()+getTime).setValue(inputReport);
+                    finish();
+                } else{
+                    SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd");
+                    String strtoday = today.format(mDate);
+
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    DatabaseReference dbRefReply = firebaseDatabase.getReference("SC");
+                    Report inputReport = new Report(user.getUid(), category,"x", title, context, strtoday);
+                    dbRefReply.child(user.getUid()+getTime).setValue(inputReport);
+                    finish();
+                }
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.withpet.newsfeed;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.withpet.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -32,6 +35,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
 
     private ArrayList<Reply> reply;
     private Context context; //선택한 activity action 내용
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
     //생성자
     public ReplyAdapter(ArrayList<Reply> reply, Context context) {
@@ -58,7 +62,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         holder.name.setText(nickName);
-        holder.context.setText(reply.get(position).getContext());
+        holder.tvcontext.setText(reply.get(position).getContext());
         Glide.with(holder.itemView).load(feedImg).circleCrop().into(holder.img);
     }
 
@@ -68,7 +72,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
     }
 
     public class ReplyViewHolder extends RecyclerView.ViewHolder {
-        TextView name, context;
+        TextView name, tvcontext;
         CircleImageView img;
 
     public ReplyViewHolder(@NonNull View itemView) {
@@ -76,11 +80,58 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
 
         this.name = itemView.findViewById(R.id.replyTv_nickname);
         //img = itemView.findViewById(R.id.mainImage);
-        this.context = itemView.findViewById(R.id.replyTv_re);
+        this.tvcontext = itemView.findViewById(R.id.replyTv_re);
         this.img = itemView.findViewById(R.id.replyCiv_re);
 
         img.setImageResource(R.drawable.userdefault);
 
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int pos = getAdapterPosition();
+                if(pos != RecyclerView.NO_POSITION){
+/*                    String ang = (tvcontext.getText()).toString();
+                    Toast.makeText(context, ""+ reply.get(pos).getBoardName(), Toast.LENGTH_SHORT).show();*/
+                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    if((reply.get(pos).getUid()).equals(firebaseUser.getUid())){
+                        final List<String> ListItems = new ArrayList<>();
+                        ListItems.add("댓글 수정");
+                        ListItems.add("댓글 삭제");
+                        final CharSequence[] items =  ListItems.toArray(new String[ ListItems.size()]);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("댓글 설정");
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String selectedText = items[which].toString();
+                                DatabaseReference databaseReference = firebaseDatabase.getReference("Reply");
+                                if(selectedText.equals("댓글 수정")){
+                                    Intent intent = new Intent(context, FeedWriteActivity.class);
+                                    intent.putExtra("replyBoardName", reply.get(pos).getBoardName());
+                                    intent.putExtra("replyName", reply.get(pos).getReplyName());
+                                    intent.putExtra("replyUid", reply.get(pos).getUid());
+                                    intent.putExtra("replyContext", reply.get(pos).getContext());
+                                    intent.putExtra("replyDate", reply.get(pos).getDate());
+                                    context.startActivity(intent);
+                                }
+                                else if(selectedText.equals("댓글 삭제")){
+                                    databaseReference.child(reply.get(pos).getBoardName()).child(reply.get(pos).getReplyName()).removeValue();
+                                    Toast.makeText(context, "성공적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+                        builder.show();
+                    }
+                    else {
+                        Toast.makeText(context, "본인이 작성한 댓글이 아닙니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
     }
+
 }
 }

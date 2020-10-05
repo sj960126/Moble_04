@@ -18,6 +18,14 @@ public class Report {
         this.date = date;
     }
 
+    Report(String uid, String category, String title, String context, String date){
+        this.uid = uid;
+        this.category =category;
+        this.title = title;
+        this.context = context;
+        this.date = date;
+    }
+
     public String getUid() {
         return uid;
     }
