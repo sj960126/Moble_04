@@ -27,7 +27,6 @@
         <activity android:name=".Search.Search_view"></activity>
         <activity android:name=".walk.Walk_boardmod" />
         <activity android:name=".Search.Search_FeedActivity" />
-        <activity android:name=".Chat.tmepActivity"></activity>
         <activity android:name=".walk.Walk_boardmod"></activity>
         <activity android:name=".Search.Search_FeedActivity"></activity>
         <activity android:name=".main.SettingActivity" />
@@ -56,48 +55,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".Chat.MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".Chat.FirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
         <service
             android:name=".Chat.ForegroundService"
             android:exported="true"
             android:enabled="true">
         </service>
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBLaYTPSCp-sYkDgXEYo0gTtrgaig82iX0" /> <!-- 받은 메시지 기본 icon설정 -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/chanel_id" />
-        <meta-data
-            android:name="firebase_messaging_auto_init_enabled"
-            android:value="false" />
-        <meta-data
-            android:name="firebase_analytics_collection_enabled"
-            android:value="false" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher_background" />
-        <!--
- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more.
-        -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
     </application>
 
 </manifest>
