@@ -2,6 +2,7 @@ package com.withpet.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -14,14 +15,17 @@ public class loding_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loding);
         startLoading();
+
     }
     private void startLoading(){
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                finish();
+                Intent intent = new Intent(loding_Activity.this,LoginActivity.class);
+                loding_Activity.this.startActivity(intent);
+                loding_Activity.this.finish();
             }
-        },2000);
+        },3000);
     }
 }

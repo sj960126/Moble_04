@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,13 +41,15 @@ public class diaryActivity extends AppCompatActivity {
     private TextView change;
     private ArrayList<Diary_Day_Info> day_list;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FirebaseUser firebaseUser;
     private int check = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //로그인 처리 //삭제 80%
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
-        //로그인에서 id가지고 오기
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser(); //유저정보 가져오기
         day_list = new ArrayList<Diary_Day_Info>();
         change = findViewById(R.id.day_change);
         Date system_date = new Date();
@@ -65,7 +70,7 @@ public class diaryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         arrayList= new ArrayList<diary>(); //객체를 담을 (어댑터쪽으로)
         database =FirebaseDatabase.getInstance(); //파이어베이스 데이터베이스 연동
-        databaseReference = database.getReference("Diary").child("song");//db테이블 연결 경로 액세스
+        databaseReference = database.getReference("Diary").child(firebaseUser.getUid());//db테이블 연결 경로 액세스
         cal = findViewById(R.id.calendar);
         add = findViewById(R.id.plus);
 
@@ -73,7 +78,7 @@ public class diaryActivity extends AppCompatActivity {
         cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                date = String.valueOf(i)+"-0"+String.valueOf(i1+1)+"-"+String.valueOf(i2);
+                date = String.valueOf(i)+"-"+String.valueOf(i1+1)+"-"+String.valueOf(i2);
                 arrayList.clear();
                 for(Diary_Day_Info day : day_list ){
                     if(day.getDate().equals(date)){

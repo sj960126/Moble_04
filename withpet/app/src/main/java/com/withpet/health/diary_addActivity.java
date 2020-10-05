@@ -3,6 +3,8 @@ package com.withpet.health;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.withpet.*;
@@ -30,6 +32,7 @@ public class diary_addActivity extends AppCompatActivity {
     private String time;
     private Button submit;
     private Context context;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +42,12 @@ public class diary_addActivity extends AppCompatActivity {
         eat =findViewById(R.id.input_eat);
         rg = findViewById(R.id.radiogroup);
         submit = findViewById(R.id.diaryBtn_submit);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser(); //유저정보 가져오기
         context =this;
         Spinner spinner = findViewById(R.id.spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this,R.array.eat,android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter)
-        ;
+        spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -87,8 +90,8 @@ public class diary_addActivity extends AppCompatActivity {
                     else{
                         diary Diary = new diary(kind, eat.getText().toString(), time, brand.getText().toString());
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference databaseReference = database.getReference("Diary").child("song").child(day);
-                        databaseReference.push().setValue(Diary);
+                        DatabaseReference databaseReference = database.getReference("Diary");
+                        databaseReference.child(firebaseUser.getUid()).child(day).push().setValue(Diary);
                         finish();
                     }
                 }

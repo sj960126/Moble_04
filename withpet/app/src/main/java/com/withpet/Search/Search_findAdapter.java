@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseUser;
 import com.withpet.R;
 import com.withpet.main.MainActivity;
 import com.withpet.main.TransUser;

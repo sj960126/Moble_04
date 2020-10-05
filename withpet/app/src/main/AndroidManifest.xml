@@ -27,7 +27,6 @@
         <activity android:name=".Search.Search_view"></activity>
         <activity android:name=".walk.Walk_boardmod" />
         <activity android:name=".Search.Search_FeedActivity" />
-        <activity android:name=".Chat.tmepActivity"></activity>
         <activity android:name=".walk.Walk_boardmod"></activity>
         <activity android:name=".Search.Search_FeedActivity"></activity>
         <activity android:name=".main.SettingActivity" />
@@ -38,7 +37,6 @@
         <activity android:name=".newsfeed.ReplyActivity" />
         <activity android:name=".walk.Walk_tmap" />
         <activity android:name=".walk.Walk_boardwriteActivity" />
-        <activity android:name=".main.loding_Activity" />
         <activity android:name=".health.HealthHospitalActivity" />
         <activity android:name=".health.diaryActivity" />
         <activity android:name=".health.diary_addActivity" />
@@ -48,27 +46,15 @@
         <activity android:name=".iot.iot_streaming_area" />
         <activity android:name=".mypage.ProfileModifyActivity" />
         <activity android:name=".main.MainActivity" />
+        <activity android:name=".main.LoginActivity"/>
         <activity android:name=".main.JoinActivity" />
-        <activity android:name=".main.LoginActivity">
+        <activity android:name=".main.loding_Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <service
-            android:name=".Chat.MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".Chat.FirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
             android:name=".Chat.ForegroundService"
             android:exported="true"
             android:enabled="true">
