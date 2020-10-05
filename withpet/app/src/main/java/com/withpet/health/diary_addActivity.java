@@ -24,8 +24,6 @@ import android.widget.Spinner;
 public class diary_addActivity extends AppCompatActivity {
 
     private RadioGroup rg;
-    private RadioButton rb1;
-    private RadioButton rb2;
     private EditText eat;
     private EditText brand;
     private String kind;
@@ -43,6 +41,7 @@ public class diary_addActivity extends AppCompatActivity {
         rg = findViewById(R.id.radiogroup);
         submit = findViewById(R.id.diaryBtn_submit);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser(); //유저정보 가져오기
+
         context =this;
         Spinner spinner = findViewById(R.id.spinner);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this,R.array.eat,android.R.layout.simple_spinner_dropdown_item);

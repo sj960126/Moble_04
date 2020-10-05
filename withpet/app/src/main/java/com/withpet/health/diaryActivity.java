@@ -33,6 +33,7 @@ public class diaryActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<diary> arrayList;
+    private ArrayList<String> arrayKeyList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private ImageButton add;
@@ -42,11 +43,10 @@ public class diaryActivity extends AppCompatActivity {
     private ArrayList<Diary_Day_Info> day_list;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FirebaseUser firebaseUser;
-    private int check = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //로그인 처리 //삭제 80%
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser(); //유저정보 가져오기
@@ -69,6 +69,7 @@ public class diaryActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         arrayList= new ArrayList<diary>(); //객체를 담을 (어댑터쪽으로)
+        arrayKeyList= new ArrayList<String>(); //내용 추가
         database =FirebaseDatabase.getInstance(); //파이어베이스 데이터베이스 연동
         databaseReference = database.getReference("Diary").child(firebaseUser.getUid());//db테이블 연결 경로 액세스
         cal = findViewById(R.id.calendar);
@@ -80,10 +81,14 @@ public class diaryActivity extends AppCompatActivity {
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
                 date = String.valueOf(i)+"-"+String.valueOf(i1+1)+"-"+String.valueOf(i2);
                 arrayList.clear();
+                arrayKeyList.clear();
                 for(Diary_Day_Info day : day_list ){
                     if(day.getDate().equals(date)){
                         for(diary d : day.getDiaryArrayList()){
                             arrayList.add(d);
+                        }
+                        for(int index = 0; index<day.getDiaryArrayList().size();index++){
+                            arrayKeyList.add(day.getDiaryKeyArrayList().get(index)); //키값 등록
                         }
                         break;
                     }
@@ -110,11 +115,11 @@ public class diaryActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()){  //  ds : 날짜 (2020-09-15)
-                    Log.i("con : ", ds.getValue().toString());
                     Diary_Day_Info td = new Diary_Day_Info();
                     td.setDate(ds.getKey());
                     for(DataSnapshot ids : ds.getChildren()){
                         td.addDiaryArrayList(ids.getValue(diary.class));
+                        td.addDiaryKeyArrayList(ids.getKey()); //날짜의 각 행 키값저장
                     }
                     day_list.add(td);
                 }
@@ -125,7 +130,7 @@ public class diaryActivity extends AppCompatActivity {
 
             }
         });
-        adapter = new diary_Adapter(arrayList,this);
+        adapter = new diary_Adapter(arrayList,this, arrayKeyList);
         recyclerView.setAdapter(adapter); //리사이클러뷰에 어뎁터 연결
     }
     public void Refresh(){
@@ -133,4 +138,5 @@ public class diaryActivity extends AppCompatActivity {
         finish();
         startActivity(intent);
     }
+    public String getDate() {return date;}
 }
