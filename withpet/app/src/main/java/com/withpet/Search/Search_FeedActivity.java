@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.util.Log;
+import android.view.View;
+import android.widget.SearchView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,14 +21,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
+import com.withpet.Chat.FindUserAdapter;
 import com.withpet.main.User;
 import com.withpet.newsfeed.Feed;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Search_FeedActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
+    private RecyclerView find_recyclerview;
+    private RecyclerView.Adapter finduserlistAdapter;
+    private ArrayList<User> userlist;
+    private ArrayList<User> finduserlist;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<ArrayList<String>> temp;
@@ -35,19 +41,34 @@ public class Search_FeedActivity extends AppCompatActivity {
     private int mypetcode;
     private ArrayList<String> feedid;
     private ArrayList<String> arr;
+    private SearchView find_userinput;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search__feed);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser(); // 유저 아이디 얻기
+        database = FirebaseDatabase.getInstance();//파이어베이스 데이터베이스 연동
+
+        //피드 리사이클러 뷰
         recyclerView = findViewById(R.id.search_rc);
         recyclerView.setHasFixedSize(true); //리사이클러뷰 성능 강화
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         temp = new ArrayList<ArrayList<String>>();
         feedid = new ArrayList<String>();
-        database = FirebaseDatabase.getInstance();//파이어베이스 데이터베이스 연동
+        adapter = new SearchAdapter(temp,this);
+        recyclerView.setAdapter(adapter);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //유저 찾기 리사이클러 뷰
+        find_userinput = findViewById(R.id.find);
+        find_recyclerview = findViewById(R.id.find_rc);
+        userlist = new ArrayList<User>();
+        finduserlist = new ArrayList<User>();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        find_recyclerview.setHasFixedSize(true); //리사이클러뷰 기존 성능 강화
+        find_recyclerview.setLayoutManager(layoutManager);
+        finduserlistAdapter = new Search_findAdapter(this, finduserlist);
+        find_recyclerview.setAdapter(finduserlistAdapter);
 
     }
 
@@ -55,6 +76,48 @@ public class Search_FeedActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         databaseReference = database.getReference("User"); //db테이블 연결 경로
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userlist.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    userlist.add(dataSnapshot.getValue(User.class)); //유저 정보를 담는다
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        find_userinput.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false; //검색버튼 눌렀을 경우
+            }
+
+            @Override
+            public boolean onQueryTextChange(String findid) {
+                finduserlist.clear();
+                if (!findid.equals("")) {
+                    find_recyclerview.setVisibility(View.VISIBLE); // 글 적히면 리사이클 뷰 Visible
+                    for (User user : userlist){ //userlist 정보 가져오기
+                        if (user.getNickname().contains(findid)){
+                            if (!user.getUid().equals(firebaseUser)){
+                                finduserlist.add(user);
+                            }
+                        }
+                    }
+                }
+                if (findid.equals("")){
+                    find_recyclerview.setVisibility(View.GONE);
+                }
+                finduserlistAdapter.notifyDataSetChanged();
+                return false; //텍스트가 바뀔떄마다 호출
+            }
+        });
+
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -70,7 +133,6 @@ public class Search_FeedActivity extends AppCompatActivity {
                     if (mypetcode == snapshot2.getValue(User.class).getPetcode()){ //내 팻 코드와 같은 사람들의 정보를
                         feedid.add(snapshot2.getValue(User.class).getUid()); //feedid에 저장한다
                     }
-                    Log.i("1","ㅋ");
                 }
                 arr = new ArrayList<String>();
 
@@ -85,41 +147,34 @@ public class Search_FeedActivity extends AppCompatActivity {
                             }
                             if (arr.size()==7){
                                 temp.add(arr);
-                                adapter.notifyDataSetChanged();
+                                arr = new ArrayList<String>();
                             }
+                            adapter.notifyDataSetChanged();
                         }
 
-                    }
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    }@Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
             }
 
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-        Log.i("시발"," ㄴ");
-        adapter = new SearchAdapter(temp,this);
-        recyclerView.setAdapter(adapter);
+    }
+    @Override
+    public void onCancelled(@NonNull DatabaseError error){ }});
+
     }
 }

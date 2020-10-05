@@ -80,7 +80,7 @@ public class ChatListActivity extends AppCompatActivity {
                 chatListAdapter.notifyDataSetChanged();
                 for(DataSnapshot chatroomdata : snapshot.getChildren()){
                     if(chatroomdata.getKey().contains(loginUser.getUid())){
-                        ChattingRoom ctr = new ChattingRoom();                  // 채팅방 정보를 담을 객체 생성
+                        ChattingRoom ctr = new ChattingRoom();                  // 채팅방 정보를 담을 객체 생성( 채팅내역, 채팅방 이름 )
                         ctr.setChatroomname(chatroomdata.getKey());
                         for(DataSnapshot chatdata : chatroomdata.getChildren()){
                             ctr.addChattingList(chatdata.getValue(Chat.class));

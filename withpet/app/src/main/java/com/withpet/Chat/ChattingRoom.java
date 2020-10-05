@@ -7,6 +7,8 @@ import com.withpet.main.*;
 public class ChattingRoom {
     private String chatroomname;
     private ArrayList<Chat> chattingList = new ArrayList<Chat>();
+    private long childcount;
+    private int notificationid;
 
     public String getChatroomname() {
         return chatroomname;
@@ -25,5 +27,21 @@ public class ChattingRoom {
     }
     public void addChattingList(Chat chat){
         chattingList.add(chat);
+    }
+
+    public long getChildcount() {
+        return childcount;
+    }
+
+    public void setChildcount(long childcount) {
+        this.childcount = childcount;
+    }
+
+    public int getNotificationid() {
+        return notificationid;
+    }
+
+    public void setNotificationid(int notificationid) {
+        this.notificationid = notificationid;
     }
 }

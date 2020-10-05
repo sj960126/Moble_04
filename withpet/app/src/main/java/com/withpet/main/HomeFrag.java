@@ -2,6 +2,7 @@ package com.withpet.main;
 
 
 import android.Manifest;
+import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;

@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -36,12 +35,20 @@ public class ChattingActivity extends AppCompatActivity {
     private String chatroomname;
     private RecyclerView chattingRecyclerView;
     public  RecyclerView.Adapter chattingAdapter;
+    private NotifyApplication applicationinfo;
 
     // 개선사항 :  채팅 ui 수정
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
+        applicationinfo = (NotifyApplication)getApplication();
+        // 일단 포그라운드 서비스 종료
+        /*if(applicationinfo.isStart){
+            this.stopService(new Intent(this, ForegroundService.class));
+            applicationinfo.isStart = false;
+        }*/
+
         Intent intent = getIntent();
         et_sendmeaasge = findViewById(R.id.chattingEt_input);
         opponent = (TransUser)intent.getSerializableExtra("Opponent");      // 대화 상대의 정보 가져오기
@@ -76,6 +83,7 @@ public class ChattingActivity extends AppCompatActivity {
                     }
                 }
                 chatroomname = (chatroomname != null)? chatroomname : meid + "_" + opponent.getUid();
+                applicationinfo.setEnterChattingRoom(chatroomname);
                 dbreference = db.getReference("Chat/"+chatroomname);    // 왜 해당 메시지가 있는 경로를 설정해줘야만 알아서 갱신이 되는가..?
                 dbreference.addChildEventListener(new ChildEventListener() {
                     @Override
@@ -91,7 +99,7 @@ public class ChattingActivity extends AppCompatActivity {
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                        Log.i("체인지 :", " 체인지문 실행");
                     }
 
                     @Override
@@ -115,6 +123,13 @@ public class ChattingActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        applicationinfo.setEnterChattingRoom(null);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
