@@ -36,6 +36,7 @@ import com.google.firebase.storage.UploadTask;
 import com.withpet.*;
 import com.withpet.newsfeed.*;
 import com.withpet.main.*;
+import com.withpet.Chat.*;
 import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -44,16 +45,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileModifyActivity extends AppCompatActivity {
 
-    ArrayAdapter adapter;
+    private ArrayAdapter adapter;
     private String[] permission_list = {Manifest.permission.READ_EXTERNAL_STORAGE};
     private FirebaseStorage storage;
     private StorageReference storageRf; // 스토리지 주소 담는 객체
     private StorageReference imgRf;
     private FirebaseUser firebaseUser;
     private CircleImageView iv_profilephoto;
+    private EditText et_username;
     private User loginuser;     // 로그인 한 사용자 정보 담은 객체
     private String shape;
     private String imgId;
+    private boolean nickcheck = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +68,12 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
         Spinner spinner = findViewById(R.id.modifySp_shape);
         iv_profilephoto = findViewById(R.id.modifyIv_profile);
+        et_username = findViewById(R.id.modifyEt_UserName);
         ((EditText)findViewById(R.id.modifyEt_Meal)).setText(""+loginuser.getMeal());
-        ((EditText)findViewById(R.id.modifyEt_UserName)).setText(loginuser.getNickname());
+        et_username.setText(loginuser.getNickname());
         Glide.with(this).load(loginuser.getImgUrl()).override(800).into(iv_profilephoto);
 
+        findViewById(R.id.modifyBtn_nickcheck).setOnClickListener(onclickListener);
         findViewById(R.id.modifyBtn_Ok).setOnClickListener(onclickListener);
         findViewById(R.id.modifyBtn_cancel).setOnClickListener(onclickListener);
         findViewById(R.id.modifyBtn_help).setOnClickListener(onclickListener);
@@ -121,48 +126,53 @@ public class ProfileModifyActivity extends AppCompatActivity {
         public void onClick(View view) {
             Intent intent = getIntent();
             switch (view.getId()){
-                case R.id.modifyBtn_cancel:
+                case R.id.modifyBtn_cancel: // 취소 버튼 클릭 이벤트
                     setResult(RESULT_CANCELED,intent);
                     finish();
                     break;
-                case R.id.modifyBtn_Ok:
-                    String meal = ((EditText)findViewById(R.id.modifyEt_Meal)).getText().toString();
-                    String username = ((EditText)findViewById(R.id.modifyEt_UserName)).getText().toString();
-                    loginuser.setNickname(username);
-                    checkProfileInfo(shape, meal);
-                    //파베 저장소의 feed 폴더에 사진 업로드
-                    if(imgId != null) {
-                        Uri file = Uri.fromFile(new File(imgId));
-                                // 파이어베이스 저장소에 선택한 파일의 이름으로 이미지 저장 경로 생성
-                                imgRf = storageRf.child("Profile/" + file.getLastPathSegment());
-                                UploadTask uploadTask = imgRf.putFile(file);    // 파이어 베이스 저장소에 이미지 저장
+                case R.id.modifyBtn_Ok: // 확인 버튼 클릭 이벤트
+                    // 닉네임 중복체크를 하거나, 닉네임 수정을 하지 않았을 때 업로드
+                    if(nickcheck || loginuser.getNickname().equals(et_username.getText().toString())) {
+                        String meal = ((EditText) findViewById(R.id.modifyEt_Meal)).getText().toString();
+                        String username = et_username.getText().toString();
+                        loginuser.setNickname(username);
+                        checkProfileInfo(shape, meal);
+                        //파베 저장소의 feed 폴더에 사진 업로드
+                        if (imgId != null) {
+                            Uri file = Uri.fromFile(new File(imgId));
+                            // 파이어베이스 저장소에 선택한 파일의 이름으로 이미지 저장 경로 생성
+                            imgRf = storageRf.child("Profile/" + file.getLastPathSegment());
+                            UploadTask uploadTask = imgRf.putFile(file);    // 파이어 베이스 저장소에 이미지 저장
 
-                                uploadTask.addOnFailureListener(new OnFailureListener() {
-                                    //저장소에 업로드가 실패했을 경우
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-                                        Toast.makeText(ProfileModifyActivity.this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
-                                    }
-                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    //저장소에 업로드가 성공했을 경우
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        Toast.makeText(ProfileModifyActivity.this, "사진 업로드 성공", Toast.LENGTH_SHORT).show();
-                                        //파이어베이스 데이터베이스에 저장
-                                        uploadProfile();
-                                        //프로필 수정 > 마이페이지 이동
-                                        finish();
-                            }
-                        });
-                    }
-                    else{
-                        uploadProfile();
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                //저장소에 업로드가 실패했을 경우
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    Toast.makeText(ProfileModifyActivity.this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                //저장소에 업로드가 성공했을 경우
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    Toast.makeText(ProfileModifyActivity.this, "사진 업로드 성공", Toast.LENGTH_SHORT).show();
+                                    //파이어베이스 데이터베이스에 저장
+                                    uploadProfile();
+                                    //프로필 수정 > 마이페이지 이동
+                                    finish();
+                                }
+                            });
+                        } else {
+                            uploadProfile();
+                            finish();
+                        }
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    else{
+                        Toast.makeText(ProfileModifyActivity.this, "닉네임 중복확인을 해주세요.", Toast.LENGTH_SHORT).show();
+                    }
                     break;
-                case R.id.modifyBtn_help:
+                case R.id.modifyBtn_help:   // 도움말 버튼 클릭 이벤트
                     Modify_help helpdialog = new Modify_help(view.getContext());
                     ViewGroup.LayoutParams params = helpdialog.getWindow().getAttributes();
                     params.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -171,8 +181,23 @@ public class ProfileModifyActivity extends AppCompatActivity {
                     helpdialog.setCancelable(true);
                     helpdialog.show();
                     break;
-                case R.id.modifyIv_profile:
+                case R.id.modifyIv_profile: // 프로필 사진 클릭 이벤트
                     Permission();
+                    break;
+                case R.id.modifyBtn_nickcheck:      // 중복확인 버튼 클릭 이벤트
+                    NotifyApplication nfa = (NotifyApplication) getApplication();
+                    nickcheck = true;
+                    for(User user : nfa.getUserlist()){
+                        if(user.getNickname().equals(et_username.getText().toString())){
+                            nickcheck = false;
+                        }
+                    }
+                    if(nickcheck){
+                        Toast.makeText(view.getContext(), "사용 가능한 닉네임입니다.", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(view.getContext(), "사용중인 닉네임입니다.", Toast.LENGTH_SHORT).show();
+                    }
                     break;
             }
         }

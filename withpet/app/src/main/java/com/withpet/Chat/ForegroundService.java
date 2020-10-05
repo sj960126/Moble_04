@@ -36,12 +36,12 @@ public class ForegroundService extends Service {
     private final int MAXRANDNUM = 5000;
     private NotifyApplication applicationinfo;
     private final int foregroundNotificationId = 1000;
-    private ArrayList<ChattingRoom> chattingRoomdata;
+    private ArrayList<ChattingRoom> chattingRoomdatalist;
     private Random rnd;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         applicationinfo = (NotifyApplication)getApplication();
-        chattingRoomdata = new ArrayList<ChattingRoom>();
+        chattingRoomdatalist = new ArrayList<ChattingRoom>();
         rnd = new Random();
         createNotificationChannel();
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -70,7 +70,7 @@ public class ForegroundService extends Service {
                         ctr.setChatroomname(ds.getKey());       // 채팅방 이름 저장
                         ctr.setChildcount(ds.getChildrenCount());   // 해당 채팅방의 채팅내역 수 저장
                         ctr.setNotificationid(createNotificationId());
-                        chattingRoomdata.add(ctr);
+                        chattingRoomdatalist.add(ctr);
                         // 내가 속한 1개의 채팅방의 ValueEventListener, 해당 채팅방에서 메시지를 보냈는지 감시하기 위함, 메시지를 보낸 내역이 있다면
                         chattingroomreference.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -78,7 +78,7 @@ public class ForegroundService extends Service {
                                 // 맨처음 데이터를 읽었을 때보다 child의 숫자가 커졌을 때 push알림 발생
                                 // 이 구문에서의 snapshot은 1개의 채팅방 정보, 이 구문 snapshot의 child 수는 해당 채팅방의 채팅내역수
                                 // 따라서 해당 방에서 채팅내역 수가 처음 저장했던 채팅내역 수보다 많다는 것은 누군가 채팅을 쳤다는 것 그래서 알림 발생
-                                for(ChattingRoom chattingRoom : chattingRoomdata) {
+                                for(ChattingRoom chattingRoom : chattingRoomdatalist) {
                                     // 이 구문에서의 snapshot.getKey() : 채팅방 이름
                                     // 내가 속한 채팅방의 정보들 중에서 채팅이 온 채팅방 이름을 비교 (이유 : 해당 채팅방의 child 수 비교하기 위함)
                                     if(snapshot.getKey().equals(chattingRoom.getChatroomname())){
@@ -111,6 +111,7 @@ public class ForegroundService extends Service {
                         });
                     }
                 }
+                applicationinfo.setChattingroomlist(chattingRoomdatalist);
             }
 
             @Override
@@ -191,7 +192,7 @@ public class ForegroundService extends Service {
         while(codeoverlap){
             codeoverlap = false;
             notificationid = rnd.nextInt(MAXRANDNUM);
-            for(ChattingRoom cr : chattingRoomdata){
+            for(ChattingRoom cr : chattingRoomdatalist){
                 if(cr.getNotificationid() == notificationid || notificationid == foregroundNotificationId){
                     codeoverlap = true;
                 }
