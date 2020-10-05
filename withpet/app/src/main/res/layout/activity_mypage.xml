@@ -20,7 +20,7 @@
             android:fontFamily="@font/gmarketsans_m"
             android:gravity="fill"
             android:text="WithPet"
-            android:textSize="30sp" />
+            android:textSize="26sp" />
 
         <Button
             android:id="@+id/mypageBtn_setting"

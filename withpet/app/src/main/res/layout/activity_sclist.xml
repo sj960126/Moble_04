@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".main.SettingActivity">
+    tools:context=".main.SclistActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/settingBtn_before"
+            android:id="@+id/sclistBtn_before"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="10sp"
@@ -27,14 +27,15 @@
             android:layout_weight="1"
             android:fontFamily="@font/gmarketsans_m"
             android:gravity="fill"
-            android:text="@string/app_name"
+            android:text="문의내역"
             android:textSize="26sp" />
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/settingLv"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sclistRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 
 </LinearLayout>
