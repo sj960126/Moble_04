@@ -147,7 +147,6 @@ public class FeedWriteActivity extends AppCompatActivity {
     private void writeNewUser(String boardName, String id, String context, String imgUrl, String newsName, String date) {
         //객체 데이터
         Feed feed = new Feed(id, imgUrl, context, newsName, date);
-
         //dbreference 는 feed 테이블과 연결
         //feed > boardName > news data 추가
         //addOnSuccessListener 와 addOnFailureListener 개발가이드
@@ -196,7 +195,7 @@ public class FeedWriteActivity extends AppCompatActivity {
                 String getTime = mFormat.format(mDate);
 
                 //게시글 이름을 사용자닉네임 + 현재 날짜시간
-                writeNewUser( userNickname+getTime, user.getUid(), inputContext, uri.toString(),userNickname + getTime, getTime);
+                writeNewUser( user.getUid()+getTime, user.getUid(), inputContext, uri.toString(),user.getUid() + getTime, getTime);
             }
         });
     }

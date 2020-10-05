@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +37,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.main.*;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -151,6 +155,38 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             @Override
             public void onCancelled(@NonNull DatabaseError error){}
         });
+
+        //좋아요 수
+        DatabaseReference likeData = firebaseDatabase.getReference("Like");
+        Query likeQuery = likeData.child(myfeed.get(position).getNewsName());
+        final ArrayList<String> likeArray = new ArrayList<>();
+        likeQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                likeArray.add(0, snapshot.getKey());
+                Log.i("dt",""+ likeArray.get(0));
+                holder.tvLikecount.setText(likeArray.size()+"명이 게시글을 좋아합니다.");
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
@@ -161,7 +197,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     //viewHolder = listItem
     public class FeedViewHolder extends RecyclerView.ViewHolder {
         //listitem
-        TextView name, context, replyName, replyContext;
+        TextView name, context, replyName, replyContext, tvLikecount;
         ImageView img;
         CircleImageView loginUserImg;
         Button btnLike;
@@ -178,6 +214,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             etReply =(EditText) itemView.findViewById(R.id.newsEt_reply);
             replyName =(TextView) itemView.findViewById(R.id.mainTv_replyid);
             replyContext = (TextView) itemView.findViewById(R.id.mainTv_replyContext);
+            tvLikecount =(TextView) itemView.findViewById(R.id.mainTv_like);
 
             //button 디폴트 이미지 설정
             btnLike.setBackgroundResource(R.drawable.iconlike);
