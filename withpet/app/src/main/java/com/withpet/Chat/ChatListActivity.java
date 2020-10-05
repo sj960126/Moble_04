@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class ChatListActivity extends AppCompatActivity {
     private ArrayList<ChattingRoom> chatroomlist;
     private ArrayList<User> userlist;
     private RecyclerView chatListRecyclerView;
+    private TextView tv_newchatnum;
     public  RecyclerView.Adapter chatListAdapter;
     final int requestcode = 1001;
     @Override
@@ -39,6 +41,7 @@ public class ChatListActivity extends AppCompatActivity {
         userlist = new ArrayList<User>();
         db = FirebaseDatabase.getInstance(); //파이어베스 데이터베이스 연동
 
+        tv_newchatnum = findViewById(R.id.chatListTv_NewChatNum);
         loginUser = FirebaseAuth.getInstance().getCurrentUser();    //로그인한 유저의 정보 가져오기
         findViewById(R.id.chatListBtn_Find).setOnClickListener(onClickListener);
         findViewById(R.id.chatListBtn_Back).setOnClickListener(onClickListener);
@@ -82,6 +85,7 @@ public class ChatListActivity extends AppCompatActivity {
                     if(chatroomdata.getKey().contains(loginUser.getUid())){
                         ChattingRoom ctr = new ChattingRoom();                  // 채팅방 정보를 담을 객체 생성( 채팅내역, 채팅방 이름 )
                         ctr.setChatroomname(chatroomdata.getKey());
+                        ctr.setChildcount(chatroomdata.getChildrenCount());
                         for(DataSnapshot chatdata : chatroomdata.getChildren()){
                             ctr.addChattingList(chatdata.getValue(Chat.class));
                         }
