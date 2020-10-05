@@ -7,7 +7,7 @@
     <string name="iot">IOT</string>
     <string name="login">로그인</string>
     <string name="join">회원가입</string>
-    <string name="chanel_id">withpet_channel</string>
-    <string name="chanel_name">jong test</string>
+    <string name="chanel_id">withpet_chat_channel</string>
+    <string name="chanel_name">WithPet 채팅</string>
     <string name="channel_description">위드펫 알림입니다.</string>
 </resources>

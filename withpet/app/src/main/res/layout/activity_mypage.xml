@@ -74,7 +74,7 @@
                 android:id="@+id/myPageTv_noticenum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="100"
+                android:text="0"
                 android:textAlignment="center"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -99,7 +99,7 @@
                 android:id="@+id/myPageTv_interestnum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="100"
+                android:text="0"
                 android:textAlignment="center"
                 android:textSize="22sp"
                 android:textStyle="bold" />

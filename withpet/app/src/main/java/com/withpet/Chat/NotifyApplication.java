@@ -34,18 +34,6 @@ public class NotifyApplication extends Application {
     public void onCreate() {
         userlist = new ArrayList<User>();
         chattingroomlist = new ArrayList<ChattingRoom>();
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create channel to show notifications.
-            String channelName = getString(R.string.chanel_name);
-            // 알림 채널 생성
-            // 인수 1 : 채널 id, 2: 채널 이름, 3: 채널의 알림 중요도 정도
-            // 알림 중요도
-            // - IMPORTANCE_HIGH(긴급) : 알림음 울리며 헤드업 알림으로 표시, - IMPORTANCE_DEFAULT(높음) : 알림음 울림
-            // - IMPORTANCE_LOW(중간) : 알림음이 없음, IMPORTANCE_MIN(낮음) : 알림음 없고 상태표시줄 표시 x
-            NotificationChannel channel = new NotificationChannel(channel_id, channelName, NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(channel);
-        }
         startService();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("User");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {

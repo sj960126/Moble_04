@@ -27,8 +27,6 @@
         <activity android:name=".Search.Search_view"></activity>
         <activity android:name=".walk.Walk_boardmod" />
         <activity android:name=".Search.Search_FeedActivity" />
-        <activity android:name=".walk.Walk_boardmod"></activity>
-        <activity android:name=".Search.Search_FeedActivity"></activity>
         <activity android:name=".main.SettingActivity" />
         <activity android:name=".iot.iot_recorder" />
         <activity android:name=".Chat.FindUserActivity" />
