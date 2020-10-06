@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.withpet.iot.*;
 import com.withpet.*;
 
@@ -34,15 +36,15 @@ public class IotFrag extends Fragment {
     public InputStream dataInputStream;
     public OutputStream dataOutputStream;
     private Socket clientsocket;
-    private String ip = "192.168.0.3";
-    private int port =8015;
+    private String ip = "192.168.0.2";
+    private int port =8035;
     private Button meal;
     private Button voicesend;
     private Button recorder;
     private Button gostreaming_btn;
 
     String socket_id;
-
+    String uid;
     Thread thread;
     ImageButton lightButton;
 
@@ -69,13 +71,16 @@ public class IotFrag extends Fragment {
         public void onClick(View v) {
             Intent intent;
             ConnectThread th = new ConnectThread();
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            uid = firebaseUser.getUid();
             switch (v.getId()){
                 case R.id.iotBtn_AutoMeal:
                     socket_id="1";
                     th.start();
                     break;
                 case R.id.iotBtn_RecorderSend:
-                    socket_id="2";
+                    socket_id="2"+uid;
+
                     th.start();
                     break;
                 case R.id.iotBtn_Recorder:
@@ -104,6 +109,7 @@ public class IotFrag extends Fragment {
                 PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter
                         (clientsocket.getOutputStream())),true);
                 out.println(sndMsg);
+
                 clientsocket.close();
 
             } catch(Exception e){

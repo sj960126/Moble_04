@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +27,7 @@ public class SclistActivity extends AppCompatActivity {
 
     private ArrayList<Report> scArrayList;
     private FirebaseDatabase firebaseDatabase;
+    private FirebaseUser firebaseUser;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private Button btnBefore;
@@ -52,9 +55,10 @@ public class SclistActivity extends AppCompatActivity {
 
         scArrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = firebaseDatabase.getReference("SC");
-
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = databaseReference.orderByChild("uid").equalTo(firebaseUser.getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 scArrayList.clear();
