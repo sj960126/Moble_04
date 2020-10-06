@@ -37,11 +37,11 @@
 
         <EditText
             android:id="@+id/loginEt_id"
-            android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:ems="10"
-            android:text="dydwns1801@naver.com"
+            android:hint="email"
             android:inputType="textPersonName" />
 
 
@@ -49,9 +49,9 @@
             android:id="@+id/loginEt_pw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="k350a77"
             android:layout_marginTop="100dp"
+            android:ems="10"
+            android:hint="password"
             android:inputType="textPassword" />
 
 
