@@ -92,8 +92,8 @@ public class Walk_tmap extends AppCompatActivity implements TMapGpsManager.onLoc
 
 
         gps();
-        //tMapView.setTrackingMode(true);
-        //tMapView.setSightVisible(true);
+        tMapView.setTrackingMode(true);
+
         tMapView.setZoomLevel(14);
         //tmapview 클릭 이벤트
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
@@ -169,7 +169,7 @@ public class Walk_tmap extends AppCompatActivity implements TMapGpsManager.onLoc
 
     }
 
-    public  void gps(){
+    public  void gps(){ //gps 사용 권한과 현재위치 표시
 
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
 
