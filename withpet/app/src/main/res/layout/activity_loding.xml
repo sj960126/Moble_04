@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".health.loding_Activity"
+    android:orientation="vertical"
+    tools:context=".main.loding_Activity"
     android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Withpet"
+            android:textSize="80dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/c4"
+            android:fontFamily="@font/bazzi"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="30dp"
+            android:fontFamily="@font/bazzi"
+            android:text="너와 함께 만들어가는 공간"
+            android:textSize="25dp" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         >
-
         <com.github.ybq.android.spinkit.SpinKitView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/spin_kit"
@@ -23,4 +46,6 @@
             app:SpinKit_Color="@color/c4"/>
 
     </LinearLayout>
-</RelativeLayout>
+
+
+</LinearLayout>

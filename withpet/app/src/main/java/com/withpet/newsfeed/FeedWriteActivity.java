@@ -31,10 +31,14 @@ import com.google.firebase.storage.UploadTask;
 import com.withpet.*;
 import com.withpet.main.*;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.view.View.GONE;
 
 public class FeedWriteActivity extends AppCompatActivity {
 
@@ -43,11 +47,13 @@ public class FeedWriteActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageRf;
     private StorageReference imgRf;
-    private String inputContext, strImage,userNickname;
+    private String inputContext, strImage, userNickname;
     private String modifyContext, modifyImg, modifyName, modifyDate, modifyUid;
+    private String replyContext, replyBoardName, replyName, replyUid, replyDate;
     private Button btnUpload;
     private ImageView ivPhoto;
     private EditText et;
+    private TextView tvUserNick, tvDate;
 
     //필요한 리소스 초기화
     @Override
@@ -61,6 +67,8 @@ public class FeedWriteActivity extends AppCompatActivity {
         btnUpload = (Button) findViewById(R.id.mainwBtn_finish);
         btnUpload.setBackgroundResource(R.drawable.iconcheck);
         ivPhoto = (ImageView) findViewById(R.id.mainwIv_thumbnail);
+        tvUserNick = (TextView) findViewById(R.id.mainwTv_nickname);
+        tvDate = (TextView) findViewById(R.id.mainwTv_date);
 
         //파베 연결 및 연동
         db = FirebaseDatabase.getInstance();
@@ -68,8 +76,9 @@ public class FeedWriteActivity extends AppCompatActivity {
         storage= FirebaseStorage.getInstance();
         storageRf = storage.getReference();
 
-        //선택한 갤러리 사진 이름 받기
+        //게시글 작성시 이미지, 닉네임 받기
         strImage = getIntent().getStringExtra("imgId");
+        userNickname =getIntent().getStringExtra("loginUserNickname");
 
         //수정할 게시글 내용 받기
         modifyImg = getIntent().getStringExtra("feedImg");
@@ -77,7 +86,13 @@ public class FeedWriteActivity extends AppCompatActivity {
         modifyName = getIntent().getStringExtra("feedName");
         modifyDate = getIntent().getStringExtra("feedDate");
         modifyUid = getIntent().getStringExtra("feedUid");
-
+        
+        //수정할 댓글 내용 받기
+        replyContext = getIntent().getStringExtra("replyContext");
+        replyName = getIntent().getStringExtra("replyName");
+        replyUid = getIntent().getStringExtra("replyUid");
+        replyBoardName = getIntent().getStringExtra("replyBoardName");
+        replyDate = getIntent().getStringExtra("replyDate");
     }
 
     // 사용자와의 상호작용 (터치이벤트 및 등등)
@@ -85,9 +100,17 @@ public class FeedWriteActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //게시글 작성
-        if(modifyContext == null && modifyImg == null && modifyName == null){
+        if(modifyContext == null && replyContext == null){
             //선택한 사진 불러오기
             Glide.with(this).load(strImage).override(1000).into(ivPhoto);
+            //작성자 닉네임
+            tvUserNick.setText(userNickname);
+            //작성일
+            long now = System.currentTimeMillis();
+            Date mDate = new Date(now);
+            SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String tttime = mFormat.format(mDate);
+            tvDate.setText("[ 게시글 작성일 ] "+ tttime);
             //버튼이벤트
             btnUpload.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -118,36 +141,61 @@ public class FeedWriteActivity extends AppCompatActivity {
                 }
             });
         }
+        else if(replyContext != null && replyBoardName != null){
+            ivPhoto.setVisibility(GONE);
+            //수정할 댓글 내용
+            et =findViewById(R.id.mainwEt_context);
+            et.setText(replyContext);
+            //댓글 작성자
+            SharedPreferences preferences = this.getSharedPreferences(replyUid, Context.MODE_PRIVATE);
+            String nickName = preferences.getString("nickName", "host");
+            tvUserNick.setText(nickName);
+            tvDate.setText("[ 댓글 수정 중 ]");
+            //버튼이벤트
+            btnUpload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    inputContext = et.getText().toString();
+                    //Reply 테이블 파베 연동
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    DatabaseReference dbRefReply = firebaseDatabase.getReference("Reply");
+                    Reply modifyReply = new Reply(replyName, replyUid, replyBoardName, inputContext, replyDate);
+                    dbRefReply.child(replyBoardName).child(replyName).setValue(modifyReply);
+                    finish();
+                }
+            });
+        }
         //게시글 수정
         else{
             //선택한 사진 불러오기
             Glide.with(this).load(modifyImg).override(1000).into(ivPhoto);
             et =findViewById(R.id.mainwEt_context);
             et.setText(modifyContext);
+            //댓글 작성자
+            SharedPreferences preferences = this.getSharedPreferences(modifyUid, Context.MODE_PRIVATE);
+            String nickName = preferences.getString("nickName", "host");
+            tvUserNick.setText(nickName);
+            //작성일
+            tvDate.setText("[ 게시글 수정 중 ]");
             //버튼이벤트
             btnUpload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     inputContext = et.getText().toString();
-                    writeNewUser(modifyName , modifyUid, inputContext, modifyImg, modifyName, modifyDate );
-
+                    writeNewUser(modifyName , modifyUid, inputContext, modifyImg, modifyName, modifyDate);
                     //작성 페이지 > 메인페이지 이동
                     Intent intent = new Intent(FeedWriteActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }
             });
-
         }
-
-
     }
 
     //파베 데베에 데이터 작성
     private void writeNewUser(String boardName, String id, String context, String imgUrl, String newsName, String date) {
         //객체 데이터
         Feed feed = new Feed(id, imgUrl, context, newsName, date);
-
         //dbreference 는 feed 테이블과 연결
         //feed > boardName > news data 추가
         //addOnSuccessListener 와 addOnFailureListener 개발가이드
@@ -196,7 +244,7 @@ public class FeedWriteActivity extends AppCompatActivity {
                 String getTime = mFormat.format(mDate);
 
                 //게시글 이름을 사용자닉네임 + 현재 날짜시간
-                writeNewUser( userNickname+getTime, user.getUid(), inputContext, uri.toString(),userNickname + getTime, getTime);
+                writeNewUser( user.getUid()+getTime, user.getUid(), inputContext, uri.toString(),user.getUid() + getTime, getTime);
             }
         });
     }

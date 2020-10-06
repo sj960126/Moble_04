@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".main.SettingActivity">
+    tools:context=".main.ScActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/settingBtn_before"
+            android:id="@+id/scBtn_before"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="10sp"
@@ -33,8 +33,9 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/settingLv"
+        android:id="@+id/scLv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 
 </LinearLayout>

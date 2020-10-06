@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +37,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.main.*;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -53,6 +57,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     private FirebaseUser loginUser = FirebaseAuth.getInstance().getCurrentUser();
     private ArrayList<Feed> choiceModify;
     private ArrayList<Reply> ang;
+    private ArrayList<String> likeArray;
     private User userinfo;
 
     //생성자
@@ -79,6 +84,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         SharedPreferences preferences = context.getSharedPreferences(myfeed.get(position).getUid(), Context.MODE_PRIVATE);
         String nickName = preferences.getString("nickName", "host");
         String feeduserImg = preferences.getString("img","");
+        Glide.with(holder.itemView).load(feeduserImg).circleCrop().into(holder.feedUserImg);
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //추가 부분
@@ -103,10 +109,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         holder.name.setTag(R.integer.userinfo, userinfo);
         holder.context.setText(myfeed.get(position).getContext());
 
-        // 좋아요 버튼에 해당 개시글 이름을 tag에 저장
-        holder.btnLike.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
-        holder.btnLike.setOnClickListener(onClickListener);
-
         // 댓글 버튼에 해당 개시글 이름을 tag에 저장
         holder.btnReply.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
         holder.btnReply.setOnClickListener(onClickListener);
@@ -121,7 +123,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
         // 최근에 업로드된 댓글 하나만 보여주게 함.
         DatabaseReference databaseReference = firebaseDatabase.getReference("Reply");
-        Query oneReply = databaseReference.child(myfeed.get(position).getNewsName()).limitToLast(1);
+        Query oneReply = databaseReference.child(myfeed.get(position).getNewsName()).orderByChild("date").limitToLast(1);
         oneReply.addChildEventListener(new ChildEventListener() {
 
             @Override
@@ -151,6 +153,42 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             @Override
             public void onCancelled(@NonNull DatabaseError error){}
         });
+
+        // 좋아요 버튼에 해당 개시글 이름을 tag에 저장
+        holder.btnLike.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());
+        holder.btnLike.setOnClickListener(onClickListener);
+
+        //좋아요 수
+        DatabaseReference likeData = firebaseDatabase.getReference("Like");
+        Query likeQuery = likeData.child(myfeed.get(position).getNewsName());
+        likeQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                likeArray =new ArrayList<>();
+                likeArray.add(snapshot.getKey());
+                Log.i("size",""+likeArray.size());
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                holder.tvLikecount.setText(likeArray.size()+"명이 게시글을 좋아합니다.");
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     @Override
@@ -161,9 +199,9 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     //viewHolder = listItem
     public class FeedViewHolder extends RecyclerView.ViewHolder {
         //listitem
-        TextView name, context, replyName, replyContext;
+        TextView name, context, replyName, replyContext, tvLikecount;
         ImageView img;
-        CircleImageView loginUserImg;
+        CircleImageView loginUserImg, feedUserImg;
         Button btnLike;
         Button btnReply, btnMenu, btnReplyEnter;
         EditText etReply;
@@ -178,6 +216,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             etReply =(EditText) itemView.findViewById(R.id.newsEt_reply);
             replyName =(TextView) itemView.findViewById(R.id.mainTv_replyid);
             replyContext = (TextView) itemView.findViewById(R.id.mainTv_replyContext);
+            tvLikecount =(TextView) itemView.findViewById(R.id.mainTv_like);
+            feedUserImg = (CircleImageView) itemView.findViewById(R.id.newsIv_feedImg);
 
             //button 디폴트 이미지 설정
             btnLike.setBackgroundResource(R.drawable.iconlike);

@@ -44,9 +44,12 @@ public class MypageFrag extends Fragment {
     private RecyclerView list;
     private CircleImageView iv_profilephoto;
     private TextView tv_nickname;
+    private TextView tv_noticenum;
+    private TextView tv_interestnum;
     private Button btn_profliemodify, btn_setting;
     private RecyclerView.Adapter adapter;
     private ArrayList<Feed> myfeed;
+    private ArrayList<String> myfollowlist;
     private FirebaseDatabase db;
     private DatabaseReference dbreference;
     private FirebaseUser firebaseUser;  // 로그인 유저의 uid정보를 가지고 있는 변수
@@ -66,7 +69,6 @@ public class MypageFrag extends Fragment {
         // 메인피드에서 프로필을 클릭해 마이페이지로 온경우
         Bundle bundle = this.getArguments();
         requestfrom = bundle.getString("from");
-
         if(requestfrom.equals("proflie"))  {
             choiceuser = (TransUser) bundle.getSerializable("userinfo");
             nowuserinfo = choiceuser;
@@ -77,6 +79,8 @@ public class MypageFrag extends Fragment {
 
         iv_profilephoto = rootview.findViewById(R.id.walkIv_user);
         tv_nickname = rootview.findViewById(R.id.myPageTv_username);
+        tv_noticenum = rootview.findViewById(R.id.myPageTv_noticenum);
+        tv_interestnum = rootview.findViewById(R.id.myPageTv_interestnum);
 
         btn_setting = (Button) rootview.findViewById(R.id.mypageBtn_setting);
         btn_setting.setOnClickListener(onClickListener);
@@ -107,7 +111,7 @@ public class MypageFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(rootview.getContext(), col);  // 그리드 뷰 레이아웃으로 설정
         list.setLayoutManager(layoutManager);
         myfeed = new ArrayList<>(); //유저 객체를 담을 (어댑터쪽으로)
-
+        myfollowlist = new ArrayList<String>();
         adapter = new MyPageNoticeAdapter(myfeed, getContext(), nowuserinfo);
         list.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
 
@@ -151,6 +155,7 @@ public class MypageFrag extends Fragment {
                                     }
                                 }
                                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
+                                tv_noticenum.setText(""+myfeed.size());
                             }
 
                             @Override
@@ -194,13 +199,18 @@ public class MypageFrag extends Fragment {
         dbreference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                if(snapshot.getKey().equals(firebaseUser.getUid())){
+                // 접속한 유저의 follow 목록 찾기
+                if(snapshot.getKey().equals(firebaseUser.getUid())) {
+                    // 접속 유저의 전체 follow 리스트 내용 하나씩 가져오기
+                    // followUserData.getKey : 접속한 유저가 관심등록한 유저들의 uid
                     for(DataSnapshot followUserData :snapshot.getChildren()){
+                        myfollowlist.add(followUserData.getKey());
                         if(followUserData.getKey().equals(nowuserinfo.getUid())){
                             btn_profliemodify.setText("관심 삭제");     // 관심 추가가 된 사람일 경우 버튼을 관심 삭제로 변경
                         }
                     }
                 }
+                tv_interestnum.setText(""+myfollowlist.size());
             }
 
             @Override
