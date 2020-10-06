@@ -27,7 +27,7 @@ public class iot_streaming_area extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        webView.loadUrl("http://192.168.0.3:8091/stream_simple.html");
+        webView.loadUrl("http://192.168.0.4:8091/stream_simple.html");
 
     }
 }
