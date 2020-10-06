@@ -1,8 +1,10 @@
 package com.withpet.main;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -81,7 +83,8 @@ public class SettingActivity extends AppCompatActivity {
                     dbreference = db.getReference("User");
                     dbreference.child(firebaseUser.getUid()).removeValue();
                     firebaseUser.delete();
-                    finish();
+                    ActivityCompat.finishAffinity(SettingActivity.this);
+                    System.exit(0);
                 }
                 else if(selectedText.equals("친구초대")){
                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);

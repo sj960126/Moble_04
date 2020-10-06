@@ -3,12 +3,14 @@ package com.withpet.health;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,6 +51,7 @@ public class HealthHospitalActivity extends AppCompatActivity {
   private double lon;
   private String way;
   private Thread tr;
+  private TMapTapi tMapTapi;
   private final static String TAG = "XML";
   private ArrayList<Hospital> list; //파싱 결과값
   private ProgressDialog dialog; // 로딩창
@@ -69,26 +72,34 @@ public class HealthHospitalActivity extends AppCompatActivity {
     tMapView = new TMapView(this);
     tMapView.setSKTMapApiKey(APK);
     health_hospital_map.addView(tMapView);
+
     //setGps();
     tMapView.setCenterPoint(126.988205, 37.551135);
 
-    tMapView.setOnCalloutRightButtonClickListener(new TMapView.OnCalloutRightButtonClickCallback() {
+    tMapView.setOnCalloutRightButtonClickListener(new TMapView.OnCalloutRightButtonClickCallback() { //풍선뷰 클릭 이벤트
         @Override
         public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
             lat = tMapMarkerItem.latitude; //위도
             lon = tMapMarkerItem.longitude; //경도
             way = tMapMarkerItem.getName();
-            TMapTapi tMapTapi = new TMapTapi(mcontext);
+            tMapTapi = new TMapTapi(mcontext);
             boolean isTmapApp = tMapTapi.isTmapApplicationInstalled();
             if(isTmapApp ==true){
                 tMapTapi.invokeRoute(way,(float)lon,(float)lat);
             }else{
-                Toast.makeText(mcontext,"설치",Toast.LENGTH_SHORT).show();
+                tmapinstall(); // 티맵  다운받는 메소드
             }
         }
     });
-   new GetWeatherTask().execute();
+    new GetWeatherTask().execute();
 
+    }
+    public void tmapinstall(){
+        ArrayList<String> arrayList = tMapTapi.getTMapDownUrl(); // 통신사별로 티맵 다운로드  uri를 arraylist로 저장한다
+        if (arrayList !=null && arrayList.size() > 0){
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(arrayList.get(0)));  //저장 받은 값을 intent한다
+            startActivity(intent);
+        }
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -152,13 +163,9 @@ public class HealthHospitalActivity extends AppCompatActivity {
     // MAIN UI 그리면서 백그라운드에서는 파싱을 해준다.
     class GetWeatherTask extends AsyncTask<Void, Void, Void> {
 
-
-
         // MAIN 스레드 중간에 백그라운드에서 작업할 내용
         @Override
         protected Void doInBackground(Void... params) {
-
-
 
             //파싱한 결과값을 담을 해쉬맵
             ArrayList<Hospital> arrayList = new ArrayList<Hospital>();
@@ -230,6 +237,7 @@ public class HealthHospitalActivity extends AppCompatActivity {
             }
 
             list = arrayList;
+
             for (int i=0;i<list.size();i++) {
                 TMapPoint point = new TMapPoint(Double.parseDouble(list.get(i).getX()), Double.parseDouble(list.get(i).getY()));
                 TMapMarkerItem markerItem = new TMapMarkerItem();
@@ -251,7 +259,6 @@ public class HealthHospitalActivity extends AppCompatActivity {
                 markerItem.setAutoCalloutVisible(true);
 
                 tMapView.addMarkerItem("marker" + i, markerItem);
-
             }
 
 //         마커 완료 후 로딩 끄기
@@ -259,6 +266,7 @@ public class HealthHospitalActivity extends AppCompatActivity {
 
             return null;
         }
+
     }
 }
 
