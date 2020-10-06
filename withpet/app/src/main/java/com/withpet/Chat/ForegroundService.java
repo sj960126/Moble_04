@@ -154,7 +154,6 @@ public class ForegroundService extends Service {
         Intent chattingintent = new Intent(this, ChattingActivity.class);
         TransUser tuser = new TransUser(applicationinfo.getUser(uid));      // chat에서 가져온 uid로 유저 정보 가져오기
         chattingintent.putExtra("Opponent", tuser);     // 가져온 유저 정보 intent에 추가
-        Log.i("유저확인", ""+((TransUser)chattingintent.getSerializableExtra("Opponent")).getUid());
         chattingintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         // 알림 메시지 만들기

@@ -16,9 +16,12 @@ import com.withpet.*;
 import com.withpet.Chat.ChatListAdapter;
 import com.withpet.Chat.ChattingRoom;
 import com.withpet.Chat.NotifyApplication;
+import com.withpet.main.MainActivity;
+import com.withpet.main.TransUser;
 import com.withpet.main.User;
 
 import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -83,6 +86,7 @@ public class FollowListActivity extends AppCompatActivity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             switch (v.getId()) {
                 case R.id.followListBtn_Back:
                     finish();
