@@ -159,36 +159,23 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         holder.btnLike.setOnClickListener(onClickListener);
 
         //좋아요 수
-        DatabaseReference likeData = firebaseDatabase.getReference("Like");
-        Query likeQuery = likeData.child(myfeed.get(position).getNewsName());
-        likeQuery.addChildEventListener(new ChildEventListener() {
+        final DatabaseReference likeData = firebaseDatabase.getReference("Like");
+        final int index = position;
+        likeData.child(myfeed.get(position).getNewsName()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 likeArray =new ArrayList<>();
-                likeArray.add(snapshot.getKey());
-                Log.i("size",""+likeArray.size());
+                for(DataSnapshot ds : snapshot.getChildren()) {
+                    likeArray.add(ds.getKey());
+                    holder.tvLikecount.setVisibility(View.VISIBLE);
+                    holder.tvLikecount.setText(likeArray.size()+"명이 게시글을 좋아합니다.");
+                }
             }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                holder.tvLikecount.setText(likeArray.size()+"명이 게시글을 좋아합니다.");
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-
     }
 
     @Override

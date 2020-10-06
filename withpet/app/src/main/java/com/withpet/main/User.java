@@ -4,6 +4,7 @@ public class User {
     private String name;
     private String nickname;
     private String email;
+    private String pw;
     private String uid;
     private String shape;
     private String imgUrl;
@@ -75,5 +76,13 @@ public class User {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getPw() {
+        return pw;
+    }
+
+    public void setPw(String pw) {
+        this.pw = pw;
     }
 }

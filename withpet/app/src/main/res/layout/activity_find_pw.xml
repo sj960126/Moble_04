@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".main.FindPwActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -35,44 +36,26 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <EditText
-            android:id="@+id/loginEt_id"
+            android:id="@+id/findEt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="아이디"
+            android:hint="Email"
             android:inputType="textPersonName" />
 
-
         <EditText
-            android:id="@+id/loginEt_pw"
+            android:id="@+id/findEt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="비밀번호"
-            android:inputType="textPassword" />
-
-
-        <Button
-            android:id="@+id/loginBtn_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="btnClick"
-            android:text="@string/login" />
+            android:hint="이름"
+            android:inputType="textPersonName" />
 
         <Button
-            android:id="@+id/loginBtn_findpw"
+            android:id="@+id/findBtn_ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="btnClick"
             android:text="비밀번호 찾기" />
-
-        <Button
-            android:id="@+id/loginBtn_join"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="btnClick"
-            android:text="@string/join" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 allUser.clear();
-
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor removeEditor = preferences.edit();
                 removeEditor.clear();
@@ -97,8 +96,14 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuth.signInWithEmailAndPassword(strEmail, strPw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        // 가입  && 이메일인증 완료
                         if(task.isSuccessful()){
-                            Login();
+                            FirebaseUser login = firebaseAuth.getCurrentUser();
+                            if(login.isEmailVerified()){
+                                Login();
+                            }else{
+                                Toast.makeText(LoginActivity.this, "가입한 이메일로 전송한 인증메일을 수락하세요.", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         else{
                             Toast.makeText(LoginActivity.this, "일치하는 회원이 없습니다.", Toast.LENGTH_SHORT).show();
@@ -106,10 +111,13 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
                 break;
+            case R.id.loginBtn_findpw:
+                Intent find = new Intent(LoginActivity.this, FindPwActivity.class);
+                startActivity(find);
+                break;
             case R.id.loginBtn_join:
                 Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
                 startActivity(intent);
-                finish();
                 break;
         }
     }
@@ -120,10 +128,10 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    //로그인 정보확인인
+    //로그인 정보확인
   private void loginCheck(FirebaseUser user) {
-        //로그인 유저가 있다면
-        if (user != null) {
+        //로그인 유저가 있고, 이메일 인증이 되었다면
+        if (user != null && user.isEmailVerified()) {
             Login();
         }
     }
