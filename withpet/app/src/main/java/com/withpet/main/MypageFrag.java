@@ -204,12 +204,17 @@ public class MypageFrag extends Fragment {
                 if(snapshot.getKey().equals(firebaseUser.getUid())) {
                     // 접속 유저의 전체 follow 리스트 내용 하나씩 가져오기
                     // followUserData.getKey : 접속한 유저가 관심등록한 유저들의 uid
-                    myfollowlist.clear();
                     for(DataSnapshot followUserData :snapshot.getChildren()){
                         myfollowlist.add(followUserData.getKey());
                         if(followUserData.getKey().equals(nowuserinfo.getUid())){
                             btn_profliemodify.setText("관심 삭제");     // 관심 추가가 된 사람일 경우 버튼을 관심 삭제로 변경
                         }
+                    }
+                }
+                myfollowlist.clear();
+                if(snapshot.getKey().equals(nowuserinfo.getUid())){
+                    for(DataSnapshot followUserData :snapshot.getChildren()){
+                        myfollowlist.add(followUserData.getKey());
                     }
                 }
                 tv_interestnum.setText(""+myfollowlist.size());

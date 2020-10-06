@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg">
 
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -16,22 +18,12 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:fontFamily="@font/gmarketsans_m"
-            android:layout_height="60dp"
-            android:gravity="fill"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:text="@string/app_name"
-            android:textSize="26sp" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@color/c6"
-            android:text="Email 회원가입"
-            android:textAlignment="textEnd"
-            android:textColor="@color/text"
-            android:textSize="18sp" />
+            android:fontFamily="@font/bazzi"
+            android:textColor="#ffffff"
+            android:textSize="50sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,6 +50,15 @@
                 android:hint="Email"
                 android:inputType="textPersonName" />
 
+            <Button
+                android:id="@+id/joinBtn_email"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center|center_vertical"
+                android:layout_weight="1"
+                android:backgroundTint="@color/text"
+                android:onClick="checkClick" />
+
         </LinearLayout>
 
         <EditText
@@ -69,23 +70,16 @@
             android:hint="이름"
             android:inputType="textPersonName" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/joinEt_pw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="비밀번호"
-                android:inputType="textPassword"
-                tools:layout_editor_absoluteX="-72dp"
-                tools:layout_editor_absoluteY="502dp" />
-
-        </LinearLayout>
+        <EditText
+            android:id="@+id/joinEt_pw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="비밀번호( 6자리 이상 )"
+            android:inputType="textPassword"
+            tools:layout_editor_absoluteX="-72dp"
+            tools:layout_editor_absoluteY="502dp" />
 
         <EditText
             android:id="@+id/joinEt_pw2"
@@ -117,6 +111,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="checkClick"
+            android:background="@drawable/diary_add_btn"
+            android:fontFamily="@font/bazzi"
+            android:layout_marginTop="20dp"
+            android:textColor="#ffffff"
             android:text="@string/join" />
 
     </LinearLayout>

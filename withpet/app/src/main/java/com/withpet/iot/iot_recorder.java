@@ -94,8 +94,6 @@ public class iot_recorder extends AppCompatActivity {
                 mediaPlayer = new MediaPlayer();
 
                 try {
-
-
                     mediaPlayer.setDataSource(AudioSavePathInDevice);
                     mediaPlayer.prepare();
                 } catch (IOException e) {
@@ -104,8 +102,7 @@ public class iot_recorder extends AppCompatActivity {
 
                 mediaPlayer.start();
 
-                Toast.makeText(iot_recorder.this, "Recording Playing", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(iot_recorder.this, "녹음파일 재생", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -120,6 +117,7 @@ public class iot_recorder extends AppCompatActivity {
 
                     MediaRecorderReady();
 
+                    Toast.makeText(iot_recorder.this, "녹음파일 정지", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -180,7 +178,7 @@ public class iot_recorder extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                        Toast.makeText(iot_recorder.this, "Recording started", Toast.LENGTH_LONG).show();
+                        Toast.makeText(iot_recorder.this, "녹음 시작.", Toast.LENGTH_LONG).show();
                     }
                     else {
                         requestPermission();
@@ -191,7 +189,7 @@ public class iot_recorder extends AppCompatActivity {
 
                     mediaRecorder.stop();
                     //    mediaPlayer.release();
-                    Toast.makeText(getApplicationContext(), "녹음 중지됨", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "녹음 중지", Toast.LENGTH_SHORT).show();
                     click = 0;
                 }
 

@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPw;
     private String strEmail, strPw;
+    private Button btnLogin, btnJoin, btnFind;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -45,6 +48,10 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = (EditText) findViewById(R.id.loginEt_id);
         etPw = (EditText) findViewById(R.id.loginEt_pw);
 
+        btnFind = (Button) findViewById(R.id.loginBtn_findpw);
+        btnJoin = (Button) findViewById(R.id.loginBtn_join);
+        btnLogin = (Button) findViewById(R.id.loginBtn_login);
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         DatabaseReference databaseReference = firebaseDatabase.getReference("User");
@@ -53,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 allUser.clear();
-
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor removeEditor = preferences.edit();
                 removeEditor.clear();
@@ -87,29 +93,45 @@ public class LoginActivity extends AppCompatActivity {
         loginCheck(LoginUser);
     }
 
+
+
     public void btnClick(View view){
         switch (view.getId()){
             case R.id.loginBtn_login:
                 //로그인할 이메일과 비밀번호
                 strEmail = etEmail.getText().toString().trim();
                 strPw = etPw.getText().toString().trim();
-                //파이어베이스 '인증' >> 이메일로그인
-                firebaseAuth.signInWithEmailAndPassword(strEmail, strPw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Login();
+                if(strEmail.equals("") || strPw.equals("")){
+                    Toast.makeText(this, "로그인 정보를 정확히 기입하세요.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    //파이어베이스 '인증' >> 이메일로그인
+                    firebaseAuth.signInWithEmailAndPassword(strEmail, strPw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            // 가입  && 이메일인증 완료
+                            if(task.isSuccessful()){
+                                FirebaseUser login = firebaseAuth.getCurrentUser();
+                                if(login.isEmailVerified()){
+                                    Login();
+                                }else{
+                                    Toast.makeText(LoginActivity.this, "가입한 이메일로 전송한 인증메일을 수락하세요.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this, "일치하는 회원이 없습니다.", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else{
-                            Toast.makeText(LoginActivity.this, "일치하는 회원이 없습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                    });
+                }
+                break;
+            case R.id.loginBtn_findpw:
+                Intent find = new Intent(LoginActivity.this, FindPwActivity.class);
+                startActivity(find);
                 break;
             case R.id.loginBtn_join:
                 Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
                 startActivity(intent);
-                finish();
                 break;
         }
     }
@@ -120,10 +142,10 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    //로그인 정보확인인
+    //로그인 정보확인
   private void loginCheck(FirebaseUser user) {
-        //로그인 유저가 있다면
-        if (user != null) {
+        //로그인 유저가 있고, 이메일 인증이 되었다면
+        if (user != null && user.isEmailVerified()) {
             Login();
         }
     }

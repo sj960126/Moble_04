@@ -43,11 +43,6 @@ public class ChattingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
         applicationinfo = (NotifyApplication)getApplication();
-        // 일단 포그라운드 서비스 종료
-        /*if(applicationinfo.isStart){
-            this.stopService(new Intent(this, ForegroundService.class));
-            applicationinfo.isStart = false;
-        }*/
 
         Intent intent = getIntent();
         et_sendmeaasge = findViewById(R.id.chattingEt_input);
