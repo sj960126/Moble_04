@@ -129,7 +129,7 @@ public class iot_recorder extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageReference = storage.getReferenceFromUrl("gs://practice-d557f.appspot.com").child("recorder/"+firebaseUser.getUid()+"recorder.mp4");
+                StorageReference storageReference = storage.getReferenceFromUrl("gs://practice-d557f.appspot.com").child("recorder").child(firebaseUser.getUid()+"/recorder.mp4");
                 Toast.makeText(iot_recorder.this, "경로 : "+new File(AudioSavePathInDevice), Toast.LENGTH_SHORT).show();
                 Uri recorderfile = Uri.fromFile(new File(AudioSavePathInDevice));
                 storageReference.putFile(recorderfile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
