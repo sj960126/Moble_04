@@ -169,6 +169,11 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                     likeArray.add(ds.getKey());
                     holder.tvLikecount.setVisibility(View.VISIBLE);
                     holder.tvLikecount.setText(likeArray.size()+"명이 게시글을 좋아합니다.");
+
+                    //만약 내가 좋아요를 눌렀다면 색칠!
+                    if(ds.getKey().equals(loginUser.getUid())){
+                        holder.btnLike.setBackgroundResource(R.drawable.iconlike2);
+                    }
                 }
             }
             @Override
