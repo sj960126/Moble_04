@@ -31,15 +31,16 @@
         android:layout_width="350dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="90dp"
         app:cardCornerRadius="30dp"
         android:elevation="10dp" >
 
         <EditText
             android:id="@+id/loginEt_id"
-            android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:ems="10"
             android:hint="email"
             android:inputType="textPersonName" />
@@ -47,9 +48,10 @@
 
         <EditText
             android:id="@+id/loginEt_pw"
-            android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="90dp"
             android:ems="10"
             android:hint="password"
             android:inputType="textPassword" />
