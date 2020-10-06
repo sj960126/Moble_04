@@ -81,6 +81,7 @@ public class MypageFrag extends Fragment {
         tv_nickname = rootview.findViewById(R.id.myPageTv_username);
         tv_noticenum = rootview.findViewById(R.id.myPageTv_noticenum);
         tv_interestnum = rootview.findViewById(R.id.myPageTv_interestnum);
+        tv_interestnum.setOnClickListener(onClickListener);
 
         btn_setting = (Button) rootview.findViewById(R.id.mypageBtn_setting);
         btn_setting.setOnClickListener(onClickListener);
@@ -203,6 +204,7 @@ public class MypageFrag extends Fragment {
                 if(snapshot.getKey().equals(firebaseUser.getUid())) {
                     // 접속 유저의 전체 follow 리스트 내용 하나씩 가져오기
                     // followUserData.getKey : 접속한 유저가 관심등록한 유저들의 uid
+                    myfollowlist.clear();
                     for(DataSnapshot followUserData :snapshot.getChildren()){
                         myfollowlist.add(followUserData.getKey());
                         if(followUserData.getKey().equals(nowuserinfo.getUid())){
@@ -271,6 +273,10 @@ public class MypageFrag extends Fragment {
                         ((Button)v).setText("관심 추가");
                         //btn_profliemodify.setB(ColorStateList.valueOf(R.color.c1));
                     }
+                    break;
+                case R.id.myPageTv_interestnum:
+                    intent = new Intent(v.getContext(), FollowListActivity.class);
+                    startActivity(intent);
                     break;
             }
         }
