@@ -4,7 +4,7 @@ public class diary {
     private String kind; //종류
     private String eat; // 사료량
     private String time; // 날짜
-    private String brand;
+    private String brand; //브랜드
     diary(){
 
     }

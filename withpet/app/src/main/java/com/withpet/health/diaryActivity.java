@@ -15,8 +15,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
@@ -43,8 +46,11 @@ public class diaryActivity extends AppCompatActivity {
     private ArrayList<Diary_Day_Info> day_list;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FirebaseUser firebaseUser;
-
-
+    private ImageButton search;
+    private Context context =this;
+    private int morning;
+    private int launcher;
+    private int diner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +80,7 @@ public class diaryActivity extends AppCompatActivity {
         databaseReference = database.getReference("Diary").child(firebaseUser.getUid());//db테이블 연결 경로 액세스
         cal = findViewById(R.id.calendar);
         add = findViewById(R.id.plus);
+        search =findViewById(R.id.diary_search);
 
 
         cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -82,10 +89,19 @@ public class diaryActivity extends AppCompatActivity {
                 date = String.valueOf(i)+"-"+String.valueOf(i1+1)+"-"+String.valueOf(i2);
                 arrayList.clear();
                 arrayKeyList.clear();
+                morning = 0; launcher=0; diner=0; int count =0;
                 for(Diary_Day_Info day : day_list ){
                     if(day.getDate().equals(date)){
                         for(diary d : day.getDiaryArrayList()){
                             arrayList.add(d);
+                            if (arrayList.get(count).getTime().equals("아침")){
+                                morning = morning + Integer.parseInt(arrayList.get(count).getEat());
+                            }else  if (arrayList.get(count).getTime().equals("점심")){
+                                launcher = launcher + Integer.parseInt(arrayList.get(count).getEat());
+                            }else  if (arrayList.get(count).getTime().equals("저녁")){
+                                diner = diner +Integer.parseInt(arrayList.get(count).getEat());
+                            }
+                            count++;
                         }
                         for(int index = 0; index<day.getDiaryArrayList().size();index++){
                             arrayKeyList.add(day.getDiaryKeyArrayList().get(index)); //키값 등록
@@ -107,6 +123,17 @@ public class diaryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(),diary_detail.class);
+                intent.putExtra("morning",morning);
+                intent.putExtra("launcher",launcher);
+                intent.putExtra("diner",diner);
+                startActivity(intent);
+            }
+        });
+
     }
     @Override
     protected void onResume() { // 액티비티 단위, 액티비티가 다시 켜질 때(인텐트로 넘어간 후 다시 돌아올때, intent startactivity)
@@ -116,12 +143,12 @@ public class diaryActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()){  //  ds : 날짜 (2020-09-15)
                     Diary_Day_Info td = new Diary_Day_Info();
-                    td.setDate(ds.getKey());
+                    td.setDate(ds.getKey()); //td에 날짜를 저장
                     for(DataSnapshot ids : ds.getChildren()){
-                        td.addDiaryArrayList(ids.getValue(diary.class));
+                        td.addDiaryArrayList(ids.getValue(diary.class)); //날짜의 정보를 넣는다
                         td.addDiaryKeyArrayList(ids.getKey()); //날짜의 각 행 키값저장
                     }
-                    day_list.add(td);
+                    day_list.add(td); //날짜 한줄씩 저장
                 }
             }
 

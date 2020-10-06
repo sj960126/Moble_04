@@ -45,6 +45,15 @@
             android:textSize="13dp" />
 
         <ImageButton
+            android:id="@+id/diary_search"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_toEndOf="@+id/day_change"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/search_diary" />
+
+        <ImageButton
             android:id="@+id/plus"
             android:layout_width="20dp"
             android:layout_height="20dp"
