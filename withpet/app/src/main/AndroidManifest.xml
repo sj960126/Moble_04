@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".mypage.FollowListActivity"></activity>
         <activity android:name=".main.FindPwActivity"></activity>
         <activity android:name=".main.SclistActivity" />
         <activity android:name=".main.ScActivity" />

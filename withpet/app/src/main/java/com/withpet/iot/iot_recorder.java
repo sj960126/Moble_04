@@ -1,5 +1,6 @@
 package com.withpet.iot;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -25,10 +26,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -36,6 +40,7 @@ import com.withpet.R;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -46,7 +51,6 @@ public class iot_recorder extends AppCompatActivity {
     private FirebaseDatabase database;
     private FirebaseUser firebaseUser;
     private static final int SCALE = 2 ;
-    private StorageReference storage;
 
     ImageButton img2;
     ImageButton img3;
@@ -66,7 +70,7 @@ public class iot_recorder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iot_recorder);
         database = FirebaseDatabase.getInstance();
-        storage = FirebaseStorage.getInstance().getReference();
+       // storage = FirebaseStorage.getInstance().getReference();
         img2 = (ImageButton) findViewById(R.id.play);
         img3 = (ImageButton) findViewById(R.id.stop);
         upload_btn = findViewById(R.id.iot_btn_audiosend);
@@ -123,9 +127,27 @@ public class iot_recorder extends AppCompatActivity {
         upload_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaRecorder.stop();
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageReference = storage.getReferenceFromUrl("gs://practice-d557f.appspot.com").child("recorder").child(firebaseUser.getUid()+"/recorder.mp4");
+                Toast.makeText(iot_recorder.this, "경로 : "+new File(AudioSavePathInDevice), Toast.LENGTH_SHORT).show();
+                Uri recorderfile = Uri.fromFile(new File(AudioSavePathInDevice));
+                storageReference.putFile(recorderfile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(iot_recorder.this, "업로드 완료", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(iot_recorder.this, "업로드 실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
             }
         });
+
 
 
         image = (ImageView) findViewById(R.id.image);

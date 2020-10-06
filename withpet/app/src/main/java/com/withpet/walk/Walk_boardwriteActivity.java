@@ -122,7 +122,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent_tmap = new Intent(Walk_boardwriteActivity.this,Walk_tmap.class);
                 intent_tmap.putExtra("uploadId",uploadId);
-                intent_tmap.putExtra("write",99);
+                intent_tmap.putExtra("check",99);
                 startActivity(intent_tmap);
             }
         });
@@ -172,7 +172,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
 
         if(d == 0.0 && c != 0.0){
             centerlat = latcenter/3;
-        }else if(b == 0.0){
+        }else if(b != 0.0 && c == 0.0 && d == 0.0){
             centerlat = latcenter/2;
         }else{
             centerlat = latcenter/4;
@@ -184,7 +184,7 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
 
         if(d == 0.0 && c != 0.0){
             centerlong = longcenter/3;
-        }else if(b == 0.0){
+        }else if(b != 0.0  && c == 0.0 && d == 0.0){
             centerlong = longcenter/2;
         }else{
             centerlong = longcenter/4;

@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg">
 
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -16,22 +18,12 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:fontFamily="@font/gmarketsans_m"
-            android:layout_height="60dp"
-            android:gravity="fill"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:text="@string/app_name"
-            android:textSize="26sp" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@color/c6"
-            android:text="Email 회원가입"
-            android:textAlignment="textEnd"
-            android:textColor="@color/text"
-            android:textSize="18sp" />
+            android:fontFamily="@font/bazzi"
+            android:textColor="#ffffff"
+            android:textSize="50sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -119,6 +111,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="checkClick"
+            android:background="@drawable/diary_add_btn"
+            android:fontFamily="@font/bazzi"
+            android:layout_marginTop="20dp"
+            android:textColor="#ffffff"
             android:text="@string/join" />
 
     </LinearLayout>
