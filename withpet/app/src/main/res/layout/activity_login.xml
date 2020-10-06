@@ -56,7 +56,6 @@
             android:hint="password"
             android:inputType="textPassword" />
 
-
         <Button
             android:id="@+id/loginBtn_login"
             android:layout_gravity="center_horizontal"
