@@ -73,8 +73,8 @@ public class HealthHospitalActivity extends AppCompatActivity {
     tMapView.setSKTMapApiKey(APK);
     health_hospital_map.addView(tMapView);
 
-    //setGps();
-    tMapView.setCenterPoint(126.988205, 37.551135);
+    setGps();
+//    tMapView.setCenterPoint(126.988205, 37.551135);
 
     tMapView.setOnCalloutRightButtonClickListener(new TMapView.OnCalloutRightButtonClickCallback() { //풍선뷰 클릭 이벤트
         @Override
