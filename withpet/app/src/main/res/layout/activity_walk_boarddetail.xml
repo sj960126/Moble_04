@@ -20,8 +20,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="fill"
-            android:text="@string/app_name"
-            android:textSize="30sp" />
+            android:text="WithPet"
+            android:textSize="35dp"
+            android:fontFamily="@font/bazzi"
+            />
 
     </LinearLayout>
 
@@ -49,14 +51,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="작성자"
-                android:textSize="20sp" />
+                android:fontFamily="@font/bazzi"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/walk_nickname"
                 android:layout_width="220dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:textSize="20sp" />
+                android:fontFamily="@font/bazzi"
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/mainBtn_menu"
@@ -79,21 +83,24 @@
                 android:layout_width="80dp"
                 android:layout_height="32dp"
                 android:text="제목"
-                android:textSize="20sp" />
+                android:fontFamily="@font/bazzi"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/walkTv_title"
+                android:fontFamily="@font/bazzi"
                 android:layout_width="320dp"
                 android:layout_height="32dp"
                 android:layout_weight="1"
                 android:textFontWeight="1"
-                android:textSize="20sp" />
+                android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/detail_tmap"
+            android:fontFamily="@font/bazzi"
             android:layout_width="match_parent"
-            android:layout_height="268dp"
+            android:layout_height="164dp"
             android:orientation="horizontal"></LinearLayout>
 
         <TextView
@@ -101,6 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="111dp"
             android:text="글 내용"
+            android:fontFamily="@font/bazzi"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -113,6 +121,9 @@
                 android:layout_width="62dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/bazzi"
+                android:textSize="20sp"
+                android:paddingTop = "15dp"
                 android:text="댓글" />
 
 
@@ -121,20 +132,24 @@
                 android:layout_width="269dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:fontFamily="@font/bazzi"
                 android:hint="댓글 작성" />
 
             <Button
                 android:id="@+id/walkreplyBtn_add"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="작성" />
+                android:fontFamily="@font/bazzi"
+                android:text="작성"
+                android:textColor="#ffff"
+                android:background="@drawable/diary_add_btn"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/walkrv_reply"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 
