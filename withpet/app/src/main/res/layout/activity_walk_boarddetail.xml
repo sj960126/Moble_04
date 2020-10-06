@@ -26,8 +26,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="379dp"
-        android:layout_height="607dp"
+        android:layout_width="356dp"
+        android:layout_height="594dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="10dp"
