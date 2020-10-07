@@ -104,14 +104,24 @@
             android:orientation="horizontal"></LinearLayout>
 
         <TextView
+            android:id="@+id/textView33"
+            android:layout_width="match_parent"
+            android:paddingTop="10dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bazzi"
+            android:textSize="20sp"
+            android:text="글내용" />
+
+        <TextView
             android:id="@+id/walkTv_content"
             android:layout_width="match_parent"
             android:layout_height="111dp"
-            android:text="글 내용"
+            android:paddingTop="10dp"
             android:fontFamily="@font/bazzi"
             android:textSize="20sp" />
 
         <LinearLayout
+            android:paddingTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="51dp"
             android:orientation="horizontal">
@@ -148,6 +158,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/walkrv_reply"
+            android:paddingTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
