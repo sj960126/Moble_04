@@ -130,6 +130,7 @@ public class diaryActivity extends AppCompatActivity {
                 intent.putExtra("morning",morning);
                 intent.putExtra("launcher",launcher);
                 intent.putExtra("diner",diner);
+                intent.putExtra("day",date);
                 startActivity(intent);
             }
         });
