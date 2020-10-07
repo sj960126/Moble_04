@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/textView8"
-                android:layout_width="119dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/bazzi"
@@ -80,9 +80,11 @@
             android:id="@+id/walkLayout_tmap"
             android:layout_width="match_parent"
             android:layout_height="164dp"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal"></LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -109,6 +111,7 @@
 
         <TextView
             android:id="@+id/textView10"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bazzi"
@@ -120,6 +123,7 @@
             android:id="@+id/walkEt_contentmodify"
             android:layout_width="match_parent"
             android:layout_height="197dp"
+            android:layout_marginTop="10dp"
             android:ems="10"
             android:fontFamily="@font/bazzi"
             android:gravity="start|top"
