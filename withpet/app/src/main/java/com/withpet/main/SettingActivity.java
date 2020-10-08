@@ -1,5 +1,6 @@
 package com.withpet.main;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,8 +20,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.newsfeed.ReportActivity;
 
@@ -30,6 +35,7 @@ public class SettingActivity extends AppCompatActivity {
     private Button btn_before;
     private Intent main;
     private DatabaseReference dbreference;
+    private DatabaseReference followreference;
     private FirebaseDatabase db;
     private FirebaseUser firebaseUser;
     private ListView listView;
@@ -80,6 +86,7 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 else if(selectedText.equals("회원탈퇴")){
                     Toast.makeText(SettingActivity.this, "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                    //deleteFollow();
                     dbreference = db.getReference("User");
                     dbreference.child(firebaseUser.getUid()).removeValue();
                     firebaseUser.delete();
@@ -112,5 +119,34 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
     }
+    private void deleteFollow(){
+        followreference = db.getReference("Follow");
+        //followreference.child(firebaseUser.getUid()).removeValue();
+        followreference.addListenerForSingleValueEvent(valueEventListener);
+    }
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+            for(DataSnapshot followUser : snapshot.getChildren()){
+
+               for (DataSnapshot followUserData : followUser.getChildren()){
+
+                   if(followUserData.getKey().equals(firebaseUser.getUid())){
+
+                       //followreference.child(followUser.getKey()).child(followUserData.getKey()).removeValue();
+                   }
+               }
+            }
+            //followreference.removeEventListener(valueEventListener);
+            Log.i("실행", "실행끝");
+            /// 일단 문제 : 리스너 나중에 실행되는데 시스템 꺼짐
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
 
 }
