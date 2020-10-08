@@ -6,18 +6,24 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +33,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.newsfeed.ReportActivity;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -78,8 +86,6 @@ public class SettingActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedText = (String) parent.getItemAtPosition(position);
                 if(selectedText.equals("로그아웃")){
-
-
                     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                     DatabaseReference databaseReference = firebaseDatabase.getReference("User");
                     allUser = new ArrayList<>();
@@ -90,29 +96,72 @@ public class SettingActivity extends AppCompatActivity {
                             //회원정보 xml파일 추가
                             for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                                 allUser.add(0, dataSnapshot.getValue(User.class));
-
-                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this.getApplicationContext());
-                                sp.edit().remove(allUser.get(0).getUid()).commit();
+                                SharedPreferences pref = getSharedPreferences(allUser.get(0).getUid(), MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.clear();
+                                editor.commit();
                             }
                         }
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
+                        public void onCancelled(@NonNull DatabaseError error) { }
                     });
-                    FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(SettingActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
-                    main = new Intent(SettingActivity.this, LoginActivity.class);
-                    startActivity(main);
-                    finish();
+
+                    //로그아웃
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                    FirebaseUser user = auth.getCurrentUser();
+                    try{
+                        if(user != null){
+                            auth.signOut();
+                            Toast.makeText(SettingActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                            main = new Intent(SettingActivity.this, LoginActivity.class);
+                            startActivity(main);
+                            finish();
+                        }
+                        else{
+                            Toast.makeText(SettingActivity.this, "파이어베이스 세션 null", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch(Exception e){
+                        Toast.makeText(SettingActivity.this, "오류발생", Toast.LENGTH_SHORT).show();
+                        Log.i("로그아웃 실행 중 오류 발생 :",""+e);
+                    }
+
                 }
                 else if(selectedText.equals("회원탈퇴")){
-                    Toast.makeText(SettingActivity.this, "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                    dbreference = db.getReference("User");
-                    dbreference.child(firebaseUser.getUid()).removeValue();
-                    firebaseUser.delete();
-                    ActivityCompat.finishAffinity(SettingActivity.this);
-                    System.exit(0);
+                    if(firebaseUser != null){
+                        final LinearLayout linearLayout = (LinearLayout) View.inflate(SettingActivity.this, R.layout.unlink_dialog,null);
+                        AlertDialog ad = new AlertDialog.Builder(SettingActivity.this).create();
+                        ad.setView(linearLayout);
+                        TextView tvEmail = linearLayout.findViewById(R.id.dlogTv_email);
+                        tvEmail.setText(firebaseUser.getEmail());
+
+                        View.OnClickListener onClickListener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                switch (view.getId()) {
+                                    case R.id.dlogBtn_ok:
+                                        String pw = 
+                                        break;
+                                    case R.id.dlogBtn_cancel:
+                                        break;
+                                }
+                            }
+                        };
+                    }
+                    firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            //알림 문구
+                            Toast.makeText(SettingActivity.this, "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+
+                            //파베 삭제
+                           dbreference = db.getReference("User");
+                            dbreference.child(firebaseUser.getUid()).removeValue();
+
+                            //어플 종료
+                            ActivityCompat.finishAffinity(SettingActivity.this);
+                            System.exit(0);
+                        }
+                    });
                 }
                 else if(selectedText.equals("친구초대")){
                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
