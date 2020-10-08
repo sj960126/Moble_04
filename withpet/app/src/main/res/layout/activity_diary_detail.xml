@@ -8,18 +8,22 @@
     tools:context=".health.diary_detail">
 
     <androidx.cardview.widget.CardView
-        android:layout_height="200dp"
-        android:layout_width="wrap_content"
-        app:cardCornerRadius="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        app:cardCornerRadius="10dp"
         android:elevation="10dp" >
         <LinearLayout
+            android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:orientation="horizontal"
             android:weightSum="3">
 
             <ImageView
-                android:id="@+id/walkIv_user"
+                android:id="@+id/diary_img"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -33,14 +37,14 @@
                 android:weightSum="3">
 
                 <TextView
-                    android:id="@+id/walk_title"
+                    android:id="@+id/diary_title"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:text="TextView" />
 
                 <TextView
-                    android:id="@+id/walk_content"
+                    android:id="@+id/diary_kind"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
