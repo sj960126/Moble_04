@@ -25,6 +25,8 @@ import org.eazegraph.lib.models.BarModel;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class diary_detail extends AppCompatActivity {
 
     private ArrayList<Integer> imageList;
@@ -40,26 +42,21 @@ public class diary_detail extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private TextView day;
     private User user;
-    private ImageView user_img;
+    private CircleImageView user_img;
     private TextView user_name;
     private TextView user_kind;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_detail);
         day = (TextView) findViewById(R.id.setdate);
-        user_img = (ImageView) findViewById(R.id.diary_img);
+        user_img = (CircleImageView) findViewById(R.id.diary_img);
         user_name = (TextView) findViewById(R.id.diary_title);
         user_kind = (TextView) findViewById(R.id.diary_kind);
         user = new User();
         initData();
 
-        Glide.with(this).load(user.getImgUrl()).into(user_img);
-        user_name.setText(user.getName());
-        if (user.getShape()==null){
-            user_kind.setText("정보가없어");
-        }
-        user_kind.setText(user.getShape());
 
         CreateBar();
         this.initializeData();
@@ -110,11 +107,11 @@ public class diary_detail extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
-                    Log.i("user확인",snapshot1.getKey());
-                    Log.i("user확인",firebaseUser.getUid());
                     if(snapshot1.getKey().equals(firebaseUser.getUid())){
                         user = snapshot1.getValue(User.class);
-                        Log.i("이름",user.getName());
+                        Glide.with(getApplicationContext()).load(user.getImgUrl()).override(200).into(user_img);
+                        user_kind.setText(user.getShape());
+                        user_name.setText(user.getName());
                     }
 
                 }
