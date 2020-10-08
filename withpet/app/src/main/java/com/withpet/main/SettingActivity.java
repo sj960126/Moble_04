@@ -1,5 +1,6 @@
 package com.withpet.main;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,8 +20,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.newsfeed.ReportActivity;
 
@@ -34,6 +38,7 @@ public class SettingActivity extends AppCompatActivity {
     private FirebaseDatabase db;
     private FirebaseUser firebaseUser;
     private ListView listView;
+    private ArrayList<User> allUser;
     static final String[] listMenu = {"친구초대", "고객센터", "정보", "로그아웃", "회원탈퇴"};
 
     @Override
@@ -73,8 +78,28 @@ public class SettingActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedText = (String) parent.getItemAtPosition(position);
                 if(selectedText.equals("로그아웃")){
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this.getApplicationContext());
-                    sp.edit().remove("clientToken").commit();
+
+
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    DatabaseReference databaseReference = firebaseDatabase.getReference("User");
+                    allUser = new ArrayList<>();
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            allUser.clear();
+                            //회원정보 xml파일 추가
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                allUser.add(0, dataSnapshot.getValue(User.class));
+
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this.getApplicationContext());
+                                sp.edit().remove(allUser.get(0).getUid()).commit();
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                     FirebaseAuth.getInstance().signOut();
                     Toast.makeText(SettingActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                     main = new Intent(SettingActivity.this, LoginActivity.class);

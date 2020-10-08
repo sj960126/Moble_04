@@ -81,29 +81,42 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     public void onBindViewHolder(@NonNull final FeedViewHolder holder, int position) {
 
         //각 게시글의 닉네임, 프로필이미지
-        SharedPreferences preferences = context.getSharedPreferences(myfeed.get(position).getUid(), Context.MODE_PRIVATE);
-        String nickName = preferences.getString("nickName", "host");
-        String feeduserImg = preferences.getString("img","");
-        Glide.with(holder.itemView).load(feeduserImg).circleCrop().into(holder.feedUserImg);
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //SharedPreferences를 사용할 예정이었으나, 다른 사용자가 변경한 프로필 내용이 바로 업데이트 되지 않아서 파베를 통해 출력할 수 있도록 수정 10.08
+        DatabaseReference databaseReference_user = firebaseDatabase.getReference("User");
+        final int writeNickname = position;
+        databaseReference_user.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    User user = dataSnapshot.getValue(User.class);
+                    if((myfeed.get(writeNickname).getUid()).equals(user.getUid())){
+                        holder.name.setText(user.getNickname());
+                        Glide.with(holder.itemView).load(user.getImgUrl()).circleCrop().into(holder.feedUserImg);
 
-        //추가 부분
-        userinfo = new User();
-        userinfo.setUid(myfeed.get(position).getUid());
-        userinfo.setNickname(nickName);
-        userinfo.setImgUrl(feeduserImg);
+                        //추가 부분
+                        userinfo = new User();
+                        userinfo.setUid(myfeed.get(writeNickname).getUid());
+                        userinfo.setNickname(user.getNickname());
+                        userinfo.setImgUrl(user.getImgUrl());
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
         //로그인한 사용자의 프로필이미지
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);
         String loginImg = sharedPreferences.getString("img", "");
-        // Log.i("login img", ""+ loginImg);
 
         Glide.with(holder.itemView)
                 .load(myfeed.get(position).getImgUrl())
                 .into(holder.img);
 
         Glide.with(holder.itemView).load(loginImg).circleCrop().into(holder.loginUserImg);
-        holder.name.setText(nickName);
+
         //추가 부분
         holder.name.setOnClickListener(onClickListener);
         holder.name.setTag(R.integer.userinfo, userinfo);
@@ -177,9 +190,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                 }
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 

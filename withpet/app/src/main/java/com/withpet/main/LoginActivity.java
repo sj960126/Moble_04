@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 //회원정보 xml파일 추가
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     allUser.add(0, dataSnapshot.getValue(User.class));
-
                     SharedPreferences sharedPreferences = getSharedPreferences(allUser.get(0).getUid(), MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 
