@@ -46,7 +46,8 @@
         <activity android:name=".newsfeed.FeedGalleryActivity" />
         <activity android:name=".newsfeed.FeedWriteActivity" />
         <activity android:name=".newsfeed.ReportActivity" />
-        <activity android:name=".iot.iot_streaming_area" />
+        <activity android:name=".iot.iot_streaming_area"
+                  android:configChanges="keyboard|keyboardHidden|orientation"/>
         <activity android:name=".mypage.ProfileModifyActivity" />
         <activity android:name=".main.MainActivity" />
         <activity android:name=".main.LoginActivity" />
