@@ -40,6 +40,7 @@ import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 import com.withpet.*;
 import com.withpet.main.MainActivity;
+import com.withpet.main.User;
 
 import java.util.ArrayList;
 
@@ -69,6 +70,7 @@ public class Walk_boarddetailFrag extends Fragment {
     int line_nb;
     int repeat;
     int reply_nb;
+    private String img;
     private String current_user;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -154,8 +156,19 @@ public class Walk_boarddetailFrag extends Fragment {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 databaseReference_reply = database.getReference("walk-reply").child(Integer.toString(board_nb)).child(Integer.toString(reply_nb));
 
-                SharedPreferences preferences = getContext().getSharedPreferences(user.getUid(), Context.MODE_PRIVATE);
-                String img = preferences.getString("img", "img");
+                DatabaseReference sb = database.getReference("User").child(user.getUid());
+                sb.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User user = snapshot.getValue(User.class);
+                        img = user.getImgUrl();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
                 Walk_ReplyUpload walk_replyUpload = new Walk_ReplyUpload(board_nb,replyTv.getText().toString().trim(),user.getUid(),reply_nb,img);
 
                 databaseReference_reply.setValue(walk_replyUpload);
