@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -72,6 +73,8 @@ public class SettingActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedText = (String) parent.getItemAtPosition(position);
                 if(selectedText.equals("로그아웃")){
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this.getApplicationContext());
+                    sp.edit().remove("clientToken").commit();
                     FirebaseAuth.getInstance().signOut();
                     Toast.makeText(SettingActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                     main = new Intent(SettingActivity.this, LoginActivity.class);
