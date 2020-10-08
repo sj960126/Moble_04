@@ -31,75 +31,75 @@
         android:id="@+id/linear1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/iotBtn_AutoMeal"
-                android:layout_width="wrap_content"
-                android:layout_height="90dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="30dp"
-                android:layout_weight="1"
-                android:text="자동급식버튼"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="자동급식버튼" />
-
-            <Button
-                android:id="@+id/iotBtn_RecorderSend"
-                android:layout_width="wrap_content"
-                android:layout_height="90dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginBottom="30dp"
-                android:layout_weight="1"
-                android:text="음성전송버튼"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="음성전송버튼"  />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView34"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:fontFamily="@font/bazzi"
+            android:textSize="30sp"
+            android:text="IOT" />
 
-            <Button
-                android:id="@+id/iotBtn_Recorder"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="30dp"
-                android:layout_weight="1"
-                android:text="음성녹음버튼"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="음성녹음버튼" />
+        <Button
+            android:id="@+id/iotBtn_Recorder"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/diary_add_btn"
+            android:fontFamily="@font/bazzi"
+            android:text="음성녹음"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#ffff"
+            tools:text="음성녹음" />
 
-            <Button
-                android:id="@+id/iotBtn_WebViewStreaming"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
-                android:text="우리아이가 밥먹는 모습 보러가기"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/iotBtn_RecorderSend"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/diary_add_btn"
+            android:fontFamily="@font/bazzi"
+            android:text="음성전송"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#ffff"
+            tools:text="음성전송" />
+
+        <Button
+            android:id="@+id/iotBtn_AutoMeal"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/diary_add_btn"
+            android:fontFamily="@font/bazzi"
+            android:text="자동급식"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#ffff"
+            tools:text="자동급식" />
+
+        <Button
+            android:id="@+id/iotBtn_WebViewStreaming"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/diary_add_btn"
+            android:fontFamily="@font/bazzi"
+            android:text="밥먹는 모습 보러가기"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#ffff" />
 
 
     </LinearLayout>

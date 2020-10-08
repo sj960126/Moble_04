@@ -1,13 +1,16 @@
 package com.withpet.walk;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -117,13 +120,27 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
             }
         });
 
-        walkBtn_tmap.setOnClickListener(new Button.OnClickListener() {
+        walkBtn_tmap.setOnClickListener(new Button.OnClickListener() { //tmap 경로설정하기
             @Override
             public void onClick(View view) {
+                /*if(getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)){
+                    if(hasPermissions()){
+                        Toast.makeText(context, "이미 허용함", Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        requestPerms();
+
+                    }
+                } else {
+                    Toast.makeText(context, "이용할 수 없음", Toast.LENGTH_SHORT).show();
+                }
+*/
                 Intent intent_tmap = new Intent(Walk_boardwriteActivity.this,Walk_tmap.class);
                 intent_tmap.putExtra("uploadId",uploadId);
                 intent_tmap.putExtra("check",99);
                 startActivity(intent_tmap);
+
+
             }
         });
     }
@@ -192,5 +209,26 @@ public class Walk_boardwriteActivity extends AppCompatActivity {
         return centerlong;
     }
 
+    private boolean hasPermissions(){
+        int res = 0;
+
+        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION};
+
+        for (String perms : permissions){
+            res = checkCallingOrSelfPermission(perms);
+
+            if(!(res == PackageManager.PERMISSION_GRANTED))
+                return false;
+        }
+        return true;
+    }
+
+    private void requestPerms(){
+        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION};
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            requestPermissions(permissions, 0);
+        }
+    }
 
 }

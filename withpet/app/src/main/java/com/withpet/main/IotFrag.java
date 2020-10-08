@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +38,7 @@ public class IotFrag extends Fragment {
     public OutputStream dataOutputStream;
     private Socket clientsocket;
     private String ip = "192.168.0.4";
-    private int port =8044;
+    private int port =8080;
     private Button meal;
     private Button voicesend;
     private Button recorder;
@@ -77,11 +78,12 @@ public class IotFrag extends Fragment {
                 case R.id.iotBtn_AutoMeal:
                     socket_id="1";
                     th.start();
+                    Toast.makeText(getContext(), "급식이 시작됩니다.", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.iotBtn_RecorderSend:
                     socket_id="2"+uid;
-
                     th.start();
+                    Toast.makeText(getContext(), "곧 급식기에서 음성이 재생됩니다.", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.iotBtn_Recorder:
                     intent = new Intent(v.getContext(), iot_recorder.class);

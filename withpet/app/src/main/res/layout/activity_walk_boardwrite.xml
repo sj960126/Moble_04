@@ -11,7 +11,9 @@
         android:layout_width="402dp"
         android:layout_height="41dp"
         android:layout_marginStart="1dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="1dp"
+
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,6 +30,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
+            android:fontFamily="@font/bazzi"
             android:text="게시글 작성"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -36,17 +39,17 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="409dp"
-        android:layout_height="527dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="356dp"
+        android:layout_height="500dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -58,21 +61,26 @@
                 android:layout_width="119dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/bazzi"
                 android:text="경로"
-                android:textSize="20sp" />
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/walkBtn_tmap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="설정" />
+                android:background="@drawable/diary_add_btn"
+                android:fontFamily="@font/bazzi"
+                android:text="설정"
+                android:textColor="#ffff"
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/walkwrite_tmap"
             android:layout_width="match_parent"
-            android:layout_height="205dp"
+            android:layout_height="164dp"
             android:orientation="horizontal"></LinearLayout>
 
         <LinearLayout
@@ -85,8 +93,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/bazzi"
                 android:text="제목"
-                android:textSize="20sp" />
+                android:textSize="25sp" />
 
             <EditText
                 android:id="@+id/walk_title"
@@ -94,16 +103,19 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:fontFamily="@font/bazzi"
                 android:inputType="textPersonName"
-                android:text="" />
+                android:text=""
+                android:textSize="25sp" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/textView10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/bazzi"
             android:text="내용"
-            android:textSize="20dp"
+            android:textSize="25sp"
             tools:text="내용" />
 
         <EditText
@@ -111,8 +123,10 @@
             android:layout_width="match_parent"
             android:layout_height="197dp"
             android:ems="10"
+            android:fontFamily="@font/bazzi"
             android:gravity="start|top"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -124,7 +138,11 @@
         android:layout_marginTop="98dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="54dp"
+        android:fontFamily="@font/bazzi"
+        android:textSize="20sp"
         android:text="작성"
+        android:textColor="#ffff"
+        android:background="@drawable/diary_add_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,6 +38,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.withpet.R;
+import com.withpet.main.MainActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +77,11 @@ public class iot_recorder extends AppCompatActivity {
         img3 = (ImageButton) findViewById(R.id.stop);
         upload_btn = findViewById(R.id.iot_btn_audiosend);
 
+        img2.setEnabled(false);
+        img3.setEnabled(false);
+        upload_btn.setEnabled(false);
+
+
         Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.iconrecorder_start_); //비트맵 선언
         bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / SCALE, bitmap.getHeight() / SCALE, true); //비트맵 커스텀
         img2.setImageBitmap(bitmap);
@@ -90,12 +97,10 @@ public class iot_recorder extends AppCompatActivity {
         img2.setOnClickListener(new View.OnClickListener() { //play
             @Override
             public void onClick(View view) {
-
+                img3.setEnabled(true);
                 mediaPlayer = new MediaPlayer();
 
                 try {
-
-
                     mediaPlayer.setDataSource(AudioSavePathInDevice);
                     mediaPlayer.prepare();
                 } catch (IOException e) {
@@ -104,8 +109,7 @@ public class iot_recorder extends AppCompatActivity {
 
                 mediaPlayer.start();
 
-                Toast.makeText(iot_recorder.this, "Recording Playing", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(iot_recorder.this, "녹음파일 재생", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -120,6 +124,7 @@ public class iot_recorder extends AppCompatActivity {
 
                     MediaRecorderReady();
 
+                    Toast.makeText(iot_recorder.this, "녹음파일 정지", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -136,6 +141,10 @@ public class iot_recorder extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Toast.makeText(iot_recorder.this, "업로드 완료", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("frag",4);
+                        startActivity(intent);
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -180,7 +189,7 @@ public class iot_recorder extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                        Toast.makeText(iot_recorder.this, "Recording started", Toast.LENGTH_LONG).show();
+                        Toast.makeText(iot_recorder.this, "녹음 시작.", Toast.LENGTH_LONG).show();
                     }
                     else {
                         requestPermission();
@@ -191,7 +200,9 @@ public class iot_recorder extends AppCompatActivity {
 
                     mediaRecorder.stop();
                     //    mediaPlayer.release();
-                    Toast.makeText(getApplicationContext(), "녹음 중지됨", Toast.LENGTH_SHORT).show();
+                    img2.setEnabled(true);
+                    upload_btn.setEnabled(true);
+                    Toast.makeText(getApplicationContext(), "녹음 중지", Toast.LENGTH_SHORT).show();
                     click = 0;
                 }
 

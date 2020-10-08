@@ -11,7 +11,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <WebView
             android:id="@+id/webview"
@@ -21,7 +25,15 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="30dp"
             android:layout_marginRight="5dp"
-            android:background="#434343" />
+            android:background="#343434">
+
+            <TextView
+                android:id="@+id/iot_dateNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        </WebView>
 
         <TextView
             android:id="@+id/textView5"
@@ -29,8 +41,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:text="♥우리아이 밥먹는 모습♥"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:fontFamily="@font/bazzi"
+            android:text="실시간 밥먹는 모습이다멍!"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#EFD2EC" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
