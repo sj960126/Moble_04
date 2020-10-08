@@ -47,7 +47,7 @@
         <activity android:name=".newsfeed.FeedWriteActivity" />
         <activity android:name=".newsfeed.ReportActivity" />
         <activity android:name=".iot.iot_streaming_area"
-                  android:configChanges="keyboard|keyboardHidden|orientation"/>
+                  android:configChanges="keyboard|keyboardHidden|orientation"/> // 웹뷰 화면전환시 reroad 현상 방지
         <activity android:name=".mypage.ProfileModifyActivity" />
         <activity android:name=".main.MainActivity" />
         <activity android:name=".main.LoginActivity" />

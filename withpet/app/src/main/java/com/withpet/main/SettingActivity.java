@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +25,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -128,39 +133,21 @@ public class SettingActivity extends AppCompatActivity {
 
                 }
                 else if(selectedText.equals("회원탈퇴")){
-                    if(firebaseUser != null){
-                        final LinearLayout linearLayout = (LinearLayout) View.inflate(SettingActivity.this, R.layout.unlink_dialog,null);
-                        AlertDialog ad = new AlertDialog.Builder(SettingActivity.this).create();
-                        ad.setView(linearLayout);
-                        TextView tvEmail = linearLayout.findViewById(R.id.dlogTv_email);
-                        tvEmail.setText(firebaseUser.getEmail());
-
-                        View.OnClickListener onClickListener = new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                switch (view.getId()) {
-                                    case R.id.dlogBtn_ok:
-                                        String pw = 
-                                        break;
-                                    case R.id.dlogBtn_cancel:
-                                        break;
-                                }
-                            }
-                        };
-                    }
                     firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            //알림 문구
-                            Toast.makeText(SettingActivity.this, "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                            if(task.isSuccessful()){
+                                //알림 문구
+                                Toast.makeText(SettingActivity.this, "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
 
-                            //파베 삭제
-                           dbreference = db.getReference("User");
-                            dbreference.child(firebaseUser.getUid()).removeValue();
+                                //파베 삭제
+                                dbreference = db.getReference("User");
+                                dbreference.child(firebaseUser.getUid()).removeValue();
 
-                            //어플 종료
-                            ActivityCompat.finishAffinity(SettingActivity.this);
-                            System.exit(0);
+                                main = new Intent(SettingActivity.this, LoginActivity.class);
+                                startActivity(main);
+                                finish();
+                            }
                         }
                     });
                 }

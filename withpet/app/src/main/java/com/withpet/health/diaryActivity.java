@@ -78,6 +78,7 @@ public class diaryActivity extends AppCompatActivity {
         arrayKeyList= new ArrayList<String>(); //내용 추가
         database =FirebaseDatabase.getInstance(); //파이어베이스 데이터베이스 연동
         databaseReference = database.getReference("Diary").child(firebaseUser.getUid());//db테이블 연결 경로 액세스
+
         cal = findViewById(R.id.calendar);
         add = findViewById(R.id.plus);
         search =findViewById(R.id.diary_search);
@@ -148,6 +149,7 @@ public class diaryActivity extends AppCompatActivity {
                     for(DataSnapshot ids : ds.getChildren()){
                         td.addDiaryArrayList(ids.getValue(diary.class)); //날짜의 정보를 넣는다
                         td.addDiaryKeyArrayList(ids.getKey()); //날짜의 각 행 키값저장
+
                     }
                     day_list.add(td); //날짜 한줄씩 저장
                 }
