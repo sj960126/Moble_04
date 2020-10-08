@@ -34,6 +34,8 @@ public class TransUser implements Serializable {
         user.setNickname(nickname);
         user.setShape(shape);
         user.setUid(uid);
+        user.setPw(pw);
+        user.setPetcode(petcode);
         return user;
     }
     public String getName() {

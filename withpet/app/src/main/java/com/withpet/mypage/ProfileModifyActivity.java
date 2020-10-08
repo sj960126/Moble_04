@@ -64,7 +64,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mypage_modify);
         Intent intent = getIntent();
         TransUser tuser = (TransUser) intent.getSerializableExtra("loginuser");
-        loginuser = tuser.TransformUser();
+        loginuser = tuser.TransformUser();      // intent로 받은 user정보는 인텐트로 전달하기 위한 TransUser 클래스 타입이라 User
 
         Spinner spinner = findViewById(R.id.modifySp_shape);
         iv_profilephoto = findViewById(R.id.modifyIv_profile);
