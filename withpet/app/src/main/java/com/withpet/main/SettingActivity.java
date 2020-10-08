@@ -48,6 +48,7 @@ public class SettingActivity extends AppCompatActivity {
     private Button btn_before;
     private Intent main;
     private DatabaseReference dbreference;
+    private DatabaseReference followreference;
     private FirebaseDatabase db;
     private FirebaseUser firebaseUser;
     private ListView listView;
@@ -176,5 +177,34 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
     }
+    private void deleteFollow(){
+        followreference = db.getReference("Follow");
+        //followreference.child(firebaseUser.getUid()).removeValue();
+        followreference.addListenerForSingleValueEvent(valueEventListener);
+    }
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+            for(DataSnapshot followUser : snapshot.getChildren()){
+
+               for (DataSnapshot followUserData : followUser.getChildren()){
+
+                   if(followUserData.getKey().equals(firebaseUser.getUid())){
+
+                       //followreference.child(followUser.getKey()).child(followUserData.getKey()).removeValue();
+                   }
+               }
+            }
+            //followreference.removeEventListener(valueEventListener);
+            Log.i("실행", "실행끝");
+            /// 일단 문제 : 리스너 나중에 실행되는데 시스템 꺼짐
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
 
 }

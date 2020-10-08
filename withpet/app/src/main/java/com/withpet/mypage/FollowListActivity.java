@@ -13,18 +13,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
-import com.withpet.Chat.ChatListAdapter;
-import com.withpet.Chat.ChattingRoom;
 import com.withpet.Chat.NotifyApplication;
-import com.withpet.main.MainActivity;
-import com.withpet.main.TransUser;
 import com.withpet.main.User;
-
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -60,7 +52,7 @@ public class FollowListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Follow").child(firebaseUser.getUid());
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Follow").child(getIntent().getStringExtra("userid"));
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
