@@ -107,7 +107,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         });
 
         //로그인한 사용자의 프로필이미지
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);
         String loginImg = sharedPreferences.getString("img", "");
 
@@ -387,7 +387,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                        });
                        popupMenu.show();
                    }
-
                    break;
                    //추가부분
                case R.id.mainTv_name:

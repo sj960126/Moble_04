@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 fragment = clientcenterFrag;
                 break;
-            case 4:
+            case 5:
                 Bundle bundle = new Bundle();
                 bundle.putString("uid",uid);
                 userdetailinfoFrag.setArguments(bundle);
