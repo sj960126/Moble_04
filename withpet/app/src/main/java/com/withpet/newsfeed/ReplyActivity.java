@@ -105,7 +105,7 @@ public class ReplyActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 feedReply.clear();
                 for(DataSnapshot reply: snapshot.getChildren()){
-                    feedReply.add(0,reply.getValue(Reply.class));
+                    feedReply.add(reply.getValue(Reply.class));
                 }
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }

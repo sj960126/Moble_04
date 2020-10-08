@@ -38,7 +38,7 @@ public class IotFrag extends Fragment {
     public OutputStream dataOutputStream;
     private Socket clientsocket;
     private String ip = "192.168.0.4";
-    private int port =8044;
+    private int port =8080;
     private Button meal;
     private Button voicesend;
     private Button recorder;
