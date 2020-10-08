@@ -2,16 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/userinfo"
-        android:title="사용자 정보 관리" />
-    <item
-        android:id="@+id/userfeed"
-        android:title="사용자 피드 관리" />
-    <item
-        android:id="@+id/userboard"
-        android:title="사용자 게시글 관리" />
+        android:title="회원 관리" />
     <item
         android:id="@+id/declarationlist"
-        android:title="신고 목록" />
+        android:title="피드 관리" />
+    <item
+        android:id="@+id/userboard"
+        android:title="산책 관리" />
     <item
         android:id="@+id/clientcenter"
         android:title="고객 센터" />

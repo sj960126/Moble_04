@@ -1,4 +1,4 @@
-package com.withpet_manager;
+package com.withpet_manager.main;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,14 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ClientcenterFrag extends Fragment {
+import com.withpet_manager.R;
+
+public class UserfeedFrag extends Fragment {
     private  View view;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_clientcenter_frag, container,false);
-
-
+        view = inflater.inflate(R.layout.activity_userfeed_frag,container,false);
         return view;
+
+
     }
 }

@@ -1,4 +1,4 @@
-package com.withpet_manager;
+package com.withpet_manager.userinfo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-
-import org.w3c.dom.Text;
+import com.withpet_manager.R;
+import com.withpet_manager.main.MainActivity;
 
 import java.util.ArrayList;
 

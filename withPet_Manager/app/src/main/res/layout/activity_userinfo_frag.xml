@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".UserinfoFrag" >
+    tools:context=".main.UserinfoFrag" >
 
     <TextView
         android:id="@+id/textView"
@@ -13,18 +13,18 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/bazzi"
         android:text="WithPet_Manager"
-        android:textSize="30sp" />
+        android:textSize="24sp" />
+
     <TextView
-        android:layout_marginTop="30dp"
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="사용자 정보 관리"
-        android:textSize="30sp" />
+        android:textSize="32sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
-        android:layout_width="471dp"
-        android:layout_height="649dp"
-        android:layout_marginTop="30dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp" />
 </LinearLayout>

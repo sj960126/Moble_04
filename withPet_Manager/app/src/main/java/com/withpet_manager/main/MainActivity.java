@@ -1,4 +1,4 @@
-package com.withpet_manager;
+package com.withpet_manager.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,12 +8,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.Window;
 import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.withpet_manager.R;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView; // 바텀 네비게이션 뷰
@@ -22,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     private ClientcenterFrag clientcenterFrag;
     private DeclarationlistFrag declarationlistFrag;
     private UserboardFrag userboardFrag;
-    private UserfeedFrag userfeedFrag;
     private UserinfoFrag userinfoFrag;
     private UserdetailinfoFrag userdetailinfoFrag;
 
@@ -39,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         clientcenterFrag = new ClientcenterFrag();
         declarationlistFrag = new DeclarationlistFrag();
         userinfoFrag = new UserinfoFrag();
-        userfeedFrag = new UserfeedFrag();
         userboardFrag = new UserboardFrag();
         userdetailinfoFrag = new UserdetailinfoFrag();
 
@@ -61,17 +58,14 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.userinfo:
                         setFrag(0);
                         break;
-                    case R.id.userfeed:
+                    case R.id.userboard:
                         setFrag(1);
                         break;
-                    case R.id.userboard:
+                    case R.id.declarationlist:
                         setFrag(2);
                         break;
-                    case R.id.declarationlist:
-                        setFrag(3);
-                        break;
                     case R.id.clientcenter:
-                        setFrag(4);
+                        setFrag(3);
                         break;
                 }
                 return true;
@@ -88,23 +82,19 @@ public class MainActivity extends AppCompatActivity {
                 fragment = userinfoFrag;
                 break;
             case 1:
-                fragment = userfeedFrag;
-                break;
-            case 2:
                 fragment = userboardFrag;
                 break;
-            case 3:
+            case 2:
                 fragment = declarationlistFrag;
                 break;
-            case 4:
+            case 3:
                 fragment = clientcenterFrag;
                 break;
-            case 5:
+            case 4:
                 Bundle bundle = new Bundle();
                 bundle.putString("uid",uid);
                 userdetailinfoFrag.setArguments(bundle);
                 fragment = userdetailinfoFrag;
-
                 break;
             default:
                 return;

@@ -1,4 +1,4 @@
-package com.withpet_manager;
+package com.withpet_manager.userinfo;
 
 public class Userinfo_getset {
     private String email;
