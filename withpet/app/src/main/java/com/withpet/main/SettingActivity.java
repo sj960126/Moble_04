@@ -144,9 +144,9 @@ public class SettingActivity extends AppCompatActivity {
                                 dbreference = db.getReference("User");
                                 dbreference.child(firebaseUser.getUid()).removeValue();
 
-                                //어플 종료
-                                ActivityCompat.finishAffinity(SettingActivity.this);
-                                System.exit(0);
+                                main = new Intent(SettingActivity.this, LoginActivity.class);
+                                startActivity(main);
+                                finish();
                             }
                         }
                     });

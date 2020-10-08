@@ -90,7 +90,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser LoginUser = firebaseAuth.getCurrentUser();
-        loginCheck(LoginUser);
+        //로그인 유저가 있고, 이메일 인증이 되었다면
+        if (LoginUser != null) {
+            if(LoginUser.isEmailVerified()){
+                Login();
+            }
+            else{
+                Toast.makeText(this, "인증메일을 확인해주세요.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 
@@ -145,18 +153,5 @@ public class LoginActivity extends AppCompatActivity {
         Intent main = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(main);
         finish();
-    }
-
-    //로그인 정보확인
-  private void loginCheck(FirebaseUser user) {
-        //로그인 유저가 있고, 이메일 인증이 되었다면
-        if (user != null) { 
-            if(user.isEmailVerified()){
-                Login();
-            }
-            else{
-                Toast.makeText(this, "인증메일을 확인해주세요.", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }
