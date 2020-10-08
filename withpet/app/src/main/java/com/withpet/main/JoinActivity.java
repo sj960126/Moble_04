@@ -8,8 +8,12 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +39,9 @@ public class JoinActivity extends AppCompatActivity {
     private EditText etNickName, etEmail, etPw, etPwcheck, etName;
     private String strEmail, strNickname, strPw, strPw2, strName;
     private Button btnEmail;
+    private Spinner spShpae;
+    private String shape;
+    private ArrayAdapter adapter;
 
 
     @Override
@@ -48,6 +55,7 @@ public class JoinActivity extends AppCompatActivity {
         etPw = (EditText) findViewById(R.id.joinEt_pw);
         etPwcheck = (EditText) findViewById(R.id.joinEt_pw2);
         btnEmail = (Button) findViewById(R.id.joinBtn_email);
+        spShpae =(Spinner)findViewById(R.id.joinSp_shape);
 
         btnEmail.setBackgroundResource(R.drawable.iconhelp);
 
@@ -55,6 +63,12 @@ public class JoinActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         reference = firebaseDatabase.getReference("User");
+
+        // Spinner(콤보박스)에 사용할 아이템 리스트 adapter 생성(R.array.shape : 아이템리스트, R.layout.support~ : 안드로이드 제공 콤보박스 아이템 기본 레이아웃)
+        adapter = ArrayAdapter.createFromResource(this, R.array.shape, R.layout.support_simple_spinner_dropdown_item);
+        spShpae.setAdapter(adapter);
+
+
     }
 
     @Override
@@ -73,8 +87,21 @@ public class JoinActivity extends AppCompatActivity {
                 return null;
             }
         };
-
         etNickName.setFilters(new InputFilter[]{filter_nickName});
+
+        // 아이템 선택 이벤트
+        spShpae.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            //아이템 선택 시
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                shape = (String)adapter.getItem(position);
+            }
+            //잘 모르겠음
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                shape = "";
+            }
+        });
     }
 
     public void checkClick(View view) {
@@ -95,6 +122,7 @@ public class JoinActivity extends AppCompatActivity {
                 strEmail = etEmail.getText().toString().trim();
                 strPw = etPw.getText().toString().trim();
                 strPw2 = etPwcheck.getText().toString().trim();
+                Log.i("견종", ""+shape);
                 //비밀번호 = 비밀번호 확인
                 if (strPw.equals(strPw2)) {
                     firebaseAuth.createUserWithEmailAndPassword(strEmail, strPw)
