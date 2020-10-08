@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "4736701025",
+    "firebase_url": "https://practice-d557f.firebaseio.com",
+    "project_id": "practice-d557f",
+    "storage_bucket": "practice-d557f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4736701025:android:89b70a498aeaff43215020",
+        "android_client_info": {
+          "package_name": "com.example.withpet_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4736701025-oiutigubgoom33hn4go5vb1ttbe6mkfq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.withpet_manager",
+            "certificate_hash": "ab10180f79fbb8ea4dfd3dbe0e8f9485c45e07a9"
+          }
+        },
+        {
+          "client_id": "4736701025-66m4mdgq8t9hkd5rsrmpa60uriekofrk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLy9jQhGxJe0yvVKojis0WQk9keAF9H7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4736701025-66m4mdgq8t9hkd5rsrmpa60uriekofrk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4736701025:android:9b2a8ec5483b3542215020",
+        "android_client_info": {
+          "package_name": "com.withpet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4736701025-dclujd2oag6klkj7rbin25ev2j3dtfb6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.withpet",
+            "certificate_hash": "dd42763220c3e37256f99ca914e32f58b9d4704a"
+          }
+        },
+        {
+          "client_id": "4736701025-3vggu30915rjuoufr0kdhbr9ne8e2d2h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.withpet",
+            "certificate_hash": "459ea9a07f53521c1636e08abb0a73b97bbd0d50"
+          }
+        },
+        {
+          "client_id": "4736701025-66m4mdgq8t9hkd5rsrmpa60uriekofrk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLy9jQhGxJe0yvVKojis0WQk9keAF9H7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4736701025-66m4mdgq8t9hkd5rsrmpa60uriekofrk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
