@@ -110,8 +110,11 @@ public class diary_detail extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
-                    if(snapshot1.getKey().equals(firebaseUser)){
+                    Log.i("user확인",snapshot1.getKey());
+                    Log.i("user확인",firebaseUser.getUid());
+                    if(snapshot1.getKey().equals(firebaseUser.getUid())){
                         user = snapshot1.getValue(User.class);
+                        Log.i("이름",user.getName());
                     }
 
                 }
