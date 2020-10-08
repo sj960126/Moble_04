@@ -47,6 +47,7 @@ public class NotifyApplication extends Application {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.i("실행", "변경");
                for(int i = 0 ; i < userlist.size(); i++){
                    if(userlist.get(i).getUid().equals(snapshot.getKey())){
                        userlist.set(i, snapshot.getValue(User.class));

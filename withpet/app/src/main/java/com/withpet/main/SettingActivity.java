@@ -133,6 +133,7 @@ public class SettingActivity extends AppCompatActivity {
 
                 }
                 else if(selectedText.equals("회원탈퇴")){
+                    deleteFollow();
                     firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -179,26 +180,22 @@ public class SettingActivity extends AppCompatActivity {
     }
     private void deleteFollow(){
         followreference = db.getReference("Follow");
-        //followreference.child(firebaseUser.getUid()).removeValue();
+        followreference.child(firebaseUser.getUid()).removeValue();
         followreference.addListenerForSingleValueEvent(valueEventListener);
     }
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-            for(DataSnapshot followUser : snapshot.getChildren()){
-
-               for (DataSnapshot followUserData : followUser.getChildren()){
-
-                   if(followUserData.getKey().equals(firebaseUser.getUid())){
-
-                       //followreference.child(followUser.getKey()).child(followUserData.getKey()).removeValue();
+            for(DataSnapshot followUser : snapshot.getChildren()){  // 모든 유저의 팔로우 목록 가져오기
+               for (DataSnapshot followUserData : followUser.getChildren()){    // 해당 유저의 팔로우 유저 정보 가져오기
+                   if(followUserData.getKey().equals(firebaseUser.getUid())){   // 팔로우 유저 정보에 회원 탈퇴하는 유저가 있는지 찾기
+                       // 팔로우 유저 정보에 회원탈퇴하는 유저가 있으면 정보 삭제
+                       followreference.child(followUser.getKey()).child(followUserData.getKey()).removeValue();
                    }
                }
             }
-            //followreference.removeEventListener(valueEventListener);
+            followreference.removeEventListener(valueEventListener);    // 모든 삭제가 끝나면 이벤트 리스너 삭제
             Log.i("실행", "실행끝");
-            /// 일단 문제 : 리스너 나중에 실행되는데 시스템 꺼짐
         }
 
         @Override

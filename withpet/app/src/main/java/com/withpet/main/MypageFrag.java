@@ -133,10 +133,31 @@ public class MypageFrag extends Fragment {
         // 메뉴를 통해 들어오거나, 메인피드 게시글 프로필을 눌러서 들어오지 않은 경우
 
         if(requestfrom.equals("menu") || nowuserinfo == null ){
-            nowuserinfo = new TransUser(((NotifyApplication)getActivity().getApplication()).getUser(firebaseUser.getUid()));
+            DatabaseReference databaseReference = db.getReference("User").child(firebaseUser.getUid());
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    nowuserinfo = new TransUser(snapshot.getValue(User.class));
+                    tv_nickname.setText(nowuserinfo.getNickname());                 // 마이페이지에 유저 닉네임 출력
+                    Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);     // 유저 프로필 사진 출력
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            //nowuserinfo = new TransUser(((NotifyApplication)getActivity().getApplication()).getUser(firebaseUser.getUid()));
         }
+        else{
+            tv_nickname.setText(nowuserinfo.getNickname());                 // 마이페이지에 유저 닉네임 출력
+            Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);     // 유저 프로필 사진 출력
+
+        }
+/*
         tv_nickname.setText(nowuserinfo.getNickname());                 // 마이페이지에 유저 닉네임 출력
         Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);     // 유저 프로필 사진 출력
+*/
 
         //
         dbreference = db.getReference("Feed");
