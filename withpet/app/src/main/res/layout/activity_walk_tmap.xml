@@ -7,14 +7,24 @@
     tools:context=".walk.Walk_tmap"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/textView31"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bazzi"
+        android:textSize="30sp"
+        android:text="산책로 설정"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingBottom="20dp"/>
+
+
     <LinearLayout
         android:id="@+id/walk_map"
-        android:layout_width="409dp"
+        android:layout_width="390dp"
         android:layout_height="489dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,16 +33,42 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/clearBtn"
+    <TextView
+        android:id="@+id/textView32"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Clear" />
+        android:layout_height="37dp"
+        android:layout_weight="1"
+        android:paddingLeft="200dp"
+        android:text="산책 경로 경유지는 최대 2개 입니다." />
 
-    <Button
-        android:id="@+id/mapsavebtn"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="216dp"
         android:layout_height="wrap_content"
-        android:text="완료" />
+        android:layout_marginLeft="180dp"
+        android:layout_marginTop="35dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/diary_add_btn"
+            android:fontFamily="@font/bazzi"
+            android:text="Clear"
+            android:textColor="#ffff"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/mapsavebtn"
+            android:layout_width="106dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/diary_add_btn"
+            android:fontFamily="@font/bazzi"
+            android:text="완료"
+            android:textColor="#ffff"
+
+            android:textSize="25sp" />
+    </LinearLayout>
 
 </LinearLayout>

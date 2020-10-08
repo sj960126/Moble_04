@@ -15,6 +15,7 @@ import android.graphics.PointF;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -89,14 +90,10 @@ public class Walk_tmap extends AppCompatActivity implements TMapGpsManager.onLoc
         tMapView.setSKTMapApiKey(APK);
         walk_map.addView(tMapView);
 
-        tMapGpsManager = new TMapGpsManager(context);
-        tMapGpsManager.setMinTime(1000);
-        tMapGpsManager.setMinDistance(5);
-        tMapGpsManager.setProvider(tMapGpsManager.GPS_PROVIDER);
 
-        tMapGpsManager.OpenGps();
+        gps();
         tMapView.setTrackingMode(true);
-        tMapView.setSightVisible(true);
+
         tMapView.setZoomLevel(14);
         //tmapview 클릭 이벤트
         tMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
@@ -172,6 +169,22 @@ public class Walk_tmap extends AppCompatActivity implements TMapGpsManager.onLoc
 
     }
 
+    public  void gps(){ //gps 사용 권한과 현재위치 표시
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
+            }
+            return;
+        }
+
+        tMapGpsManager = new TMapGpsManager(context);
+        tMapGpsManager.setMinTime(1000000000);
+        tMapGpsManager.setMinDistance(5);
+        tMapGpsManager.setProvider(tMapGpsManager.GPS_PROVIDER);
+        tMapGpsManager.OpenGps();
+    }
     private double Point_Lat(){
         double Lat = spot[0][0]+spot[1][0]+spot[2][0]+spot[3][0];
         if(spot[3][0] == 0 && spot[2][0] ==0){

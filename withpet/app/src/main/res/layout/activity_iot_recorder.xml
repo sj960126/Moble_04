@@ -31,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/bazzi"
             android:text="마이크를 누르면 녹음이 시작됩니다."
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -46,7 +47,7 @@
                 android:id="@+id/play"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginLeft="100dp"
+                android:layout_marginLeft="120dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="60dp"
                 android:padding="0dp"
@@ -74,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="음성이 마음에 드시나요 ? "
+                android:fontFamily="@font/bazzi"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <Button
@@ -82,7 +84,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
-                android:text="음성전송" />
+                android:text="음성전송"
+                android:fontFamily="@font/bazzi"
+                android:textColor="#ffff"
+                android:background="@drawable/diary_add_btn"/>
         </LinearLayout>
 
 

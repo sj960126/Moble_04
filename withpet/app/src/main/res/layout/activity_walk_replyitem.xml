@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="411dp"
+    android:layout_height="80dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,25 +17,27 @@
 
             <ImageView
                 android:id="@+id/walkImg_user"
-                android:layout_width="72dp"
+                android:layout_width="75dp"
                 android:layout_height="68dp"
                 android:layout_weight="1"
+                android:paddingLeft="10dp"
                 app:srcCompat="@drawable/dog" />
 
             <TextView
                 android:id="@+id/tv_replyname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:fontFamily="@font/bazzi"
+                android:paddingLeft="10dp"
+                android:text="asdfasdfasdf" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_reply"
-            android:layout_width="339dp"
-            android:layout_height="45dp"
+            android:layout_width="302dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
+            android:fontFamily="@font/bazzi"
             android:text="TextView" />
     </LinearLayout>
 
