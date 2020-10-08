@@ -244,6 +244,12 @@ public class Walk_boarddetailFrag extends Fragment {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
 
+                            case R.id.walkmenu_112:
+                                Intent intent_report = new Intent(view.getContext(),Walk_Report.class);
+                                intent_report.putExtra("board_nb",board_nb);
+                                startActivity(intent_report);
+
+                                break;
                             case R.id.walkmenu_mod: //수정 버튼
                                 FirebaseUser user0 = FirebaseAuth.getInstance().getCurrentUser();
                                 if(user0.getUid().equals(current_user)){
