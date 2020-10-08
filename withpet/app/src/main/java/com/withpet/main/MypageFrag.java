@@ -130,62 +130,16 @@ public class MypageFrag extends Fragment {
         super.onResume();
         Log.i("resume start", "resume start");
 
-        //파이어베이스에서 로그인유저 nickname 정보 가져오기
-        if(requestfrom.equals("menu") || nowuserinfo.getUid().equals(firebaseUser.getUid())) {
-            final DatabaseReference userdbreference = db.getReference("User");
-            userdbreference.addChildEventListener(new ChildEventListener() {
+        // 메뉴를 통해 들어오거나, 메인피드 게시글 프로필을 눌러서 들어오지 않은 경우
+
+        if(requestfrom.equals("menu") || nowuserinfo == null ){
+            DatabaseReference databaseReference = db.getReference("User").child(firebaseUser.getUid());
+            databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    if(snapshot.getKey().equals(firebaseUser.getUid())){
-                        loginuser = new TransUser(snapshot.getValue(User.class));       // 로그인한 유저의 정보(프로필 사진정보, 닉네임 등) 가져오기
-                        nowuserinfo = loginuser;                                        // 마이페이지에 출력할 유저 정보를 로그인한 유저의 정보로 저장
-                        tv_nickname.setText(nowuserinfo.getNickname());                 // 마이페이지에 출력 유저로
-                        Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);
-
-                        // 게시글 정보 가져오기
-                        dbreference = db.getReference("Feed");//연동한 DB의 테이블 연결
-                        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                //파이어베이스 데이터베이스의 데이터를 받아오는 곳
-                                myfeed.clear(); //기존 배열가 존재하지 않게 초기화 방지차원
-                                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                                    Feed feed = snapshot.getValue(Feed.class);
-                                    if(feed.getUid().equals(nowuserinfo.getUid())){
-                                        myfeed.add(0, feed);
-                                    }
-                                }
-                                adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
-                                tv_noticenum.setText(""+myfeed.size());
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                //데베 데이터를 가져오던 중 에러 발생 시
-                                Toast.makeText(getActivity(), "에러라라고오오옹", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }
-
-                @Override   // 변경이 있을 때 호출
-                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    if(snapshot.getKey().equals(firebaseUser.getUid())){
-                        loginuser = new TransUser(snapshot.getValue(User.class));       // onChildAdded 내용과 동일
-                        nowuserinfo = loginuser;
-                        tv_nickname.setText(nowuserinfo.getNickname());
-                        Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);
-
-                    }
-                }
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    nowuserinfo = new TransUser(snapshot.getValue(User.class));
+                    tv_nickname.setText(nowuserinfo.getNickname());                 // 마이페이지에 유저 닉네임 출력
+                    Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);     // 유저 프로필 사진 출력
                 }
 
                 @Override
@@ -193,52 +147,72 @@ public class MypageFrag extends Fragment {
 
                 }
             });
+            //nowuserinfo = new TransUser(((NotifyApplication)getActivity().getApplication()).getUser(firebaseUser.getUid()));
         }
+        else{
+            tv_nickname.setText(nowuserinfo.getNickname());                 // 마이페이지에 유저 닉네임 출력
+            Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);     // 유저 프로필 사진 출력
 
-        // 팔로우 정보 가져오기
-        dbreference = db.getReference("Follow"); //연동한 DB의 테이블 연결
-        dbreference.addChildEventListener(new ChildEventListener() {
+        }
+/*
+        tv_nickname.setText(nowuserinfo.getNickname());                 // 마이페이지에 유저 닉네임 출력
+        Glide.with(rootview).load(nowuserinfo.getImgUrl()).override(800).into(iv_profilephoto);     // 유저 프로필 사진 출력
+*/
+
+        //
+        dbreference = db.getReference("Feed");
+        dbreference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                // 접속한 유저의 follow 목록 찾기
-                if(snapshot.getKey().equals(firebaseUser.getUid())) {
-                    // 접속 유저의 전체 follow 리스트 내용 하나씩 가져오기
-                    // followUserData.getKey : 접속한 유저가 관심등록한 유저들의 uid
-                    for(DataSnapshot followUserData :snapshot.getChildren()){
-                        myfollowlist.add(followUserData.getKey());
-                        if(followUserData.getKey().equals(nowuserinfo.getUid())){
-                            btn_profliemodify.setText("관심 삭제");     // 관심 추가가 된 사람일 경우 버튼을 관심 삭제로 변경
-                        }
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                myfeed.clear();
+                for(DataSnapshot feeddata: snapshot.getChildren()){
+                    Feed feed = feeddata.getValue(Feed.class);
+                    if(feed.getUid().equals(nowuserinfo.getUid())){
+                        myfeed.add(0, feed);
                     }
                 }
-                myfollowlist.clear();
-                if(snapshot.getKey().equals(nowuserinfo.getUid())){
-                    for(DataSnapshot followUserData :snapshot.getChildren()){
-                        myfollowlist.add(followUserData.getKey());
-                    }
-                }
-                tv_interestnum.setText(""+myfollowlist.size());
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
+                tv_noticenum.setText(""+myfeed.size());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+        //파이어베이스에서 로그인유저 nickname 정보 가져오기
+        // 메뉴를 눌러 마이페이지로 오거나, 피드에서 내가 올린 게시글에서 프로필을 눌러서 왔는지 확인하는 코드
+
+        dbreference = db.getReference("Follow");
+        dbreference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                // 팔로우 정보에서 로그인한 유저의 정보 찾기
+                if(snapshot.getKey().equals(firebaseUser.getUid())){
+                    // 로그인 한 유저의 팔로우 목록 전체 실행
+                    for(DataSnapshot followuserdata :snapshot.getChildren()){
+                        // 로그인 한 유저의 팔로우 목록 중 마이페이지에 출력할 유저가 있는지 찾기
+                        if(followuserdata.getKey().equals(nowuserinfo.getUid())){
+                            btn_profliemodify.setText("관심 삭제");    // 있다면 프로필 수정 버튼을 문구를 관심 삭제로 변경
+                        }
+                    }
+                }
+                if(snapshot.getKey().equals(nowuserinfo.getUid())){
+                    myfollowlist.clear();
+                    for(DataSnapshot followuserdata :snapshot.getChildren()){
+                        myfollowlist.add(followuserdata.getKey());
+                    }
+                    tv_interestnum.setText(""+myfollowlist.size());
+                }
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {   }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {    }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
@@ -281,6 +255,7 @@ public class MypageFrag extends Fragment {
                     break;
                 case R.id.myPageTv_interestnum:
                     intent = new Intent(v.getContext(), FollowListActivity.class);
+                    intent.putExtra("userid", nowuserinfo.getUid());
                     startActivity(intent);
                     break;
             }

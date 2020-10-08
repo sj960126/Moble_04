@@ -9,7 +9,10 @@ public class TransUser implements Serializable {
     private String uid;
     private String shape;
     private String imgUrl;
+    private String pw;
     private int meal;
+    private int petcode;
+
 
     public TransUser(User user){
         name = user.getName();
@@ -19,6 +22,8 @@ public class TransUser implements Serializable {
         shape = user.getShape();
         imgUrl = user.getImgUrl();
         meal = user.getMeal();
+        pw = user.getPw();
+        petcode = user.getPetcode();
     }
     public User TransformUser(){
         User user = new User();
@@ -29,6 +34,8 @@ public class TransUser implements Serializable {
         user.setNickname(nickname);
         user.setShape(shape);
         user.setUid(uid);
+        user.setPw(pw);
+        user.setPetcode(petcode);
         return user;
     }
     public String getName() {

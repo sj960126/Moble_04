@@ -27,13 +27,15 @@
             android:layout_marginRight="5dp"
             android:background="#343434">
 
-            <TextView
-                android:id="@+id/iot_dateNow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
         </WebView>
+
+        <TextView
+            android:id="@+id/iot_dateNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="0dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <TextView
             android:id="@+id/textView5"
@@ -44,7 +46,7 @@
             android:fontFamily="@font/bazzi"
             android:text="실시간 밥먹는 모습이다멍!"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#EFD2EC" />
+            android:textColor="#EDD9EB" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

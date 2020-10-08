@@ -2,8 +2,9 @@
 <resources>
     <string-array name="shape">
         <item>종류를 선택하세요.</item>
-        <item>개</item>
-        <item>고양이</item>
+        <item>소형견</item>
+        <item>중형견</item>
+        <item>대형견</item>
     </string-array>
 
     <string-array name="reportCategory">

@@ -1,0 +1,150 @@
+<라즈베리파이 소스코드(자동급식server/음성server/picamera/firebase storage/socket)>
+
+
+import socket
+import RPi.GPIO as GPIO
+from time import sleep
+import pyrebase
+import os
+from multiprocessing import Process
+
+config ={
+  "apiKey": "AIzaSyASA7pFgRALHgBYCeISCgy4sFg8GDDNmBI",
+  "authDomain": "practice-d557f.firebaseapp.com",
+  "databaseURL": "https://practice-d557f.firebaseio.com",
+  "projectId": "practice-d557f",
+  "storageBucket": "practice-d557f.appspot.com",
+  "messagingSenderId": "4736701025",
+  "appId": "1:4736701025:web:45cfb9066d1eb898215020",
+  "measurementId": "G-FXB664Z8ZZ"
+}
+
+firebase = pyrebase.initialize_app(config)
+storage = firebase.storage()
+
+HOST = '0.0.0.0'
+PORT = 8080
+
+print('Receiving ..')
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+server_socket.bind((HOST, PORT))
+server_socket.listen()
+client_socket, addr = server_socket.accept()
+
+print('Connected by', addr)
+servoPin          = 12
+ledpin            = 16
+SERVO_MAX_DUTY    = 12   # 180
+SERVO_MIN_DUTY    = 3    # 0
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(servoPin, GPIO.OUT)
+GPIO.setup(ledpin, GPIO.OUT)
+
+
+servo = GPIO.PWM(servoPin, 50)
+servo.start(0)
+
+
+'''
+trans for gegree -> duty / I can write just degree
+'''
+def setServoPos(degree):
+    if degree > 180:
+      degree = 180
+    duty = SERVO_MIN_DUTY+(degree*(SERVO_MAX_DUTY-SERVO_MIN_DUTY)/180.0)
+    print("Degree: {} to {}(Duty)".format(degree, duty))
+    servo.ChangeDutyCycle(duty)
+
+def setonoffled():
+    print("Led ON...")
+    GPIO.output(ledpin,True)
+    sleep(10)
+    print("Led OFF...")
+    GPIO.output(ledpin,False)
+    sleep(0.5)
+
+def setvoiceprint():
+    print(data[3:-3])
+    path = "recorder/"+data[3:-3]+"/recorder.mp4"
+    storage.child(path).download("recorder.mp4")
+            
+    os.system("omxplayer recorder.mp4")
+
+
+
+    
+while True:
+    try:
+        server_socket.listen()
+        client_socket, addr = server_socket.accept()
+        data = str(client_socket.recv(1024))
+        print(data)
+        
+        if __name__ == '__main__':
+            obj1 = Process(target=setonoffled)
+            obj2 = Process(target=setvoiceprint)
+            
+            if data[2:3] == '1':
+                setServoPos(90)
+                sleep(0.3)
+                setServoPos(180)
+                sleep(1)
+                obj1.start()
+              
+            elif data[2:3] == '2':
+                obj2.start()
+                pass
+        
+            else:
+                print("Received from", addr)
+                
+    except KeyboardInterrupt:
+         servo.stop()       
+         GPIO.cleanup()
+         client_socket.close()
+         server_socket.close()
+       # client_socket, addr = server_socket.accept()
+
+
+client_socket.close()
+server_socket.close()
+
+
+-------------------------------------------------------------------------------------------
+
+
+<영상스트리밍 mjpg.sh 파일> 
+
+
+export STREAMER_PATH=$HOME/mjpg/mjpg-streamer/mjpg-streamer-experimental
+
+export LD_LIBRARY_PATH=$STREAMER_PATH
+$STREAMER_PATH/mjpg_streamer -i "input_raspicam.so" -o "output_http.so -p 8091 -w $STREAMER_PATH/www"
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+
+
+-------------------------------------------------------------------------------------------
+
+
+
+

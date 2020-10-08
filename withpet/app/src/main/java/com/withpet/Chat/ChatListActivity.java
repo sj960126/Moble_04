@@ -80,14 +80,14 @@ public class ChatListActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatroomlist.clear();   // 다시 창 켜졌을 때 기존에 있는 값 제거
-                chatListAdapter.notifyDataSetChanged();
+                chatListAdapter.notifyDataSetChanged();     // 어댑터에 연결된 list의 값 변경을 인지시키기 위함
                 for(DataSnapshot chatroomdata : snapshot.getChildren()){
                     if(chatroomdata.getKey().contains(loginUser.getUid())){
                         ChattingRoom ctr = new ChattingRoom();                  // 채팅방 정보를 담을 객체 생성( 채팅내역, 채팅방 이름 )
-                        ctr.setChatroomname(chatroomdata.getKey());
-                        ctr.setChildcount(chatroomdata.getChildrenCount());
+                        ctr.setChatroomname(chatroomdata.getKey());             // 채팅방 이름 정보 저장
+                        ctr.setChildcount(chatroomdata.getChildrenCount());     // 채팅방 채팅내역 수 저장
                         for(DataSnapshot chatdata : chatroomdata.getChildren()){
-                            ctr.addChattingList(chatdata.getValue(Chat.class));
+                            ctr.addChattingList(chatdata.getValue(Chat.class)); // 채팅방 채팅내역 저장
                         }
                         ((ChatListAdapter)chatListAdapter).addChatRoom(ctr);    //어댑터에 채팅방 정보 추가
                     }

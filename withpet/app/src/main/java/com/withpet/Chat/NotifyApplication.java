@@ -7,10 +7,13 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,25 +37,36 @@ public class NotifyApplication extends Application {
     public void onCreate() {
         userlist = new ArrayList<User>();
         chattingroomlist = new ArrayList<ChattingRoom>();
-        startService();
+        startWithpetNotificationService();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("User");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot userdata : snapshot.getChildren()){
-                    userlist.add(userdata.getValue(User.class));
-                }
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                userlist.add(snapshot.getValue(User.class));
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.i("실행", "변경");
+               for(int i = 0 ; i < userlist.size(); i++){
+                   if(userlist.get(i).getUid().equals(snapshot.getKey())){
+                       userlist.set(i, snapshot.getValue(User.class));
+                       break;
+                   }
+               }
             }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {  }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {  }
         });
         super.onCreate();
     }
 
-    public  void startService(){
+    public  void startWithpetNotificationService(){
         Intent serviceIntent = new Intent(this, ForegroundService.class);
         ContextCompat.startForegroundService(this, serviceIntent);
         isStart = true;
@@ -78,6 +92,7 @@ public class NotifyApplication extends Application {
     public void setEnterChattingRoom(String chattingRoom){
        this.enterChattingRoom =  chattingRoom;
     }
+    // 채팅방 정보 값
     public String getEnterChattingRoom() { return enterChattingRoom;}
 
     public ArrayList<ChattingRoom> getChattingroomlist() {
