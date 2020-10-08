@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -68,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
                 //회원정보 xml파일 추가
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     allUser.add(0, dataSnapshot.getValue(User.class));
-
                     SharedPreferences sharedPreferences = getSharedPreferences(allUser.get(0).getUid(), MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -119,7 +119,12 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                             else{
-                                Toast.makeText(LoginActivity.this, "일치하는 회원이 없습니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "로그인 오류 : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                try{
+
+                                }catch (Exception e){
+                                    Toast.makeText(LoginActivity.this, "시스템 오류" + e, Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                     });
@@ -145,8 +150,13 @@ public class LoginActivity extends AppCompatActivity {
     //로그인 정보확인
   private void loginCheck(FirebaseUser user) {
         //로그인 유저가 있고, 이메일 인증이 되었다면
-        if (user != null && user.isEmailVerified()) {
-            Login();
+        if (user != null) { 
+            if(user.isEmailVerified()){
+                Login();
+            }
+            else{
+                Toast.makeText(this, "인증메일을 확인해주세요.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
