@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="top"
     android:orientation="vertical"
     tools:context=".health.diary_addActivity">
 
@@ -12,9 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
         android:text="TextView"
-        android:layout_marginTop="40dp"
         android:textSize="20dp" />
 
     <TextView
@@ -22,63 +23,67 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="오늘 식사는 어땠나요?"
         android:fontFamily="@font/bazzi"
+        android:text="오늘 식사는 어땠나요?"
         android:textSize="17dp" />
 
     <androidx.cardview.widget.CardView
-        android:layout_height="80dp"
         android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="70dp"
-        app:cardCornerRadius="10dp"
-        android:elevation="10dp" >
-            <TextView
-                android:id="@+id/textView23"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/bazzi"
-                android:textSize="15dp"
-                android:text="종류" />
-            <RadioGroup
-                android:id="@+id/radiogroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+        android:layout_marginRight="10dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp">
 
-                <RadioButton
-                    android:id="@+id/radioButton"
-                    android:layout_width="14dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
-                    android:layout_weight="1"
-                    android:button="@drawable/radiobtn1" />
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/bazzi"
+            android:text="종류"
+            android:textSize="15dp" />
 
-                <RadioButton
-                    android:id="@+id/radioButton2"
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:button="@drawable/radiobtn2" />
-            </RadioGroup>
+        <RadioGroup
+            android:id="@+id/radiogroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="14dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_weight="1"
+                android:button="@drawable/radiobtn1" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/radiobtn2" />
+        </RadioGroup>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_height="80dp"
         android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="30dp"
-        app:cardCornerRadius="10dp"
-        android:elevation="40dp" >
+        android:layout_marginRight="10dp"
+        android:elevation="40dp"
+        app:cardCornerRadius="10dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/textView25"
                 android:layout_width="wrap_content"
@@ -100,17 +105,19 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_height="100dp"
         android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="30dp"
-        app:cardCornerRadius="10dp"
-        android:elevation="40dp" >
+        android:layout_marginRight="10dp"
+        android:elevation="40dp"
+        app:cardCornerRadius="10dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/textView21"
                 android:layout_width="wrap_content"
@@ -131,44 +138,46 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_height="100dp"
         android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="30dp"
-        app:cardCornerRadius="10dp"
-        android:elevation="40dp" >
+        android:layout_marginRight="10dp"
+        android:elevation="40dp"
+        app:cardCornerRadius="10dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-        <TextView
-            android:id="@+id/textView22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/bazzi"
-            android:text="양" />
 
-        <EditText
-            android:id="@+id/input_eat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/bazzi"
-            android:hint="급여량을 입력해주세요" />
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/bazzi"
+                android:text="양" />
+
+            <EditText
+                android:id="@+id/input_eat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/bazzi"
+                android:hint="급여량을 입력해주세요" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:layout_gravity="center"
         android:id="@+id/diaryBtn_submit"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="60dp"
         android:background="@drawable/diary_add_btn"
-        android:text="등록 완료"
         android:fontFamily="@font/bazzi"
+        android:text="등록 완료"
         android:textColor="#ffffff" />
 </LinearLayout>
