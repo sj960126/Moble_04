@@ -66,7 +66,7 @@ public class Userinfo_Adapter extends RecyclerView.Adapter<Userinfo_Adapter.Cust
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(itemView.getContext(), MainActivity.class);
-                    intent.putExtra("frag",5);
+                    intent.putExtra("frag",4);
                     Log.i("adpater uid :: ", arrayList.get(getAdapterPosition()).getUid());
                     intent.putExtra("uid", arrayList.get(getAdapterPosition()).getUid());
                     context.startActivity(intent);

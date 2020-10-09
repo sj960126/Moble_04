@@ -37,7 +37,7 @@ public class IotFrag extends Fragment {
     public InputStream dataInputStream;
     public OutputStream dataOutputStream;
     private Socket clientsocket;
-    private String ip = "192.168.0.4";
+    private String ip = "192.168.0.9";
     private int port =8080;
     private Button meal;
     private Button voicesend;
@@ -55,7 +55,7 @@ public class IotFrag extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.activity_iot,container,false);
-        // test주석입니다.
+
         meal = rootview.findViewById(R.id.iotBtn_AutoMeal);
         voicesend = rootview.findViewById(R.id.iotBtn_RecorderSend);
         recorder = rootview.findViewById(R.id.iotBtn_Recorder);
