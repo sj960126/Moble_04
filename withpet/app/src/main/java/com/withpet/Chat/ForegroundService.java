@@ -7,9 +7,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -25,8 +30,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.R;
 import com.withpet.main.MainActivity;
-import com.withpet.main.TransUser;
+import com.withpet.main.*;
 
+import java.io.BufferedInputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -38,6 +46,7 @@ public class ForegroundService extends Service {
     private final int foregroundNotificationId = 1000;
     private ArrayList<ChattingRoom> chattingRoomdatalist;
     private Random rnd;
+    private Bitmap notifiicon;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         applicationinfo = (NotifyApplication)getApplication();
@@ -95,8 +104,8 @@ public class ForegroundService extends Service {
                                             Log.i("확인", "메시지 보냄"+chat.getUid());
                                             String enterchattingroom  = (applicationinfo.getEnterChattingRoom() != null ) ? applicationinfo.getEnterChattingRoom() : "";
                                             if(!chat.getUid().equals(firebaseUser.getUid()) && !(snapshot.getKey().equals(enterchattingroom))){
-                                                NotificationStart(chat.getUid(), chat.getContent(), chattingRoom.getNotificationid());
-
+                                                User user = ((NotifyApplication)getApplication()).getUser(chat.getUid());
+                                                notificationStart(user, chat.getContent(), chattingRoom.getNotificationid());
                                             }
                                         }
                                     }
@@ -148,8 +157,8 @@ public class ForegroundService extends Service {
             notificationManager.createNotificationChannel(channel);
         }
     }
-    // push 알림 발생 메소드
-    private void NotificationStart(String uid, String content, int notificationid){
+    // push 알림 생성 메소드
+    private void createNotification(String uid, String content, int notificationid){
         // 알림 선택시 실행시킬 인텐트
         Intent chattingintent = new Intent(this, ChattingActivity.class);
         TransUser tuser = new TransUser(applicationinfo.getUser(uid));      // chat에서 가져온 uid로 유저 정보 가져오기
@@ -164,10 +173,10 @@ public class ForegroundService extends Service {
                 .setContentTitle(tuser.getNickname())              // 알림 메시지 제목 설정
                 .setContentText(content)                           // 알림 메시지 내용 설정
                 .setAutoCancel(true)                               // 알림 클릭 시 자동 닫기
+                .setLargeIcon(notifiicon)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))      // 알림 메시지 도착 시 알림음
                 .setVibrate(new long[] {1, 1000});                  // 진동 설정
         mBulider.setContentIntent(contentIntent);                   // 알림을 눌렀을 때 실행될 인텐트 설정
-
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String channelName = getString(R.string.chanel_name);
@@ -203,5 +212,61 @@ public class ForegroundService extends Service {
         return notificationid;
     }
 
+
+    private Bitmap createImage(String strImageURL) {
+        Bitmap imgBitmap = null;
+
+        try {
+            URL url = new URL(strImageURL);
+            Log.i("비트맵확인", ""+url);
+            URLConnection conn = url.openConnection();
+            Log.i("비트맵확인", ""+conn);
+            conn.connect();
+
+            int nSize = conn.getContentLength();
+            Log.i("비트맵확인", ""+nSize);
+            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream(), nSize);
+            imgBitmap = BitmapFactory.decodeStream(bis);
+
+            bis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return imgBitmap;
+    }
+    // url을 통해 비트맵 생성 시 스레드 필요
+    // 스레드를 통해 값을 가져와 handler에 넘겨 값 쓰기
+    // 메인 스레드와 url을 통해 비트맵을 생성하는 스레드의 실행순서가 맞지 않기 때문에 맞춰주기 위해
+    // 스레드에서 구한 값을 핸들러로 넘겨 핸들러에서 알림 발생
+    private void notificationStart(final User user, final String content, final int notificationid){
+        new Thread(){
+            public void run(){
+                Bitmap mybit = createImage(user.getImgUrl());
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("bitimage",mybit);
+                bundle.putString("notificationcontent", content);
+                bundle.putString("uid", user.getUid());
+                bundle.putInt("notificationid", notificationid);
+
+                Message msg = handler.obtainMessage();
+                msg.setData(bundle);
+                handler.sendMessage(msg);
+
+                Log.i("실행", "실행");
+            }
+        }.start();
+    }
+
+    // 알림 발생, 스레드를 통한 값 저장 핸들러
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            Bundle bundle = msg.getData();
+            notifiicon = bundle.getParcelable("bitimage");
+            createNotification(bundle.getString("uid"), bundle.getString("notificationcontent"),
+                    bundle.getInt("notificationid"));
+
+        }
+    };
 
 }
