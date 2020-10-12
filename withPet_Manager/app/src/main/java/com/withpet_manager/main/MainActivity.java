@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private UserboardFrag userboardFrag;
     private UserinfoFrag userinfoFrag;
     private UserdetailinfoFrag userdetailinfoFrag;
-
+    private WalkreportdetailFrag walkreportdetailFrag;
     private String uid = "asd";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         userinfoFrag = new UserinfoFrag();
         userboardFrag = new UserboardFrag();
         userdetailinfoFrag = new UserdetailinfoFrag();
+        walkreportdetailFrag = new WalkreportdetailFrag();
 
         Intent intent = getIntent();
         int frag =intent.getIntExtra("frag",0);
@@ -95,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putString("uid",uid);
                 userdetailinfoFrag.setArguments(bundle);
                 fragment = userdetailinfoFrag;
+                break;
+            case 5:
+                fragment = walkreportdetailFrag;
                 break;
             default:
                 return;

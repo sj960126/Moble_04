@@ -22,4 +22,11 @@
         android:text="사용자 게시글 관리"
         android:textSize="32sp" />
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/walk_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp" />
+
 </LinearLayout>
