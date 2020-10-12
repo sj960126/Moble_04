@@ -17,10 +17,12 @@ import java.util.ArrayList;
 public class ClinetAdapter extends RecyclerView.Adapter<ClinetAdapter.Clientview> {
     private  ArrayList<Client> arrayList;
     private  Context context;
+    private  ArrayList<String> arrylistkey;
 
-    public ClinetAdapter(ArrayList<Client> arrayList, Context context){
+    public ClinetAdapter(ArrayList<Client> arrayList,ArrayList<String> arrylistkey,Context context){
         this.arrayList = arrayList;
         this.context = context;
+        this.arrylistkey = arrylistkey;
     }
 
     @NonNull
@@ -32,9 +34,23 @@ public class ClinetAdapter extends RecyclerView.Adapter<ClinetAdapter.Clientview
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Clientview holder, int position) {
+    public void onBindViewHolder(@NonNull final Clientview holder, final int position) { //final
         holder.username.setText(arrayList.get(position).getTitle());
         holder.write.setText(arrayList.get(position).getContext());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(holder.itemView.getContext(),Client_view.class);
+                intent.putExtra("category",arrayList.get(position).getCategory());
+                intent.putExtra("title",arrayList.get(position).getTitle());
+                intent.putExtra("context",arrayList.get(position).getContext());
+                intent.putExtra("date",arrayList.get(position).getDate());
+                intent.putExtra("feedname",arrayList.get(position).getFeedName());
+                intent.putExtra("uid",arrayList.get(position).getUid());
+                intent.putExtra("key",arrylistkey.get(position));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -51,13 +67,6 @@ public class ClinetAdapter extends RecyclerView.Adapter<ClinetAdapter.Clientview
             this.username = itemView.findViewById(R.id.clinet_usrname);
             this.write = itemView.findViewById(R.id.client_write);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-
-                }
-            });
         }
 
     }

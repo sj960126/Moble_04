@@ -7,7 +7,15 @@ public class Client {
     private  String feedName;
     private  String title;
     private  String uid;
-
+    public Client(){}
+    public Client(String category , String context , String date , String feedName , String title , String uid){
+        this.category = category;
+        this.context = context;
+        this.date = date;
+        this.feedName =feedName;
+        this.title = title;
+        this.uid = uid;
+    }
     public String getCategory() {
         return category;
     }

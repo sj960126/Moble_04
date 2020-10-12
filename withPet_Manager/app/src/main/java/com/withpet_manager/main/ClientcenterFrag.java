@@ -33,6 +33,7 @@ public class ClientcenterFrag extends Fragment {
     private ArrayList<Client> arrayList;
     private Client client;
     private RecyclerView.Adapter adapter;
+    private ArrayList<String> arraylistKey;
 
     @Nullable
     @Override
@@ -43,6 +44,7 @@ public class ClientcenterFrag extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         arrayList = new ArrayList<Client>();
+        arraylistKey = new ArrayList<String>();
         return view;
     }
 
@@ -50,6 +52,7 @@ public class ClientcenterFrag extends Fragment {
     public void onResume() {
         super.onResume();
         arrayList.clear();
+        arraylistKey.clear();
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("SC");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -60,6 +63,7 @@ public class ClientcenterFrag extends Fragment {
                     client=dataSnapshot.getValue(Client.class);
                     if (client.getFeedName().equals("x")){
                         arrayList.add(client);
+                        arraylistKey.add(dataSnapshot.getKey());
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -73,7 +77,7 @@ public class ClientcenterFrag extends Fragment {
             }
         });
 
-        adapter = new ClinetAdapter(arrayList,getContext());
+        adapter = new ClinetAdapter(arrayList,arraylistKey,getContext());
         recyclerView.setAdapter(adapter);
     }
 }
