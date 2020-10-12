@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Client.Client_view">
+
+    <TextView
+        android:id="@+id/clinet_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bazzi"
+        android:textSize="40dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="30dp"
+        android:text="text"/>
+    <TextView
+        android:id="@+id/client_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:fontFamily="@font/bazzi"
+        android:textSize="25dp"
+        android:text="title"/>
+
+    <EditText
+        android:id="@+id/context"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:hint="text"/>
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/client_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/btn"
+        android:textColor="#ffffff"
+        android:fontFamily="@font/bazzi"
+        android:textSize="20dp"
+        android:text="등록">
+    </Button>
+
+
+
+
+
+
+
+</LinearLayout>

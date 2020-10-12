@@ -9,8 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
         <activity android:name=".main.WalkreportdetailFrag"></activity>
         <activity android:name=".main.WalkreportFrag" />
+=======
+        <activity android:name=".Client.Client_view"></activity>
+>>>>>>> 026239b0bbba9c9e30e84e04616e4e6d250bbb78
         <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

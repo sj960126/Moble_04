@@ -21,4 +21,10 @@
         android:layout_height="wrap_content"
         android:text="고객센터"
         android:textSize="32sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/clientcenter_rc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>
