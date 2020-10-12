@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +35,7 @@ public class ChattingActivity extends AppCompatActivity {
     private String meid;
     private ArrayList<Chat> chattingList;
     private EditText et_sendmeaasge;
+    private Button btn_send;
     private String chatroomname;
     private RecyclerView chattingRecyclerView;
     public  RecyclerView.Adapter chattingAdapter;
@@ -49,7 +53,9 @@ public class ChattingActivity extends AppCompatActivity {
         opponent = (TransUser)intent.getSerializableExtra("Opponent");      // 대화 상대의 정보 가져오기
         meid = FirebaseAuth.getInstance().getCurrentUser().getUid();               // 로그인 한 유저의 uid
         chattingList = new ArrayList<Chat>();
-        findViewById(R.id.chattingBtn_send).setOnClickListener(onClickListener);    // 보내기 버튼
+        btn_send = findViewById(R.id.chattingBtn_send);
+        btn_send.setVisibility(View.INVISIBLE);
+        btn_send.setOnClickListener(onClickListener);    // 보내기 버튼
 
         // 리사이클러 뷰, 어댑터 설정
         chattingRecyclerView = findViewById(R.id.chattingRv_chat);
@@ -89,6 +95,31 @@ public class ChattingActivity extends AppCompatActivity {
             }
         });
 
+        // edit textview의 내용 변경 이벤트
+        et_sendmeaasge.addTextChangedListener(new TextWatcher() {
+            @Override   // 입력 전 호출
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override   //입력할 때 호출
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String message = et_sendmeaasge.getText().toString();
+                if(message.equals("")){
+                    btn_send.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    btn_send.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override   // 입력 끝났을 때 호출
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
     }
 
     @Override
@@ -112,6 +143,7 @@ public class ChattingActivity extends AppCompatActivity {
             }
         }
     };
+    
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
