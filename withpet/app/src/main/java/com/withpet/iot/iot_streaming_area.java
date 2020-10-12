@@ -46,7 +46,7 @@ public class iot_streaming_area extends AppCompatActivity {
         webSettings.setBuiltInZoomControls(true);   // 줌 아이콘 사용
         webSettings.setSupportZoom(true); // 줌
 
-        webView.loadUrl("http://192.168.0.4:8091/stream_simple.html");
+        webView.loadUrl("http://192.168.0.9:8091/stream_simple.html");
 
         Show_Time_TextView = (TextView)findViewById(R.id.iot_dateNow) ;
         ShowTimeMethod();

@@ -18,6 +18,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -97,6 +98,8 @@ public class iot_recorder extends AppCompatActivity {
         img2.setOnClickListener(new View.OnClickListener() { //play
             @Override
             public void onClick(View view) {
+
+                Toast.makeText(iot_recorder.this, "녹음파일 재생", Toast.LENGTH_LONG).show();
                 img3.setEnabled(true);
                 mediaPlayer = new MediaPlayer();
 
@@ -109,7 +112,7 @@ public class iot_recorder extends AppCompatActivity {
 
                 mediaPlayer.start();
 
-                Toast.makeText(iot_recorder.this, "녹음파일 재생", Toast.LENGTH_LONG).show();
+                //Toast.makeText(iot_recorder.this, "녹음파일 재생", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -118,13 +121,16 @@ public class iot_recorder extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(mediaPlayer != null){
-
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-
-                    MediaRecorderReady();
-
                     Toast.makeText(iot_recorder.this, "녹음파일 정지", Toast.LENGTH_SHORT).show();
+                    try {
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                    } catch (Exception e){    // 정지버튼 연속 클릭시 어플 종료되는 것을 방지해주는 예외처리
+                        e. printStackTrace();
+                    }
+                     MediaRecorderReady();
+
+                    //Toast.makeText(iot_recorder.this, "녹음파일 정지", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -135,7 +141,8 @@ public class iot_recorder extends AppCompatActivity {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageReference = storage.getReferenceFromUrl("gs://practice-d557f.appspot.com").child("recorder").child(firebaseUser.getUid()+"/recorder.mp4");
-                Toast.makeText(iot_recorder.this, "경로 : "+new File(AudioSavePathInDevice), Toast.LENGTH_SHORT).show();
+                Toast.makeText(iot_recorder.this, "전송 시작", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(iot_recorder.this, "경로 : "+new File(AudioSavePathInDevice), Toast.LENGTH_SHORT).show();
                 Uri recorderfile = Uri.fromFile(new File(AudioSavePathInDevice));
                 storageReference.putFile(recorderfile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -172,6 +179,17 @@ public class iot_recorder extends AppCompatActivity {
                     Glide.with(iot_recorder.this).load(R.raw.audio_active).into(image);
                     Log.i("path :: ", AudioSavePathInDevice);
                     if(checkPermission()) {
+                        image.setEnabled(false); // 해당버튼 비활성화 / 사유 : 연속적인 Mediarecorder 클릭시 reload현상이 발생하며 안드로이드가 종료된다.
+
+                        final Handler handler = new Handler(); // 핸들러를 이용하여 image 버튼에 딜레이를 준다. / 사유 : 연속적인 Mediarecorder 클릭시 reload현상이 발생하며 안드로이드가 종료된다.
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                image.setEnabled(true);
+                            }
+                        },800);
+
+                        Toast.makeText(iot_recorder.this, "녹음 시작", Toast.LENGTH_LONG).show();
 
                         MediaRecorderReady();
 
@@ -187,22 +205,37 @@ public class iot_recorder extends AppCompatActivity {
                             // TODO Auto-generated catch block
 
                             e.printStackTrace();
+                        } catch (RuntimeException e){
+                            e.printStackTrace();
                         }
 
-                        Toast.makeText(iot_recorder.this, "녹음 시작.", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(iot_recorder.this, "녹음 시작.", Toast.LENGTH_LONG).show();
                     }
                     else {
                         requestPermission();
                     }
 
                 }else if(click%2 == 0){ //stop
+
+                    image.setEnabled(false); // 해당버튼 비활성화 / 사유 : 연속적인 Mediarecorder 클릭시 reload현상이 발생하며 안드로이드가 종료된다.
+
+                    final Handler handler = new Handler(); // 핸들러를 이용하여 image 버튼에 딜레이를 준다. / 사유 : 연속적인 Mediarecorder 클릭시 reload현상이 발생하며 안드로이드가 종료된다.
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            image.setEnabled(true);
+                        }
+                    },800);
+
+                    Toast.makeText(getApplicationContext(), "녹음 중지", Toast.LENGTH_SHORT).show();
                     Glide.with(iot_recorder.this).load(R.drawable.iconrecorder_mic).into(image);
+
 
                     mediaRecorder.stop();
                     //    mediaPlayer.release();
                     img2.setEnabled(true);
                     upload_btn.setEnabled(true);
-                    Toast.makeText(getApplicationContext(), "녹음 중지", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "녹음 중지", Toast.LENGTH_SHORT).show();
                     click = 0;
                 }
 
@@ -211,6 +244,7 @@ public class iot_recorder extends AppCompatActivity {
 
 
     }
+
 
 
     public void MediaRecorderReady(){

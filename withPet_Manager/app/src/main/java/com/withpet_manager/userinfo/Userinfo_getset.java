@@ -1,5 +1,6 @@
 package com.withpet_manager.userinfo;
 
+
 public class Userinfo_getset {
     private String email;
     private String imgUri;
@@ -7,6 +8,9 @@ public class Userinfo_getset {
     private String nickname;
     private String pw;
     private String uid;
+    private int meal;
+    private int petcode;
+    private String shape;
 
     Userinfo_getset(){
 
@@ -17,6 +21,17 @@ public class Userinfo_getset {
         this.nickname = nickname;
     }
 
+    public Userinfo_getset(String email, String imgUri, String name, String nickname, String pw, String uid, int meal, int petcode, String shape){
+        this.email = email;
+        this.imgUri = imgUri;
+        this.name =name;
+        this.nickname = nickname;
+        this.pw =pw;
+        this.uid = uid;
+        this.meal = meal;
+        this.petcode = petcode;
+        this.shape = shape;
+    }
     Userinfo_getset(String email, String imgUri, String name, String nickname, String pw,String uid){
         this.email = email;
         this.imgUri = imgUri;
@@ -26,6 +41,29 @@ public class Userinfo_getset {
         this.uid = uid;
     }
 
+    public int getMeal() {
+        return meal;
+    }
+
+    public void setMeal(int meal) {
+        this.meal = meal;
+    }
+
+    public int getPetcode() {
+        return petcode;
+    }
+
+    public void setPetcode(int petcode) {
+        this.petcode = petcode;
+    }
+
+    public String getShape() {
+        return shape;
+    }
+
+    public void setShape(String shape) {
+        this.shape = shape;
+    }
 
     public String getEmail() {
         return email;

@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fm;
     private FragmentTransaction ft;
     private ClientcenterFrag clientcenterFrag;
-    private DeclarationlistFrag declarationlistFrag;
+    private UserfeedFrag UserfeedFrag;
     private UserboardFrag userboardFrag;
     private UserinfoFrag userinfoFrag;
     private UserdetailinfoFrag userdetailinfoFrag;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNV);
 
         clientcenterFrag = new ClientcenterFrag();
-        declarationlistFrag = new DeclarationlistFrag();
+        UserfeedFrag = new UserfeedFrag();
         userinfoFrag = new UserinfoFrag();
         userboardFrag = new UserboardFrag();
         userdetailinfoFrag = new UserdetailinfoFrag();
@@ -85,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
                 fragment = userboardFrag;
                 break;
             case 2:
-                fragment = declarationlistFrag;
+                fragment = UserfeedFrag;
                 break;
             case 3:
                 fragment = clientcenterFrag;
                 break;
-            case 4:
+            case 5:
                 Bundle bundle = new Bundle();
                 bundle.putString("uid",uid);
                 userdetailinfoFrag.setArguments(bundle);
