@@ -111,7 +111,7 @@ public class feedDetailActivity extends AppCompatActivity {
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             for(DataSnapshot ds : snapshot.getChildren()){
                                                 Report reportDel = ds.getValue(Report.class);
-                                                if(reportDel.getFeedName().equals(boardName)){
+                                                if(reportDel.getFeedName().equals(boardName) && !(reportDel.getState().equals("삭제완료"))){
                                                     reference.child(ds.getKey()).child("state").setValue("검토중");
                                                 }
                                             }
@@ -149,10 +149,8 @@ public class feedDetailActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
-
                                 }
                             });
                             Toast.makeText(feedDetailActivity.this, "정상적으로 처리했습니다.", Toast.LENGTH_SHORT).show();

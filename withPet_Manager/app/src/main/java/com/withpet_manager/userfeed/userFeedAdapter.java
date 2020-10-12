@@ -69,7 +69,7 @@ public class userFeedAdapter  extends RecyclerView.Adapter<userFeedAdapter.userF
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, feedDetailActivity.class);
+                   Intent intent = new Intent(context, feedDetailActivity.class);
                     intent.putExtra("boardName", reports.get(getAdapterPosition()).getFeedName());
                     intent.putExtra("category", reports.get(getAdapterPosition()).getCategory());
                     context.startActivity(intent);
