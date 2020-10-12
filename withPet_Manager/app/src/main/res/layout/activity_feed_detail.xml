@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,18 +19,23 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="69dp"
         android:text="게시글 신고 내용"
         android:textSize="32sp" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="550dp"
-        android:layout_margin="10dp"
-
-        android:elevation="60dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/fdBtn_del"
+        android:layout_below="@id/textView3"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="-19dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="30dp"
+        android:background="#705D5D"
         android:padding="10dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="5dp"
         app:cardPreventCornerOverlap="false">
 
         <LinearLayout
@@ -76,12 +81,13 @@
             <ImageView
                 android:id="@+id/fdIv"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="280dp"
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/fdTv_context"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:text="게시글 내용" />
 
         </LinearLayout>
@@ -91,13 +97,17 @@
         android:id="@+id/fdBtn_del"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/fdBtn_cancel"
+        android:layout_marginBottom="0dp"
         android:text="게시글 삭제" />
 
     <Button
         android:id="@+id/fdBtn_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
         android:text="취소" />
 
 
-</LinearLayout>
+</RelativeLayout>

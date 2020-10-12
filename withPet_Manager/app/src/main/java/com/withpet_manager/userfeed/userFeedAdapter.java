@@ -69,7 +69,7 @@ public class userFeedAdapter  extends RecyclerView.Adapter<userFeedAdapter.userF
                 public void onClick(View v) {
                     Intent intent = new Intent(context, feedDetailActivity.class);
                     intent.putExtra("boardName", reports.get(getAdapterPosition()).getFeedName());
-                    Log.i("글 이름", ""+ reports.get(getAdapterPosition()).getFeedName());
+                    intent.putExtra("category", reports.get(getAdapterPosition()).getCategory());
                     context.startActivity(intent);
                 }
             });
