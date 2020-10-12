@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -106,10 +107,12 @@ public class ReportActivity extends AppCompatActivity {
                     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     DatabaseReference dbRefReply = firebaseDatabase.getReference("Report");
-                    Report inputReport = new Report(user.getUid(), category, strFeedName, title, context, getTime);
+                    Report inputReport = new Report(user.getUid(), category, strFeedName, title, context, getTime ,"대기중");
                     dbRefReply.child(user.getUid()+getTime).setValue(inputReport);
                     finish();
+                    Toast.makeText(ReportActivity.this, "정상적으로 신고 접수가 되었습니다.", Toast.LENGTH_SHORT).show();
                 } else{
+                    //SC 파베 연동
                     SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd");
                     String strtoday = today.format(mDate);
 

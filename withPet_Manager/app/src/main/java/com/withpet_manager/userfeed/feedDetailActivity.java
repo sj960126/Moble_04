@@ -100,10 +100,28 @@ public class feedDetailActivity extends AppCompatActivity {
                 case R.id.fdBtn_cancel:
                     AlertDialog.Builder cancel = new AlertDialog.Builder(feedDetailActivity.this);
                     cancel.setTitle("[ 알림 ]");
-                    cancel.setMessage("어떻게 하려고오오옹~ 신고 접수된 게시글 취소할 땐 어떻게 할꺼야~~~~~~~"); // 메시지
+                    cancel.setMessage("신고 접수된 해당 게시글을 보류하시겠습니까?"); // 메시지
                     //버튼 클릭시 동작
                     cancel.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+                                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                    final DatabaseReference reference = firebaseDatabase.getReference("Report");
+                                    reference.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            for(DataSnapshot ds : snapshot.getChildren()){
+                                                Report reportDel = ds.getValue(Report.class);
+                                                if(reportDel.getFeedName().equals(boardName)){
+                                                    reference.child(ds.getKey()).child("state").setValue("검토중");
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
                                     finish();
                                 }
                             });
@@ -119,6 +137,24 @@ public class feedDetailActivity extends AppCompatActivity {
                             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                             DatabaseReference databaseReference = firebaseDatabase.getReference("Feed");
                             databaseReference.child(boardName).removeValue();
+
+                            final DatabaseReference reference = firebaseDatabase.getReference("Report");
+                            reference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for(DataSnapshot ds : snapshot.getChildren()){
+                                        Report reportDel = ds.getValue(Report.class);
+                                        if(reportDel.getFeedName().equals(boardName)){
+                                            reference.child(ds.getKey()).child("state").setValue("삭제완료");
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                             Toast.makeText(feedDetailActivity.this, "정상적으로 처리했습니다.", Toast.LENGTH_SHORT).show();
                             finish();
                         }
