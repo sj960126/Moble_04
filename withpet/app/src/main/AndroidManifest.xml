@@ -36,7 +36,8 @@
         <activity android:name=".main.SettingActivity" />
         <activity android:name=".iot.iot_recorder" />
         <activity android:name=".Chat.FindUserActivity" />
-        <activity android:name=".Chat.ChattingActivity" />
+        <activity android:name=".Chat.ChattingActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Chat.ChatListActivity" />
         <activity android:name=".newsfeed.ReplyActivity" />
         <activity android:name=".walk.Walk_tmap" />

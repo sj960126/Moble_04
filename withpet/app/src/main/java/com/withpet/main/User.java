@@ -9,13 +9,13 @@ public class User {
     private String shape;
     private String imgUrl;
     private int meal;
-    private int petcode;
+    private String petcode;
 
-    public int getPetcode() {
+    public String getPetcode() {
         return petcode;
     }
 
-    public void setPetcode(int petcode) {
+    public void setPetcode(String petcode) {
         this.petcode = petcode;
     }
 

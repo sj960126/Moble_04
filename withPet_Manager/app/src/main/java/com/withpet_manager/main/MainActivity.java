@@ -23,8 +23,10 @@ public class MainActivity extends AppCompatActivity {
     private UserboardFrag userboardFrag;
     private UserinfoFrag userinfoFrag;
     private UserdetailinfoFrag userdetailinfoFrag;
-
+    private WalkreportdetailFrag walkreportdetailFrag;
     private String uid = "asd";
+    private String reporter;
+    private int report_nb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,10 +41,13 @@ public class MainActivity extends AppCompatActivity {
         userinfoFrag = new UserinfoFrag();
         userboardFrag = new UserboardFrag();
         userdetailinfoFrag = new UserdetailinfoFrag();
+        walkreportdetailFrag = new WalkreportdetailFrag();
 
         Intent intent = getIntent();
         int frag =intent.getIntExtra("frag",0);
         uid = intent.getStringExtra("uid");
+        reporter = intent.getStringExtra("reporter");
+        report_nb = intent.getIntExtra("report_boardnb",0);
         setFrag(frag);
 
 
@@ -90,11 +95,20 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 fragment = clientcenterFrag;
                 break;
-            case 5:
+            case 4:
                 Bundle bundle = new Bundle();
                 bundle.putString("uid",uid);
+
                 userdetailinfoFrag.setArguments(bundle);
                 fragment = userdetailinfoFrag;
+                break;
+            case 5:
+                Bundle bundle_walk = new Bundle();
+                bundle_walk.putString("reporter",reporter);
+                bundle_walk.putInt("board_nb",report_nb);
+                walkreportdetailFrag.setArguments(bundle_walk);
+
+                fragment = walkreportdetailFrag;
                 break;
             default:
                 return;

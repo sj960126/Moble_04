@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.WalkreportdetailFrag">
+
+    <LinearLayout
+        android:layout_width="325dp"
+        android:layout_height="615dp"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="42dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:fontFamily="@font/bazzi"
+                android:text="작성자"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/walk_reporter"
+                android:layout_width="220dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:fontFamily="@font/bazzi"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="80dp"
+                android:layout_height="32dp"
+                android:fontFamily="@font/bazzi"
+                android:text="제목"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/walkreport_title"
+                android:layout_width="320dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/bazzi"
+                android:textFontWeight="1"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="80dp"
+            android:layout_height="32dp"
+            android:fontFamily="@font/bazzi"
+            android:text="글내용"
+            android:layout_marginTop="20dp"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/walkreport_content"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:fontFamily="@font/bazzi"
+            android:paddingTop="10dp"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="글 삭제" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
