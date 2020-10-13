@@ -97,6 +97,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "4736701025-7apak993mlb8ca8po5seu3hpikph1vn3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.withpet_manager",
+            "certificate_hash": "ab10180f79fbb8ea4dfd3dbe0e8f9485c45e07a9"
+          }
+        },
+        {
           "client_id": "4736701025-23r27r7kgl7uvmq0l70j4e0of7s3tfk6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
