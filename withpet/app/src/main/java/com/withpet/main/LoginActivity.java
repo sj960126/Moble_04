@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(this, "로그인 정보를 정확히 기입하세요.", Toast.LENGTH_SHORT).show();
                 }
                 else{
+
                     //파이어베이스 '인증' >> 이메일로그인
                     firebaseAuth.signInWithEmailAndPassword(strEmail, strPw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -121,8 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 FirebaseUser login = firebaseAuth.getCurrentUser();
                                 if(login.isEmailVerified()){
-                                    Login();
-                                }else{
+                                                                 }else{
                                     Toast.makeText(LoginActivity.this, "가입한 이메일로 전송한 인증메일을 수락하세요.", Toast.LENGTH_SHORT).show();
                                 }
                             }

@@ -251,7 +251,8 @@ public class SettingActivity extends AppCompatActivity {
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()){
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         Walk_ReplyUpload walk_replyUpload = ds.getValue(Walk_ReplyUpload.class);
-                        if(walk_replyUpload.getUid().equals(firebaseUser.getUid())){
+
+                        if(walk_replyUpload.getWalk_uid().equals(firebaseUser.getUid())){
                             db.getReference("walk-reply").child(Integer.toString(walk_replyUpload.getBoard_nb())).child(Integer.toString(walk_replyUpload.getReply_nb())).removeValue();
                         }
                     }

@@ -9,7 +9,7 @@ public class Userinfo_getset {
     private String pw;
     private String uid;
     private int meal;
-    private int petcode;
+    private String petcode;
     private String shape;
 
 
@@ -22,7 +22,7 @@ public class Userinfo_getset {
         this.nickname = nickname;
     }
 
-    public Userinfo_getset(String email, String imgUri, String name, String nickname, String pw, String uid, int meal, int petcode, String shape){
+    public Userinfo_getset(String email, String imgUri, String name, String nickname, String pw, String uid, int meal, String petcode, String shape){
         this.email = email;
         this.imgUri = imgUri;
         this.name =name;
@@ -50,11 +50,11 @@ public class Userinfo_getset {
         this.meal = meal;
     }
 
-    public int getPetcode() {
+    public String getPetcode() {
         return petcode;
     }
 
-    public void setPetcode(int petcode) {
+    public void setPetcode(String petcode) {
         this.petcode = petcode;
     }
 
