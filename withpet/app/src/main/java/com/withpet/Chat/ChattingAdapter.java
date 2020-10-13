@@ -91,6 +91,7 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
 
     //채팅 내역 레이아웃 설정(내 채팅)
     public void setMyChat(MyViewHolder holder){
+        holder.tv_msg.setBackgroundResource(R.drawable.chattsen_border);
         holder.tv_nickname.setVisibility(View.GONE);                        // 채팅 레이아웃의 닉네임(Textview 레이아웃) 지움
         holder.iv_profilephoto.setVisibility(View.GONE);                    // 채팅 레이아웃의 프로필 사진 부분 지움
         holder.infolayout.setGravity(Gravity.RIGHT);                        // 채팅 레이아웃 메시지 오른쪽 정렬
@@ -99,6 +100,7 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
     // 채팅 내역 레이아웃 설정(상대방)
     public void setOtherChat(MyViewHolder holder){
         int position = holder.getAdapterPosition();
+        // 포지션이 0일때는 첫 내용이라 전 내용을 비교할 필요가 없음
         if(position != 0){
             if(chattingList.get(position).getUid().equals(chattingList.get(position-1).getUid())){
                 holder.iv_profilephoto.setVisibility(View.INVISIBLE);                     // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
@@ -107,6 +109,11 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
                 holder.iv_profilephoto.setVisibility(View.VISIBLE);                     // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
             }
         }
+        // 포지션 0일때 이미지뷰 default 값이 안나오기 때문에 visible로 설정
+        else{
+            holder.iv_profilephoto.setVisibility(View.VISIBLE);                     // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
+        }
+        holder.tv_msg.setBackgroundResource(R.drawable.chatt_border);
         holder.tv_nickname.setVisibility(View.VISIBLE);                         // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
         holder.infolayout.setGravity(Gravity.LEFT);
         holder.tv_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);    // 채팅 레이아웃 메시지 왼쪽정렬

@@ -8,20 +8,51 @@
     tools:context=".Chat.ChattingActivity"
     android:weightSum="1">
 
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/chattingBtn_Back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="@color/text" />
+
+        <TextView
+            android:id="@+id/chattingTv_Title"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/gmarketsans_m"
+            android:gravity="fill"
+            android:text="@string/app_name"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chattingRv_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:padding="10dp">
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <View
         android:id="@+id/divider2"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="?android:attr/listDivider" />
+        android:layout_height="2dp"
+        android:background="@color/c6" />
 
     <LinearLayout
         android:layout_width="match_parent"

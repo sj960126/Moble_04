@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -35,7 +36,8 @@ public class ChattingActivity extends AppCompatActivity {
     private String meid;
     private ArrayList<Chat> chattingList;
     private EditText et_sendmeaasge;
-    private Button btn_send;
+    private TextView tv_title;
+    private Button btn_send, btn_back;
     private String chatroomname;
     private RecyclerView chattingRecyclerView;
     public  RecyclerView.Adapter chattingAdapter;
@@ -49,13 +51,21 @@ public class ChattingActivity extends AppCompatActivity {
         applicationinfo = (NotifyApplication)getApplication();
 
         Intent intent = getIntent();
-        et_sendmeaasge = findViewById(R.id.chattingEt_input);                      // 대화 내용을 출력할 textview
+
         opponent = (TransUser)intent.getSerializableExtra("Opponent");      // 대화 상대의 정보 가져오기
+
+        et_sendmeaasge = findViewById(R.id.chattingEt_input);                      // 대화 내용을 출력할 textview
+        tv_title = findViewById(R.id.chattingTv_Title);
+        tv_title.setText(opponent.getNickname());
         meid = FirebaseAuth.getInstance().getCurrentUser().getUid();               // 로그인 한 유저의 uid
         chattingList = new ArrayList<Chat>();
         btn_send = findViewById(R.id.chattingBtn_send);
         btn_send.setVisibility(View.INVISIBLE);
         btn_send.setOnClickListener(onClickListener);    // 보내기 버튼
+
+        btn_back = findViewById(R.id.chattingBtn_Back);
+        btn_back.setBackgroundResource(R.drawable.iconbefore);
+        btn_back.setOnClickListener(onClickListener);
 
         // 리사이클러 뷰, 어댑터 설정
         chattingRecyclerView = findViewById(R.id.chattingRv_chat);
@@ -143,6 +153,9 @@ public class ChattingActivity extends AppCompatActivity {
                     Chat chat = new Chat(meid, et_sendmeaasge.getText().toString());
                     dbreference.child(chatroomname).push().setValue(chat);              //db에 채팅내용 작성
                     et_sendmeaasge.setText("");
+                    break;
+                case R.id.chattingBtn_Back:
+                    finish();
                     break;
             }
         }
