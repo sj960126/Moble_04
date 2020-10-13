@@ -12,7 +12,8 @@
         android:id="@+id/chattingRv_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:padding="10dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -25,13 +26,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:orientation="horizontal"
+        android:background="@drawable/chatt_border"
         android:weightSum="1">
 
         <EditText
             android:id="@+id/chattingEt_input"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
             android:ems="10"
@@ -39,9 +42,11 @@
 
         <Button
             android:id="@+id/chattingBtn_send"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="null"
             android:text="send" />
     </LinearLayout>
+
 </LinearLayout>
