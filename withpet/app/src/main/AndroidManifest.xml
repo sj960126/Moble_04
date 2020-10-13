@@ -24,8 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".main.FindPwActivity"></activity>
-        <activity android:name=".health.diary_detail"></activity>
+        <activity android:name=".walk.Walk_Report"></activity>
+        <activity android:name=".main.FindPwActivity" />
+        <activity android:name=".health.diary_detail" />
         <activity android:name=".mypage.FollowListActivity" />
         <activity android:name=".main.SclistActivity" />
         <activity android:name=".main.ScActivity" />
@@ -35,7 +36,8 @@
         <activity android:name=".main.SettingActivity" />
         <activity android:name=".iot.iot_recorder" />
         <activity android:name=".Chat.FindUserActivity" />
-        <activity android:name=".Chat.ChattingActivity" />
+        <activity android:name=".Chat.ChattingActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Chat.ChatListActivity" />
         <activity android:name=".newsfeed.ReplyActivity" />
         <activity android:name=".walk.Walk_tmap" />
@@ -46,8 +48,9 @@
         <activity android:name=".newsfeed.FeedGalleryActivity" />
         <activity android:name=".newsfeed.FeedWriteActivity" />
         <activity android:name=".newsfeed.ReportActivity" />
-        <activity android:name=".iot.iot_streaming_area"
-                  android:configChanges="keyboard|keyboardHidden|orientation"/> // 웹뷰 화면전환시 reroad 현상 방지
+        <activity
+            android:name=".iot.iot_streaming_area"
+            android:configChanges="keyboard|keyboardHidden|orientation" />
         <activity android:name=".mypage.ProfileModifyActivity" />
         <activity android:name=".main.MainActivity" />
         <activity android:name=".main.LoginActivity" />

@@ -107,7 +107,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         });
 
         //로그인한 사용자의 프로필이미지
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         SharedPreferences sharedPreferences = context.getSharedPreferences(firebaseUser.getUid(), Context.MODE_PRIVATE);
         String loginImg = sharedPreferences.getString("img", "");
 
@@ -178,16 +178,21 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 likeArray =new ArrayList<>();
-                for(DataSnapshot ds : snapshot.getChildren()) {
-                    likeArray.add(ds.getKey());
-                    holder.tvLikecount.setVisibility(View.VISIBLE);
-                    holder.tvLikecount.setText(likeArray.size()+"명이 게시글을 좋아합니다.");
+                if(snapshot.exists()){
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        likeArray.add(ds.getKey());
+                        holder.tvLikecount.setVisibility(View.VISIBLE);
+                        holder.tvLikecount.setText(likeArray.size()+"명이 게시글을 좋아합니다.");
 
-                    //만약 내가 좋아요를 눌렀다면 색칠!
-                    if(ds.getKey().equals(loginUser.getUid())){
-                        holder.btnLike.setBackgroundResource(R.drawable.iconlike2);
+                        //만약 내가 좋아요를 눌렀다면 색칠!
+                        if(ds.getKey().equals(loginUser.getUid())){
+                            holder.btnLike.setBackgroundResource(R.drawable.iconlike2);
+                        }
                     }
+                }else{
+                    holder.tvLikecount.setVisibility(View.GONE);
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -387,7 +392,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                        });
                        popupMenu.show();
                    }
-
                    break;
                    //추가부분
                case R.id.mainTv_name:

@@ -11,7 +11,7 @@ public class TransUser implements Serializable {
     private String imgUrl;
     private String pw;
     private int meal;
-    private int petcode;
+    private String petcode;
 
 
     public TransUser(User user){

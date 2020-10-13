@@ -1,4 +1,4 @@
-package com.withpet.newsfeed;
+package com.withpet_manager.userfeed;
 
 public class Report {
     String uid;
@@ -10,8 +10,6 @@ public class Report {
     String state;
 
     Report(){}
-
-    //Report 생성자
     Report(String uid, String category, String feedName, String title, String context, String date, String state){
         this.uid = uid;
         this.category =category;
@@ -22,14 +20,12 @@ public class Report {
         this.state =state;
     }
 
-    //SC 생성자
-    Report(String uid, String category,String answer, String title, String context, String date){
+    Report(String uid, String category, String title, String context, String date){
         this.uid = uid;
         this.category =category;
         this.title = title;
         this.context = context;
         this.date = date;
-        feedName = answer;
     }
 
     public String getUid() {

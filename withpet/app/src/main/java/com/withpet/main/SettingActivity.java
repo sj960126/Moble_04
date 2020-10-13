@@ -35,9 +35,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
+import com.withpet.newsfeed.*;
 import com.withpet.newsfeed.ReportActivity;
+import com.withpet.walk.Walk_ReplyUpload;
+import com.withpet.walk.Walk_boardUpload;
+import com.withpet.walk.Walk_boarddetailFrag;
 
 import org.w3c.dom.Text;
 
@@ -48,7 +53,7 @@ public class SettingActivity extends AppCompatActivity {
     private Button btn_before;
     private Intent main;
     private DatabaseReference dbreference;
-    private DatabaseReference followreference;
+    private DatabaseReference followreference, feedReference, replyReference;
     private FirebaseDatabase db;
     private FirebaseUser firebaseUser;
     private ListView listView;
@@ -133,7 +138,7 @@ public class SettingActivity extends AppCompatActivity {
 
                 }
                 else if(selectedText.equals("회원탈퇴")){
-                    deleteFollow();
+                    deleteUserHistory();
                     firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -178,11 +183,89 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
     }
-    private void deleteFollow(){
+
+    private void deleteUserHistory(){
+        //관심삭제
         followreference = db.getReference("Follow");
         followreference.child(firebaseUser.getUid()).removeValue();
         followreference.addListenerForSingleValueEvent(valueEventListener);
+
+        //피드 삭제
+        feedReference = db.getReference("Feed");
+        feedReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Feed feed = dataSnapshot.getValue(Feed.class);
+                    if(feed.getUid().equals(firebaseUser.getUid())){
+                        feedReference.child(feed.getNewsName()).removeValue();
+                        //좋아요 삭제
+                        DatabaseReference likeReference = db.getReference("Like");
+                        likeReference.child(feed.getNewsName()).removeValue();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        //댓글 삭제
+        replyReference = db.getReference("Reply");
+        replyReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        Reply reply = ds.getValue(Reply.class);
+                        if(reply.getUid().equals(firebaseUser.getUid())){
+                            replyReference.child(reply.getBoardName()).child(reply.getReplyName()).removeValue();
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        db.getReference("walk-board").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    Walk_boardUpload walk_boardUpload = dataSnapshot.getValue(Walk_boardUpload.class);
+                    if(walk_boardUpload.getUid().equals(firebaseUser.getUid())){
+                        db.getReference("walk-board").child(Integer.toString(walk_boardUpload.getWalkboard_nb())).removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        db.getReference("walk-reply").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        Walk_ReplyUpload walk_replyUpload = ds.getValue(Walk_ReplyUpload.class);
+                        if(walk_replyUpload.getUid().equals(firebaseUser.getUid())){
+                            db.getReference("walk-reply").child(Integer.toString(walk_replyUpload.getBoard_nb())).child(Integer.toString(walk_replyUpload.getReply_nb())).removeValue();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
+
+
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
