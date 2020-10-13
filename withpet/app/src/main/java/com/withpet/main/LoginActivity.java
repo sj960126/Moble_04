@@ -88,6 +88,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser LoginUser = firebaseAuth.getCurrentUser();
         //로그인 유저가 있고, 이메일 인증이 되었다면
@@ -100,8 +105,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
     public void btnClick(View view){
         switch (view.getId()){

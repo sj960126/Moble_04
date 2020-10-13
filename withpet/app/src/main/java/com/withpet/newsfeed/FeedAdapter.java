@@ -117,10 +117,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
         Glide.with(holder.itemView).load(loginImg).circleCrop().into(holder.loginUserImg);
 
-        //추가 부분
         holder.name.setOnClickListener(onClickListener);
         holder.name.setTag(R.integer.userinfo, userinfo);
-        holder.context.setText(myfeed.get(position).getContext());
+        if(myfeed.get(position).getContext().equals("")){
+            holder.context.setVisibility(View.GONE);
+        }
+        else{
+            holder.context.setText(myfeed.get(position).getContext());
+        }
 
         // 댓글 버튼에 해당 개시글 이름을 tag에 저장
         holder.btnReply.setTag(R.integer.key_NewsName, myfeed.get(position).getNewsName());

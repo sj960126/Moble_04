@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -136,23 +137,38 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 else if(selectedText.equals("회원탈퇴")){
                     deleteUserHistory();
+                    Log.i("회원탈 ", "ㅅㅂ");
                     firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
                                 //알림 문구
                                 Toast.makeText(SettingActivity.this, "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
-
+                                Log.i("토스트 ", "ㅅㅂ");
                                 //파베 삭제
                                 dbreference = db.getReference("User");
                                 dbreference.child(firebaseUser.getUid()).removeValue();
-
+              /*                  Log.i("파베 ", "ㅅㅂ");
                                 main = new Intent(SettingActivity.this, LoginActivity.class);
+                                Log.i("인텐트 ", "ㅅㅂ");
                                 startActivity(main);
-                                finish();
+                                Log.i("스타트액티비티 ", "ㅅㅂ");*/
+                                //finish();
+
+                  /*              Handler mHandler = new Handler();
+                                mHandler.postDelayed(new Runnable()  {
+                                    public void run() {
+
+                                    }
+                                }, 2000); // 0.5초후*/
                             }
                         }
                     });
+                    // 시간 지난 후 실행할 코딩
+                    main = new Intent(SettingActivity.this, LoginActivity.class);
+                    startActivity(main);
+                    finish();
+                    setUser(null);
                 }
                 else if(selectedText.equals("친구초대")){
                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
@@ -249,4 +265,7 @@ public class SettingActivity extends AppCompatActivity {
         }
     };
 
+    void setUser(FirebaseUser user){
+        firebaseUser = user;
+    }
 }
