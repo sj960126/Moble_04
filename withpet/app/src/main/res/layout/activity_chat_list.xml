@@ -35,9 +35,21 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textView35"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:text="메시지"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatListRv_List"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp" />
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 </LinearLayout>
