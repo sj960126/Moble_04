@@ -2,6 +2,7 @@ package com.withpet.Chat;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +35,13 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
         public TextView tv_msg;
         private CircleImageView iv_profilephoto;
         public View rootView;
+        public LinearLayout infolayout;
         public MyViewHolder(@NonNull View v) {
             super(v);
             tv_nickname = v.findViewById(R.id.chattingTv_Nickname);
             tv_msg = v.findViewById(R.id.chattingTv_content);
             iv_profilephoto = v.findViewById(R.id.chattingIv_profile);
+            infolayout = v.findViewById(R.id.chattingLay_Info);
             rootView = v;
         }
 
@@ -90,7 +93,8 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
     public void setMyChat(MyViewHolder holder){
         holder.tv_nickname.setVisibility(View.GONE);                        // 채팅 레이아웃의 닉네임(Textview 레이아웃) 지움
         holder.iv_profilephoto.setVisibility(View.GONE);                    // 채팅 레이아웃의 프로필 사진 부분 지움
-        holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);       // 채팅 레이아웃 메시지 부분 오른쪽 정렬
+        holder.infolayout.setGravity(Gravity.RIGHT);                        // 채팅 레이아웃 메시지 오른쪽 정렬
+        //holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);       // 채팅 레이아웃 메시지 부분 오른쪽 정렬
     }
     // 채팅 내역 레이아웃 설정(상대방)
     public void setOtherChat(MyViewHolder holder){
@@ -102,9 +106,9 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
             holder.iv_profilephoto.setVisibility(View.VISIBLE);                     // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
         }
         holder.tv_nickname.setVisibility(View.VISIBLE);                         // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
-
-        holder.tv_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);    // 텍스트 왼쪽정렬
-        holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);         // 텍스트 왼쪽정렬
+        holder.infolayout.setGravity(Gravity.LEFT);
+        holder.tv_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);    // 채팅 레이아웃 메시지 왼쪽정렬
+        //holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);         // 텍스트 왼쪽정렬
     }
 
 }
