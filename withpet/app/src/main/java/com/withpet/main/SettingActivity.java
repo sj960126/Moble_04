@@ -40,6 +40,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
 import com.withpet.newsfeed.*;
 import com.withpet.newsfeed.ReportActivity;
+import com.withpet.walk.Walk_ReplyUpload;
+import com.withpet.walk.Walk_boardUpload;
+import com.withpet.walk.Walk_boarddetailFrag;
 
 import org.w3c.dom.Text;
 
@@ -206,7 +209,6 @@ public class SettingActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
         //댓글 삭제
         replyReference = db.getReference("Reply");
         replyReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -223,6 +225,42 @@ public class SettingActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        db.getReference("walk-board").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    Walk_boardUpload walk_boardUpload = dataSnapshot.getValue(Walk_boardUpload.class);
+                    if(walk_boardUpload.getUid().equals(firebaseUser.getUid())){
+                        db.getReference("walk-board").child(Integer.toString(walk_boardUpload.getWalkboard_nb())).removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        db.getReference("walk-reply").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        Walk_ReplyUpload walk_replyUpload = ds.getValue(Walk_ReplyUpload.class);
+                        if(walk_replyUpload.getUid().equals(firebaseUser.getUid())){
+                            db.getReference("walk-reply").child(Integer.toString(walk_replyUpload.getBoard_nb())).child(Integer.toString(walk_replyUpload.getReply_nb())).removeValue();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

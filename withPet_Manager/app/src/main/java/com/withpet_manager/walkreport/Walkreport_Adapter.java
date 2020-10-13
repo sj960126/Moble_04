@@ -58,9 +58,9 @@ public class Walkreport_Adapter extends RecyclerView.Adapter<Walkreport_Adapter.
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
                     intent.putExtra("frag",5);
+                    intent.putExtra("report_boardnb",arrayList.get(getAdapterPosition()).getReport_boardnb());
+                    intent.putExtra("reporter", arrayList.get(getAdapterPosition()).getReporter());
                     context.startActivity(intent);
-                 //   arrayList.get(getAdapterPosition()).getReport_boardnb();
-                 //   arrayList.get(getAdapterPosition()).getReporter();
 
                 }
             });
