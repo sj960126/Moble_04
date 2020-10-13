@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -139,7 +140,7 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 else if(selectedText.equals("회원탈퇴")){
                     deleteUserHistory();
-                    firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    /*firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
@@ -155,7 +156,27 @@ public class SettingActivity extends AppCompatActivity {
                                 finish();
                             }
                         }
-                    });
+                    });*/
+                    firebaseUser.delete()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Log.i("확인", "리스너 들어옴");
+                                    if (task.isSuccessful()) {
+                                        Log.i("확인", "task 성공");
+                                        Handler mHandler = new Handler();
+                                        mHandler.postDelayed(new Runnable()  {
+                                            public void run() {
+                                                Log.i("확인", "핸들러");
+                                            }
+                                        }, 1500); // 0.5초후
+
+                                    }
+                                    else{
+                                        Log.i("확인", "task 실패");
+                                    }
+                                }
+                            });
                 }
                 else if(selectedText.equals("친구초대")){
                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
