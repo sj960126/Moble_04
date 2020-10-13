@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
+import com.withpet.Chat.NotifyApplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("d","d");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -88,10 +90,23 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser LoginUser = firebaseAuth.getCurrentUser();
         //로그인 유저가 있고, 이메일 인증이 되었다면
-        if (LoginUser != null) {
+        /*if (LoginUser != null) {
+            if(LoginUser.isEmailVerified()){
+                Login();
+            }
+            else{
+                Toast.makeText(this, "인증메일을 확인해주세요.", Toast.LENGTH_SHORT).show();
+            }
+        }*/
+        if(((NotifyApplication)getApplication()).getIslogin()){
             if(LoginUser.isEmailVerified()){
                 Login();
             }
@@ -101,12 +116,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-
     public void btnClick(View view){
         switch (view.getId()){
             case R.id.loginBtn_login:
                 //로그인할 이메일과 비밀번호
+                Log.i("login","d");
                 strEmail = etEmail.getText().toString().trim();
                 strPw = etPw.getText().toString().trim();
                 if(strEmail.equals("") || strPw.equals("")){
@@ -150,6 +164,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Login(){
+        ((NotifyApplication)getApplication()).setIslogin(true);
         Intent main = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(main);
         finish();

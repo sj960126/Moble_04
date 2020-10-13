@@ -1,6 +1,8 @@
 package com.withpet.main;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -227,6 +229,7 @@ public class MypageFrag extends Fragment {
                         intent = new Intent(v.getContext(),ChattingActivity.class);
                         intent.putExtra("Opponent", nowuserinfo);
                         startActivity(intent);
+                        ((Activity)rootview.getContext()).finish();
                     }
                     else if((int)v.getTag(R.integer.btnResource) == R.drawable.iconsetting){
                         //로그아웃, 회원탈퇴

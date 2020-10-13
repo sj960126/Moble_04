@@ -23,7 +23,7 @@
             android:textSize="26sp" />
 
         <Button
-            android:id="@+id/walkBtn_write"
+            android:id="@+id/mainBtn_write"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="10sp"

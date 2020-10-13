@@ -49,6 +49,10 @@ public class FeedGalleryActivity extends AppCompatActivity {
             btnNextPage.setBackgroundResource(R.drawable.iconcheck);
             btnNextPage.setTag(requestcode);
         }
+        else{
+            btnNextPage.setBackgroundResource(R.drawable.iconnext);
+            btnNextPage.setTag(requestcode);
+        }
 
         //선택한 이미지 보는 imageView 디폴트 사진 설정
         ivDefault = (ImageView) findViewById(R.id.mainwIv_choice);
