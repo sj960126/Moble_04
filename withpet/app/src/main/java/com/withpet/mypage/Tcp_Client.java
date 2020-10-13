@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Tcp_Client extends AsyncTask {
-    protected static String Serv_ip = "192.168.0.6"; //서버의 ip주소
+    protected static String Serv_ip = "192.168.0.10"; //서버의 ip주소
     protected static int port = 9999; //port번호
     private DataOutputStream dos;
     private DataInputStream dis;

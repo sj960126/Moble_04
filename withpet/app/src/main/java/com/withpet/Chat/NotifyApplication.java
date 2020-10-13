@@ -31,6 +31,7 @@ public class NotifyApplication extends Application {
     NotificationManager notificationManager;
     public String enterChattingRoom;
     public boolean isStart = false;
+    private boolean islogin = false;
 
 
     @Override
@@ -122,4 +123,6 @@ public class NotifyApplication extends Application {
             }
         }
     }
+    public void setIslogin(boolean islogin){this.islogin = islogin; }
+    public boolean getIslogin() {return islogin;}
 }

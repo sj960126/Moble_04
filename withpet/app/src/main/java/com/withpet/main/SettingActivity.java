@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.withpet.*;
+import com.withpet.Chat.NotifyApplication;
 import com.withpet.newsfeed.*;
 import com.withpet.newsfeed.ReportActivity;
 import com.withpet.walk.Walk_ReplyUpload;
@@ -123,6 +126,7 @@ public class SettingActivity extends AppCompatActivity {
                     try{
                         if(user != null){
                             auth.signOut();
+                            ((NotifyApplication)getApplication()).setIslogin(false);
                             Toast.makeText(SettingActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                             main = new Intent(SettingActivity.this, LoginActivity.class);
                             startActivity(main);
@@ -139,23 +143,14 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 else if(selectedText.equals("회원탈퇴")){
                     deleteUserHistory();
-                    firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                //알림 문구
-                                Toast.makeText(SettingActivity.this, "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                    firebaseUser.delete();
+                    //FirebaseAuth.getInstance().signOut();
+                    ((NotifyApplication)getApplication()).setIslogin(false);
+                    // 시간 지난 후 실행할 코딩
+                    main = new Intent(SettingActivity.this, LoginActivity.class);
+                    startActivity(main);
+                    finish();
 
-                                //파베 삭제
-                                dbreference = db.getReference("User");
-                                dbreference.child(firebaseUser.getUid()).removeValue();
-
-                                main = new Intent(SettingActivity.this, LoginActivity.class);
-                                startActivity(main);
-                                finish();
-                            }
-                        }
-                    });
                 }
                 else if(selectedText.equals("친구초대")){
                     Intent intent = new Intent(android.content.Intent.ACTION_SEND);
@@ -185,6 +180,10 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void deleteUserHistory(){
+        //파베 삭제
+        dbreference = db.getReference("User");
+        dbreference.child(firebaseUser.getUid()).removeValue();
+
         //관심삭제
         followreference = db.getReference("Follow");
         followreference.child(firebaseUser.getUid()).removeValue();

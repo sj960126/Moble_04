@@ -37,7 +37,7 @@ public class Search_FeedActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private FirebaseUser firebaseUser;
-    private int mypetcode;
+    private String mypetcode;
     private ArrayList<String> feedid;
     private ArrayList<String> arr;
     private SearchView find_userinput;
