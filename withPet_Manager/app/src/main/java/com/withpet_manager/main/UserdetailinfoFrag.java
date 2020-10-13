@@ -79,6 +79,9 @@ public class UserdetailinfoFrag extends Fragment {
 
         if(auth.getCurrentUser() != null){
             auth.signOut();
+            Log.i("로그아웃시킴","1");
+        }else{
+            Log.i("로그인 안되있었음","2");
         }
 
         db = FirebaseDatabase.getInstance();
@@ -91,8 +94,8 @@ public class UserdetailinfoFrag extends Fragment {
 
                 name = userinfo.getName();
                 nickname = userinfo.getNickname();
-                email = userinfo.getEmail();
-                password = userinfo.getPw();
+                email = userinfo.getEmail().trim();
+                password = userinfo.getPw().trim();
                 meal =userinfo.getMeal();
                 petcode = userinfo.getPetcode();
                 shape = userinfo.getShape();
@@ -113,9 +116,30 @@ public class UserdetailinfoFrag extends Fragment {
                 modpassword.setEnabled(false);
 
 
-
-
                 Glide.with(view).load(userinfo.getImgUri()).into(modimg);
+
+                //파이어베이스 '인증' >> 이메일로그인
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // 가입  && 이메일인증 완료
+                        if(task.isSuccessful()){
+                            FirebaseUser login = auth.getCurrentUser();
+                            if(login.isEmailVerified()){
+                            }else{
+                                Toast.makeText(getActivity(), "가입한 이메일로 전송한 인증메일을 수락하세요.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else{
+                            Toast.makeText(getActivity(), "로그인 오류 : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            try{
+
+                            }catch (Exception e){
+                                Toast.makeText(getActivity(), "시스템 오류" + e, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
             }
 
             @Override
@@ -123,26 +147,6 @@ public class UserdetailinfoFrag extends Fragment {
 
             }
         });
-
-        auth.signInWithEmailAndPassword(email,password).addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    FirebaseUser login = auth.getCurrentUser();
-                    if(login.isEmailVerified()){
-
-                }
-                else{
-                    Toast.makeText(view.getContext(), "로그인 오류 : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    try{
-
-                    }catch (Exception e){
-                        Toast.makeText(view.getContext(), "시스템 오류" + e, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        }
-                });
 
             //기본 이미지로 변경
         imgchangeBtn.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +173,7 @@ public class UserdetailinfoFrag extends Fragment {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteUserHistory();
+               deleteUserHistory();
                 auth.getCurrentUser().delete();
 
             }
@@ -180,8 +184,10 @@ public class UserdetailinfoFrag extends Fragment {
     }
 
     private void deleteUserHistory(){
-        //관심삭제
+        //파베 삭제
+        db.getReference("User").child(uid).removeValue();
 
+        //관심삭제
         db.getReference("Follow").child(uid).removeValue();
         db.getReference("Follow").addListenerForSingleValueEvent(valueEventListener);
 
@@ -203,8 +209,8 @@ public class UserdetailinfoFrag extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        //댓글 삭제
 
+        //댓글 삭제
         db.getReference("Reply").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
