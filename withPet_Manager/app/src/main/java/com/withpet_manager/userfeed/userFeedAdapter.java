@@ -44,6 +44,7 @@ public class userFeedAdapter  extends RecyclerView.Adapter<userFeedAdapter.userF
         holder.tvDate.setText(date[0]);
         holder.tvContext.setText(reports.get(position).getContext());
         holder.tvUid.setText(reports.get(position).getUid());
+        holder.tvState.setText(reports.get(position).getState());
     }
 
     @Override
@@ -53,7 +54,7 @@ public class userFeedAdapter  extends RecyclerView.Adapter<userFeedAdapter.userF
 
     public class userFeedViewHolder extends RecyclerView.ViewHolder {
         //위젯
-        TextView tvCategory, tvTitle, tvDate, tvContext, tvUid;
+        TextView tvCategory, tvTitle, tvDate, tvContext, tvUid, tvState;
 
         public userFeedViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,11 +64,12 @@ public class userFeedAdapter  extends RecyclerView.Adapter<userFeedAdapter.userF
             tvDate = itemView.findViewById(R.id.feedTv_date);
             tvContext = itemView.findViewById(R.id.feedTv_context);
             tvUid = itemView.findViewById(R.id.feedTv_uid);
+            tvState = itemView.findViewById(R.id.feedTv_state);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, feedDetailActivity.class);
+                   Intent intent = new Intent(context, feedDetailActivity.class);
                     intent.putExtra("boardName", reports.get(getAdapterPosition()).getFeedName());
                     intent.putExtra("category", reports.get(getAdapterPosition()).getCategory());
                     context.startActivity(intent);

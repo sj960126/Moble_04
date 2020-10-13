@@ -12,6 +12,7 @@ public class Userinfo_getset {
     private int petcode;
     private String shape;
 
+
     Userinfo_getset(){
 
     }

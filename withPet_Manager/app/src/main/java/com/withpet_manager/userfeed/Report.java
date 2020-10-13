@@ -7,15 +7,17 @@ public class Report {
     String context;
     String title;
     String date;
+    String state;
 
     Report(){}
-    Report(String uid, String category, String feedName, String title, String context, String date){
+    Report(String uid, String category, String feedName, String title, String context, String date, String state){
         this.uid = uid;
         this.category =category;
         this.feedName = feedName;
         this.title = title;
         this.context = context;
         this.date = date;
+        this.state =state;
     }
 
     Report(String uid, String category, String title, String context, String date){
@@ -72,5 +74,13 @@ public class Report {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="reportCategory">
+        <item>분류</item>
+        <item>부적절한 내용</item>
+        <item>동물학대</item>
+        <item>스팸</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="reportState">
+        <item>상태</item>
+        <item>대기중</item>
+        <item>검토중</item>
+        <item>삭제완료</item>
+    </string-array>
+
+</resources>
