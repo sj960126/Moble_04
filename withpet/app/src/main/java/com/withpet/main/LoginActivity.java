@@ -120,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         switch (view.getId()){
             case R.id.loginBtn_login:
                 //로그인할 이메일과 비밀번호
+                Log.i("login","d");
                 strEmail = etEmail.getText().toString().trim();
                 strPw = etPw.getText().toString().trim();
                 if(strEmail.equals("") || strPw.equals("")){

@@ -61,7 +61,7 @@ public class HomeFrag extends Fragment {
         rootview = inflater.inflate(R.layout.activity_news,container,false);
 
         btnSearch =(Button) rootview.findViewById(R.id.mainBtn_search);
-        btnWrite = (Button) rootview.findViewById(R.id.walkBtn_write);
+        btnWrite = (Button) rootview.findViewById(R.id.mainBtn_write);
         btnChatt = (Button) rootview.findViewById(R.id.mainBtn_chatt);
         refreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.refresh);
         recyclerView = (RecyclerView) rootview.findViewById(R.id.mainRv);

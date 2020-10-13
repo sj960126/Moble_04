@@ -146,7 +146,6 @@ public class SettingActivity extends AppCompatActivity {
                     firebaseUser.delete();
                     //FirebaseAuth.getInstance().signOut();
                     ((NotifyApplication)getApplication()).setIslogin(false);
-                    // 시간 지난 후 실행할 코딩
                     main = new Intent(SettingActivity.this, LoginActivity.class);
                     startActivity(main);
                     finish();

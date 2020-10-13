@@ -43,6 +43,9 @@ public class ChatListActivity extends AppCompatActivity {
 
         tv_newchatnum = findViewById(R.id.chatListTv_NewChatNum);
         loginUser = FirebaseAuth.getInstance().getCurrentUser();    //로그인한 유저의 정보 가져오기
+        findViewById(R.id.chatListBtn_Find).setBackgroundResource(R.drawable.iconsearch);
+        findViewById(R.id.chatListBtn_Back).setBackgroundResource(R.drawable.iconbefore);
+
         findViewById(R.id.chatListBtn_Find).setOnClickListener(onClickListener);
         findViewById(R.id.chatListBtn_Back).setOnClickListener(onClickListener);
 
