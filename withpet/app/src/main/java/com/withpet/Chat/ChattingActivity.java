@@ -76,8 +76,11 @@ public class ChattingActivity extends AppCompatActivity {
         dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // 전체 채팅방 리스트 가져오기
                 for(DataSnapshot chatroomdata : snapshot.getChildren()){
+                    // 전체 채팅방 정보에서 로그인 유저와 채팅 상대 이름이 들어간 채팅방을 찾기
                     if(chatroomdata.getKey().contains(meid) && chatroomdata.getKey().contains(opponent.getUid())){
+                        // 로그인 유저와 채팅상대가 들어간 채팅방 이름 가져오기
                         chatroomname = chatroomdata.getKey();
                         break;
                     }
@@ -105,6 +108,7 @@ public class ChattingActivity extends AppCompatActivity {
             @Override   //입력할 때 호출
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String message = et_sendmeaasge.getText().toString();
+                // 입력 창이 공백이면 보내기 버튼 비활성화
                 if(message.equals("")){
                     btn_send.setVisibility(View.INVISIBLE);
                 }
@@ -153,7 +157,10 @@ public class ChattingActivity extends AppCompatActivity {
             chattingAdapter.notifyDataSetChanged();
             for(DataSnapshot chatdata : snapshot.getChildren()) {
                 Chat chat = chatdata.getValue(Chat.class);
+                // 어댑터에 채팅방 내용 추가
                 ((ChattingAdapter)chattingAdapter).addChat(chat);
+                // 리사이클러 뷰 포커스 마지막에 맞추기
+                chattingRecyclerView.smoothScrollToPosition(chattingAdapter.getItemCount()-1);
             }
         }
 
