@@ -99,11 +99,13 @@ public class ChattingAdapter extends RecyclerView.Adapter<ChattingAdapter.MyView
     // 채팅 내역 레이아웃 설정(상대방)
     public void setOtherChat(MyViewHolder holder){
         int position = holder.getAdapterPosition();
-        if(chattingList.get(position).getUid().equals(chattingList.get(position-1).getUid())){
-            holder.iv_profilephoto.setVisibility(View.INVISIBLE);                     // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
-        }
-        else{
-            holder.iv_profilephoto.setVisibility(View.VISIBLE);                     // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
+        if(position != 0){
+            if(chattingList.get(position).getUid().equals(chattingList.get(position-1).getUid())){
+                holder.iv_profilephoto.setVisibility(View.INVISIBLE);                     // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
+            }
+            else{
+                holder.iv_profilephoto.setVisibility(View.VISIBLE);                     // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
+            }
         }
         holder.tv_nickname.setVisibility(View.VISIBLE);                         // 내 채팅 레이아웃으로 사용됐던 부분이 상대방 채팅의 레이아웃으로 사용될 수 있어서 visible 다시 사용
         holder.infolayout.setGravity(Gravity.LEFT);
