@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="3dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:orientation="horizontal"
         android:weightSum="1">
 
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:background="@drawable/chatt_border"
-                android:gravity="center_vertical"
+                android:gravity="fill_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="TextView"
