@@ -218,13 +218,10 @@ public class ForegroundService extends Service {
 
         try {
             URL url = new URL(strImageURL);
-            Log.i("비트맵확인", ""+url);
             URLConnection conn = url.openConnection();
-            Log.i("비트맵확인", ""+conn);
             conn.connect();
 
             int nSize = conn.getContentLength();
-            Log.i("비트맵확인", ""+nSize);
             BufferedInputStream bis = new BufferedInputStream(conn.getInputStream(), nSize);
             imgBitmap = BitmapFactory.decodeStream(bis);
 
