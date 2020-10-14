@@ -98,6 +98,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                         userinfo.setUid(myfeed.get(writeNickname).getUid());
                         userinfo.setNickname(user.getNickname());
                         userinfo.setImgUrl(user.getImgUrl());
+
+                        holder.name.setTag(R.integer.userinfo, user);
                     }
                 }
             }

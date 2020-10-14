@@ -81,6 +81,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
         findViewById(R.id.modifyBtn_cancel).setBackgroundResource(R.drawable.iconbefore);
 
         findViewById(R.id.modifyBtn_help).setOnClickListener(onclickListener);
+        findViewById(R.id.modifyBtn_help).setBackgroundResource(R.drawable.iconhelp);
         iv_profilephoto.setOnClickListener(onclickListener);
 
         //파베저장소 연결 및 연동

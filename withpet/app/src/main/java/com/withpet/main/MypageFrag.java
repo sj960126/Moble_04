@@ -210,7 +210,13 @@ public class MypageFrag extends Fragment {
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {   }
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {    }
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                myfollowlist.clear();
+                for(DataSnapshot followuserdata : snapshot.getChildren()){
+                    myfollowlist.add(followuserdata.getKey());
+                }
+                tv_interestnum.setText(""+myfollowlist.size());
+            }
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
             @Override

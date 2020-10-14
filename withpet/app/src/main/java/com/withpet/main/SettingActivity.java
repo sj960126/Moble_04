@@ -61,7 +61,7 @@ public class SettingActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private ListView listView;
     private ArrayList<User> allUser;
-    static final String[] listMenu = {"친구초대", "고객센터", "정보", "로그아웃", "회원탈퇴"};
+    static final String[] listMenu = {"친구초대", "고객센터", "로그아웃", "회원탈퇴"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,9 +170,6 @@ public class SettingActivity extends AppCompatActivity {
                 else if(selectedText.equals("고객센터")){
                     Intent serviceCenter = new Intent(SettingActivity.this, ScActivity.class);
                     startActivity(serviceCenter);
-                }
-                else if(selectedText.equals("정보")){
-                    Toast.makeText(SettingActivity.this, "WithPet 이용약관", Toast.LENGTH_SHORT).show();
                 }
             }
         });

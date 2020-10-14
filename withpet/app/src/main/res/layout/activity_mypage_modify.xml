@@ -111,10 +111,11 @@
 
                 <Button
                     android:id="@+id/modifyBtn_nickcheck"
-                    android:layout_width="60dp"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="중복확인" />
+                    android:background="@drawable/btnmodify_effect"
+                    android:text="확인" />
             </LinearLayout>
 
             <TextView
@@ -132,8 +133,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="30dp"
                 android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -146,9 +148,9 @@
 
                 <Button
                     android:id="@+id/modifyBtn_help"
-                    android:layout_width="65dp"
-                    android:layout_height="35dp"
-                    android:text="도움말" />
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:backgroundTint="@color/text" />
 
             </LinearLayout>
 

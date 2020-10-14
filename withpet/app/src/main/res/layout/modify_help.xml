@@ -7,7 +7,7 @@
 
     <ScrollView
         android:layout_width="400dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,6 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="도움말"
+                android:textColor="@color/text"
                 android:textSize="24sp" />
 
             <LinearLayout
@@ -42,6 +43,7 @@
                     android:layout_weight="1"
                     android:text="1컵 = 약 80 g"
                     android:textAlignment="center"
+                    android:textColor="@color/text"
                     android:textSize="18sp" />
 
                 <TextView
@@ -51,13 +53,15 @@
                     android:layout_weight="1"
                     android:text="간식 1봉지 = 30 g"
                     android:textAlignment="center"
+                    android:textColor="@color/text"
                     android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_margin="5dp"
+                android:gravity="center|center_vertical"
                 android:orientation="vertical">
 
                 <ImageView
@@ -85,8 +89,10 @@
             <Button
                 android:id="@+id/helpBtn_OK"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="확인" />
+                android:layout_height="40dp"
+                android:background="@drawable/border"
+                android:text="확인"
+                android:textColor="@color/text" />
 
         </LinearLayout>
     </ScrollView>

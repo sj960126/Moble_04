@@ -43,7 +43,7 @@ public class FollowListActivity extends AppCompatActivity {
         chatListRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         chatListRecyclerView.setLayoutManager(mLayoutManager);
-        followListAdapter = new FollowListAdapter(this, followuserlist);
+        followListAdapter = new FollowListAdapter(this, followuserlist, getIntent().getStringExtra("userid"));
         chatListRecyclerView.setAdapter(followListAdapter);
 
     }
@@ -56,10 +56,15 @@ public class FollowListActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                followuserlist.clear();
-                followListAdapter.notifyDataSetChanged();
+                followuserlist.clear();     // 기존 데이터 삭제
+                followListAdapter.notifyDataSetChanged();       // 어댑터 갱신
+                // reference를 마이페이지에 드러온 유저의 uid로 걸었기 때문에 snapshot은 그 유저의 팔로우 리스트
+                // followuserdata : 현재 들어온 마이페이지 유저의 팔로우 리스트
                 for(DataSnapshot followuserdata : snapshot.getChildren()){
+                    // appinfo.getUserlist() : 모든 유저의 정보
+                    // user : 모든 유저 정보 중 1명의 유저 정보를 저장하는 객체
                     for(User user: appinfo.getUserlist()){
+                        // 팔로우한 유저의 id와 user객체에 저장된 id가 같은지 확인
                         if(user.getUid().equals(followuserdata.getKey())){
                             ((FollowListAdapter)followListAdapter).addfollowUser(user);
                             break;

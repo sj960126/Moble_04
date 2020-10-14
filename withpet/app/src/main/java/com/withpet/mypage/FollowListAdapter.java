@@ -44,9 +44,10 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.My
         }
 
     }
-    public FollowListAdapter(Context context, ArrayList<User> followList) {
+    public FollowListAdapter(Context context, ArrayList<User> followList, String uid) {
         mContext = context;
         this.followList = followList;
+        meid = uid;
     }
 
     // 뷰홀더 생성(리스트뷰의 아이템 한줄에 해당)
@@ -64,6 +65,13 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.My
         Glide.with(holder.itemView).load(followuserinfo.getImgUrl()).override(800).into(holder.iv_profilephoto);
         holder.btn_delete.setTag(R.integer.userinfo, followuserinfo.getUid());
         holder.tv_nickname.setTag(R.integer.userinfo, followuserinfo);
+        if(meid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            holder.btn_delete.setVisibility(View.VISIBLE);
+            holder.btn_delete.setBackgroundResource(R.drawable.iconcancel);
+        }
+        else{
+            holder.btn_delete.setVisibility(View.INVISIBLE);
+        }
         holder.btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

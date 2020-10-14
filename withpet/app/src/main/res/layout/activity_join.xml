@@ -115,12 +115,12 @@
             android:id="@+id/joinBtn_ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="checkClick"
-            android:background="@drawable/diary_add_btn"
-            android:fontFamily="@font/bazzi"
             android:layout_marginTop="20dp"
-            android:textColor="#ffffff"
-            android:text="@string/join" />
+            android:background="@drawable/btn_effect"
+            android:fontFamily="@font/bazzi"
+            android:onClick="checkClick"
+            android:text="@string/join"
+            android:textColor="#ffffff" />
 
     </LinearLayout>
 
