@@ -66,6 +66,7 @@ public class SclistActivity extends AppCompatActivity {
                     scArrayList.add(0,dataSnapshot.getValue(Report.class));
                     Log.i("sc",""+scArrayList.get(0).getContext());
                 }
+
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
             @Override

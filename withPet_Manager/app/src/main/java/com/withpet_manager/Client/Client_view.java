@@ -44,7 +44,7 @@ public class Client_view extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String change_context = context.getText().toString();
-                Client client = new Client(input_category,change_context,input_date,"o",input_title,input_uid);
+                Client client = new Client(input_category,input_context,input_date,change_context,input_title,input_uid);
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference databaseReference = database.getReference("SC").child(key);
                 databaseReference.setValue(client);
