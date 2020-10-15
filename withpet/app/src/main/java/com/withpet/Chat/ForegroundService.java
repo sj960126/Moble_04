@@ -59,7 +59,7 @@ public class ForegroundService extends Service {
         Notification notification = new NotificationCompat.Builder(this, getString(R.string.chanel_id))
                 .setContentTitle("With Pet Foreground Service")
                 .setContentText("실행중")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.iconlike2)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(foregroundNotificationId, notification);
@@ -183,7 +183,7 @@ public class ForegroundService extends Service {
         // API 26 이상에선 채널 필수, 채널 생성
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {   // 오레오 이상 버전에서는 drawable을 사용
             // Create channel to show notifications.
-            mBulider.setSmallIcon(R.drawable.ic_launcher_foreground);  // 아이콘 이미지 설정
+            mBulider.setSmallIcon(R.drawable.iconreply2);  // 아이콘 이미지 설정
         }else { // 오레오 하위 버전에서는 mipmap 으로 사용
             mBulider.setSmallIcon(R.mipmap.ic_launcher);  // 아이콘 이미지 설정
         }
