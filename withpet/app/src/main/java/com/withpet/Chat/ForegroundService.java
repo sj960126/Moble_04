@@ -23,6 +23,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,7 +60,7 @@ public class ForegroundService extends Service {
         Notification notification = new NotificationCompat.Builder(this, getString(R.string.chanel_id))
                 .setContentTitle("With Pet Foreground Service")
                 .setContentText("실행중")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.iconlike2)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(foregroundNotificationId, notification);
@@ -67,19 +68,20 @@ public class ForegroundService extends Service {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = db.getReference("Chat");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()) {
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                //for(DataSnapshot ds : snapshot.getChildren()) {
                     DatabaseReference chattingroomreference; // 내가 속한 채팅방의 정보를 갖고잇는 데이터베이스의 주소를 저장하는 변수
                     // 채팅방 목록 중 내가 속한 리스트 찾기(맨 처음 어플을 시작한 경우 로그인 정보가 없어 firebaseUser가 null이 아닐 때 확인)
-                    if(firebaseUser != null &&ds.getKey().contains(firebaseUser.getUid())){
-                        chattingroomreference = db.getReference("Chat/"+ds.getKey());    // 내가 속한 채팅방의 정보를 갖고있는 데이터 베이스 주소
+                    if(firebaseUser != null &&snapshot.getKey().contains(firebaseUser.getUid())){
+                        chattingroomreference = db.getReference("Chat/"+snapshot.getKey());    // 내가 속한 채팅방의 정보를 갖고있는 데이터 베이스 주소
                         ChattingRoom ctr = new ChattingRoom();
-                        ctr.setChatroomname(ds.getKey());       // 채팅방 이름 저장
-                        ctr.setChildcount(ds.getChildrenCount());   // 해당 채팅방의 채팅내역 수 저장
+                        ctr.setChatroomname(snapshot.getKey());       // 채팅방 이름 저장
+                        ctr.setChildcount(snapshot.getChildrenCount());   // 해당 채팅방의 채팅내역 수 저장
                         ctr.setNotificationid(createNotificationId());
                         chattingRoomdatalist.add(ctr);
+                        Log.i("가장 바깥 스냅샷", " 실행");
                         // 내가 속한 1개의 채팅방의 ValueEventListener, 해당 채팅방에서 메시지를 보냈는지 감시하기 위함, 메시지를 보낸 내역이 있다면
                         chattingroomreference.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -106,12 +108,11 @@ public class ForegroundService extends Service {
                                             if(!chat.getUid().equals(firebaseUser.getUid()) && !(snapshot.getKey().equals(enterchattingroom))){
                                                 User user = ((NotifyApplication)getApplication()).getUser(chat.getUid());
                                                 notificationStart(user, chat.getContent(), chattingRoom.getNotificationid());
+                                                Log.i("노티피케이션",""+chattingRoom.getNotificationid()+"/"+chattingRoom.getChatroomname());
                                             }
                                         }
                                     }
-
                                 }
-
                             }
 
                             @Override
@@ -120,15 +121,18 @@ public class ForegroundService extends Service {
                             }
                         });
                     }
-                }
+                //}
                 applicationinfo.setChattingroomlist(chattingRoomdatalist);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {  }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {  }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {   }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
         return START_STICKY;
     }
@@ -167,7 +171,9 @@ public class ForegroundService extends Service {
 
         // 알림 메시지 만들기
         // 알림 눌렀을 때 실행될 인텐트 생성
-        PendingIntent contentIntent  = PendingIntent.getActivity(this, 0, chattingintent, PendingIntent.FLAG_ONE_SHOT);
+        // PendingIntent.getActivity : 알림 클릭시 설정할 인텐트 만들기
+        // 매개변수 : (띄울 컨텍스트, 리퀘스트id(다중 알림시 이 아이디가 달라야 다른 인텐트로 인식), 띄울 인텐트, 알림방식)
+        PendingIntent contentIntent  = PendingIntent.getActivity(this, notificationid, chattingintent, PendingIntent.FLAG_ONE_SHOT);
         String channelId = getString(R.string.chanel_id);
         NotificationCompat.Builder mBulider = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle(tuser.getNickname())              // 알림 메시지 제목 설정
@@ -183,7 +189,7 @@ public class ForegroundService extends Service {
         // API 26 이상에선 채널 필수, 채널 생성
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {   // 오레오 이상 버전에서는 drawable을 사용
             // Create channel to show notifications.
-            mBulider.setSmallIcon(R.drawable.ic_launcher_foreground);  // 아이콘 이미지 설정
+            mBulider.setSmallIcon(R.drawable.iconreply2);  // 아이콘 이미지 설정
         }else { // 오레오 하위 버전에서는 mipmap 으로 사용
             mBulider.setSmallIcon(R.mipmap.ic_launcher);  // 아이콘 이미지 설정
         }
@@ -199,13 +205,15 @@ public class ForegroundService extends Service {
     // notificationid 생성(채팅방마다 다른 push알림을 출력하기 위함)
     public int createNotificationId(){
         int notificationid = 0;
-        boolean codeoverlap = false;
-        while(codeoverlap){
-            codeoverlap = false;
-            notificationid = rnd.nextInt(MAXRANDNUM);
-            for(ChattingRoom cr : chattingRoomdatalist){
-                if(cr.getNotificationid() == notificationid || notificationid == foregroundNotificationId){
-                    codeoverlap = true;
+        boolean codeoverlap = true;
+        if(chattingRoomdatalist.size() != 0){
+            while(codeoverlap){
+                codeoverlap = false;
+                notificationid = rnd.nextInt(MAXRANDNUM);
+                for(ChattingRoom cr : chattingRoomdatalist){
+                    if(cr.getNotificationid() == notificationid || notificationid == foregroundNotificationId){
+                        codeoverlap = true;
+                    }
                 }
             }
         }
