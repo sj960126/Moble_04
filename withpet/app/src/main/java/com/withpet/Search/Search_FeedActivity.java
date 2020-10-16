@@ -131,6 +131,7 @@ public class Search_FeedActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot2 : snapshot.getChildren()){
                     if (mypetcode == snapshot2.getValue(User.class).getPetcode()){ //내 팻 코드와 같은 사람들의 정보를
                         feedid.add(snapshot2.getValue(User.class).getUid()); //feedid에 저장한다
+                        Log.i("사이즈"," "+feedid.size());
                     }
                 }
                 arr = new ArrayList<String>();

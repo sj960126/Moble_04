@@ -14,6 +14,7 @@ public class diary {
         this.time=time;
         this.brand=brand;
     }
+
     public String getKind() {
         return kind;
     }
